@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>四大龙王 · 双生关系 ｜ DRAGON RAJA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.king-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:10px 0 36px;}
+.king-nav a{text-decoration:none;font-family:var(--serif);font-size:13px;letter-spacing:.18em;color:var(--ink-dim);border:1px solid var(--line);border-radius:2px;padding:10px 20px;transition:.25s;}
+.king-nav a:hover{color:var(--gold-bright);border-color:var(--gold);box-shadow:0 0 14px rgba(216,181,117,.16);}
+.king-block{display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;padding:40px 0;border-top:1px solid var(--line);scroll-margin-top:80px;}
+.king-block:first-of-type{border-top:none;}
+.king-block .art-frame{flex:0 0 380px;max-width:380px;}
+.king-block .k-info{flex:1;min-width:280px;}
+.king-block .k-head{display:flex;align-items:center;gap:16px;margin-bottom:6px;}
+.king-block .k-icon{font-size:40px;color:var(--gold);}
+.king-block h3{font-family:var(--serif);color:var(--ink-bright);font-size:26px;letter-spacing:.18em;}
+.king-block .k-en{color:var(--gold-soft);font-family:var(--serif);font-size:12px;letter-spacing:.3em;display:block;margin-top:4px;}
+.king-block .k-row{margin-top:20px;}
+.king-block .k-label{color:var(--gold);font-family:var(--serif);font-size:12px;letter-spacing:.25em;margin-bottom:8px;display:inline-block;border-bottom:1px solid var(--gold-soft);padding-bottom:3px;}
+.king-block .k-row p{color:var(--ink);font-size:14.5px;line-height:1.95;text-align:justify;}
+.king-block .k-row p .em{color:var(--gold-bright);font-weight:600;}
+.king-block .k-row p .blood{color:var(--blood);font-weight:600;}
+@media(max-width:600px){.king-block{flex-direction:column;}.king-block .art-frame{flex:0 0 auto;max-width:100%;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><img src="img/crest.webp" alt="crest"><div><span class="zh">龙族</span><span class="en">DRAGON RAJA</span></div><span class="tag" data-i18n="nav_tag">混血种档案</span></a>
+    <div class="nav-links">
+      <a href="story.html" data-i18n="nav_story">情节长卷</a>
+      <a href="codex.html" data-i18n="nav_codex">言灵图鉴</a>
+      <a href="kings.html" class="active" data-i18n="nav_kings">四大龙王</a>
+      <a href="index.html#ritual" data-i18n="nav_ritual">血统鉴定</a>
+      <a href="index.html#elegy" data-i18n="nav_elegy">绘梨衣</a>
+      <button id="langSwitch" class="lang-switch" type="button">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="crumb"><a href="index.html" data-i18n="nav_tag">混血种档案</a> · <span data-i18n="ph_fourkings">四大龙王</span></div>
+  <h1 data-i18n="s06_h2">四 大 龙 王</h1>
+  <div class="en">T H E &nbsp; F O U R &nbsp; K I N G S &nbsp; · &nbsp; P R I M O R D I A L</div>
+</header>
+
+<section class="container" style="padding-top:30px;">
+  <div class="sec-title"><span class="num">初代种</span><div class="kick">P R I M O R D I A L</div><h2 data-i18n="sec_kings_h2">四 大 龙 王 · 双 生 与 加 冕</h2><div class="sub" data-i18n="sec_kings_sub">每一位龙王，都是一场双子相食的悲剧</div></div>
+  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
+
+  <div class="king-nav">
+    <a href="#fire" data-i18n="navk_fire">🜂 青铜与火</a>
+    <a href="#sky" data-i18n="navk_white">🜄 白王·天空</a>
+    <a href="#earth" data-i18n="navk_earth">🜃 大地与山</a>
+    <a href="#sea" data-i18n="navk_sea">🜁 海洋与水</a>
+  </div>
+
+  <div class="king-block" id="fire">
+    <div class="art-frame"><img src="img/dragon-02.webp" alt=""><div class="cap">⟪ 青铜与火之王 · Nidhogg ⟫</div></div>
+    <div class="k-info">
+      <div class="k-head"><span class="k-icon">🜂</span><div><h3 data-i18n="king_fire">青铜与火之王</h3><span class="k-en">NIDHOGG · BRONZE & FIRE</span></div></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_domain">领域与能力</span><p data-i18n-html="kp_fire1">初代种之一，镇守青铜城深处。执掌赤红烈焰与<span class="em">“青铜御座”</span>（言灵·序列号13）——能硬化肉身、令力量暴涨，是青铜与火之王最基础也最霸道的能力。它所过之处，金属熔毁、城池成灰。</p></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_twin">双生关系</span><p data-i18n-html="kp_fire2">青铜与火之王与其弟<span class="blood">康斯坦丁</span>为双子。按龙族古老的加冕之法，双子龙王须一吞噬另一，方能成为真正完整的王。康斯坦丁未能完成这场吞噬便在卷一被卡塞尔学院执行部击杀——临终前，它仍唤路明非为“哥哥”。</p></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_story">小说情节</span><p data-i18n-html="kp_fire3">卷一《火之晨曦》青铜城之战。路明非第一次以屠龙者的身份站在战场上，第一次看着一个用“哥哥”称呼自己的小龙死在面前。康斯坦丁之死，是路明非第一次为屠龙流泪——也是他第一次明白，所谓屠龙，代价从来不只是龙的生命。</p></div>
+    </div>
+  </div>
+
+  <div class="king-block" id="sky">
+    <div class="art-frame"><img src="img/dragon-03.webp" alt=""><div class="cap">⟪ 白王 · 天空与风 ⟫</div></div>
+    <div class="k-info">
+      <div class="k-head"><span class="k-icon">🜄</span><div><h3 data-i18n="king_white">白王 · 天空与风</h3><span class="k-en">WHITE KING · SKY & WIND</span></div></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_domain">领域与能力</span><p data-i18n-html="kp_white1">四大初代种中位格最高的一位，掌控风与精神之力。其权座之下，风暴可吞没城邦，精神可操控万人。白王之血被认为是复活与加冕的关键，千年来无数人觊觎。</p></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_twin">宿命与双生</span><p data-i18n-html="kp_white2">白王曾被<span class="blood">黑王</span>亲手斩杀——这是龙族史上最惨烈的一场王位之争。白王虽死，其血脉与权位之争却延续千年。它与黑王的对立，是整个龙族世界最深的裂痕。</p></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_story">小说情节</span><p data-i18n-html="kp_white3">卷三《黑月之潮》与卷五《悼亡者的归来》的核心线索。赫尔佐格抽干上杉绘梨衣的龙血，正是企图复活白王、完成一场僭越神明的加冕。世界树之下，这场千年权位之争终将了结。</p></div>
+    </div>
+  </div>
+
+  <div class="king-block" id="earth">
+    <div class="art-frame"><img src="img/dragon-05.webp" alt=""><div class="cap">⟪ 大地与山之王 · 耶梦加得 ⟫</div></div>
+    <div class="k-info">
+      <div class="k-head"><span class="k-icon">🜃</span><div><h3 data-i18n="king_earth">大地与山之王</h3><span class="k-en">JÖRMUNGAND · EARTH & MOUNTAIN</span></div></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_domain">领域与能力</span><p data-i18n-html="kp_earth1">操纵大地与重力，沉眠于极北冰原之下。一怒则山崩地裂，重力倍增之处，万物皆被压成齑粉。其传承之瞳名为<span class="em">“悼亡者之瞳”</span>。</p></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_twin">双生关系</span><p data-i18n-html="kp_earth2"><span class="blood">夏弥</span>与她的兄长为大地与山之王的双子。加冕仪式要求一吞噬另一。夏弥在人类世界里学到了爱，她不愿吞噬自己的兄长——于是选择了另一种结局：为楚子航挡下致命一击，化作人形消散在风里。</p></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_story">小说情节</span><p data-i18n-html="kp_earth3">卷二《悼亡者之瞳》。夏弥假装失忆住进楚子航隔壁，笨拙地学着做人类。她的死是全系列最令人心碎的场景之一——“因为我爱过你……所以我是世界上最厉害的龙。”楚子航抱着她，第一次在战场上落泪。</p></div>
+    </div>
+  </div>
+
+  <div class="king-block" id="sea">
+    <div class="art-frame"><img src="img/dragon-04.webp" alt=""><div class="cap">⟪ 海洋与水之王 · 利维坦 ⟫</div></div>
+    <div class="k-info">
+      <div class="k-head"><span class="k-icon">🜁</span><div><h3 data-i18n="king_sea">海洋与水之王</h3><span class="k-en">LEVIATHAN · SEA & WATER</span></div></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_domain">领域与能力</span><p data-i18n-html="kp_sea1">执掌<span class="em">“归墟”</span>（言灵·序列号113），能制造无边海啸与无尽水压，是海洋领域的终极言灵。它沉睡于万米深海，苏醒之时，整片大洋都将为之沸腾。</p></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_twin">双生关系</span><p data-i18n-html="kp_sea2">与其他三位初代种一样，海洋与水之王亦由双子相食而加冕。两子沉眠于深海渊底，待苏醒之日，必有一场吞噬之战——胜者成王，败者化为王座之下最深的祭品。</p></div>
+      <div class="k-row"><span class="k-label" data-i18n="k_story">小说情节</span><p data-i18n-html="kp_sea3">其力量以“归墟”之形现于人间。卷三《黑月之潮》中，日本近海的黑暗潮汐、源氏重工地下室的血色水域，皆是这股远古海洋之力的余响。赫尔佐格的阴谋，亦与深海中沉眠的王座息息相关。</p></div>
+    </div>
+  </div>
+
+  <div class="link-center"><a class="more-link" href="story.html" data-i18n="kings_more">前往情节长卷，看这些王座如何卷入少年们的命运<span class="arr">→</span></a></div>
+</section>
+
+<footer>
+  <p class="disc" data-i18n-html="footer_disc">本页面为《龙族》读者自发制作的<b>非官方同人向个人志</b>，所有世界观、设定、人物与“言灵”名称均版权归属原作者江南及原著出版方，本页无任何商用、二次售卖行为。双生关系与情节为同人整理，仅供参考。</p>
+  <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
+</footer>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

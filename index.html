@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>龙族 · 混血种档案 ｜ DRAGON RAJA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* index 专属：电影感开场 + hero + 世界观 + 绘梨衣 + 卷目预览 */
+#boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
+#boot.hide{opacity:0;visibility:hidden;}
+.stage{position:absolute;inset:0;overflow:hidden;animation:kenburns 28s ease-in-out infinite alternate;}
+@keyframes kenburns{from{transform:scale(1);}to{transform:scale(1.06);}}
+.bg-img{position:absolute;inset:0;background:url(img/opening.jpg) center/cover no-repeat;
+  animation:imgDrift 40s ease-in-out infinite alternate;
+  filter:brightness(.48) contrast(1.12) saturate(1.05);}
+@keyframes imgDrift{from{transform:scale(1.04) translate(0,0);}to{transform:scale(1.12) translate(-1.5%,-1%);}}
+.bar{position:absolute;left:0;right:0;height:8.5vh;background:#000;z-index:8;}
+.bar.top{top:0;}.bar.bot{bottom:0;}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 28%,rgba(0,0,0,.86) 100%);z-index:5;}
+.boot-fog{position:absolute;inset:-10%;z-index:6;pointer-events:none;background:radial-gradient(circle at 30% 78%,rgba(60,80,120,.14),transparent 42%),radial-gradient(circle at 72% 22%,rgba(120,90,60,.1),transparent 46%);animation:fogDrift 24s ease-in-out infinite alternate;}
+@keyframes fogDrift{from{transform:translate(-2%,1%);}to{transform:translate(2%,-1%);}}
+.boot-content{position:relative;z-index:9;text-align:center;max-width:620px;width:90%;padding:0 16px;opacity:0;animation:contentIn 1.6s .8s ease forwards;}
+@keyframes contentIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.boot-crest{width:64px;height:64px;margin:0 auto 14px;border-radius:50%;box-shadow:0 0 30px rgba(216,181,117,.45),0 0 1px var(--gold) inset;}
+.boot-crest img{width:100%;height:100%;object-fit:contain;border-radius:50%;animation:crestSpin 18s linear infinite;}
+@keyframes crestSpin{to{transform:rotate(360deg);}}
+.boot-kicker{color:var(--gold);letter-spacing:.42em;font-family:var(--serif);font-size:clamp(10px,1.3vw,13px);padding-left:.42em;margin-bottom:12px;text-shadow:0 0 14px rgba(0,0,0,.9);}
+.boot-notice-title{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold-bright);font-family:var(--serif);font-size:clamp(22px,4.6vw,34px);letter-spacing:.28em;padding-left:.28em;margin-bottom:4px;text-shadow:0 0 22px rgba(216,181,117,.35),0 0 8px rgba(0,0,0,.98);font-weight:700;}
+.boot-notice-title .nt-ln{width:42px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
+.boot-notice-title .nt-ln.r{background:linear-gradient(90deg,var(--gold),transparent);}
+.boot-letter{font-family:var(--serif);color:var(--ink);font-size:clamp(13px,1.7vw,15.5px);line-height:2.1;letter-spacing:.05em;margin:22px auto 16px;max-width:480px;padding:24px 26px;border:1px solid rgba(216,181,117,.3);background:linear-gradient(180deg,rgba(8,16,28,.62),rgba(6,12,22,.8));box-shadow:0 0 40px rgba(8,18,30,.5) inset,0 0 24px rgba(0,0,0,.4);text-align:left;position:relative;}
+.boot-letter::before,.boot-letter::after{content:"";position:absolute;width:14px;height:14px;border:1px solid var(--gold);}
+.boot-letter::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+.boot-letter::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
+.boot-letter .bl-salut{color:var(--gold);font-weight:600;}
+.boot-letter .bl-emph{color:var(--gold-bright);font-weight:700;}
+.boot-rule{font-family:var(--serif);color:var(--ink-bright);font-size:clamp(16px,3.4vw,26px);letter-spacing:.16em;padding-left:.16em;text-shadow:0 0 22px rgba(120,150,200,.4),0 0 10px rgba(0,0,0,.98);font-weight:600;margin-top:6px;}
+.boot-sub{margin-top:10px;color:var(--ink-dim);font-size:11px;letter-spacing:.4em;font-family:var(--serif);text-shadow:0 0 6px #000;}
+.boot-seal-no{margin-top:8px;color:var(--gold-soft);font-size:10px;letter-spacing:.3em;font-family:var(--serif);}
+.boot-actions{margin-top:24px;display:flex;align-items:center;justify-content:center;gap:14px;}
+.boot-enter{background:transparent;color:var(--ink);border:1px solid var(--line-strong);padding:14px 46px;font-family:var(--serif);font-size:14px;letter-spacing:.5em;padding-left:calc(.5em + 46px);cursor:pointer;border-radius:2px;transition:.35s;}
+.boot-enter:hover{background:rgba(216,181,117,.14);border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 26px rgba(216,181,117,.28);}
+.boot-music{width:46px;height:46px;border-radius:50%;background:rgba(5,12,24,.7);border:1px solid var(--line-strong);color:var(--gold);font-size:15px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.3s;}
+.boot-music:hover{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 18px rgba(216,181,117,.25);}
+.boot-music.on{color:var(--gold-bright);border-color:var(--gold);box-shadow:0 0 16px rgba(216,181,117,.3);}
+.boot-lang{position:absolute;top:max(18px,env(safe-area-inset-top));right:max(18px,env(safe-area-inset-right));z-index:10;}
+
+.hero{height:92vh;min-height:580px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;z-index:1;padding:0 22px;overflow:hidden;}
+.hero::before{content:"";position:absolute;inset:-20%;z-index:0;background:radial-gradient(circle at 50% 120%,rgba(120,150,200,.1),transparent 45%),radial-gradient(circle at 20% 30%,rgba(216,181,117,.06),transparent 40%);animation:heroFog 18s ease-in-out infinite alternate;pointer-events:none;}
+@keyframes heroFog{from{transform:translate(-3%,2%);}to{transform:translate(3%,-2%);}}
+.hero>*{position:relative;z-index:1;}
+.hero .kicker{color:var(--gold);letter-spacing:.5em;font-size:12px;font-family:var(--serif);margin-bottom:20px;padding-left:.5em;}
+.hero h1{font-family:var(--serif);font-size:clamp(68px,16vw,160px);letter-spacing:.2em;color:var(--ink-bright);margin-left:.2em;text-shadow:0 0 40px rgba(120,150,200,.3),0 0 10px rgba(216,181,117,.25);animation:flicker 6s infinite;}
+@keyframes flicker{0%,16%,20%,24%,55%,59%,100%{opacity:1;}18%,22%,57%{opacity:.82;}}
+.hero .en{letter-spacing:.55em;color:var(--gold);font-size:13px;margin-top:10px;font-family:var(--serif);padding-left:.55em;}
+.hero .quote{font-family:var(--serif);color:var(--ink);font-size:clamp(17px,3.6vw,24px);letter-spacing:.3em;margin:34px 0 8px;text-shadow:0 0 14px rgba(120,150,200,.22);}
+.hero p.lead{max-width:560px;margin:22px auto 0;color:var(--ink-dim);font-size:14.5px;line-height:2.1;}
+.scroll-hint{margin-top:52px;color:var(--gold);font-size:12px;letter-spacing:.3em;animation:floaty 2.2s ease-in-out infinite;}
+
+.world{max-width:760px;margin:0 auto;}
+.world p{color:var(--ink);font-size:15.5px;text-align:justify;margin-bottom:20px;}
+.world .quote{border-left:2px solid var(--blood);padding:8px 24px;color:var(--gold-soft);font-style:italic;font-family:var(--serif);margin:28px 0;background:rgba(111,31,43,.14);}
+.world .crest-line{text-align:center;color:var(--gold);letter-spacing:.4em;font-family:var(--serif);margin:32px 0 6px;}
+.world .art-frame{max-width:560px;margin:0 auto 36px;}
+
+.elegy{max-width:700px;margin:0 auto;text-align:center;}
+.elegy .badge{display:inline-block;font-size:10px;letter-spacing:.35em;color:var(--gold-soft);border:1px solid var(--line-strong);border-radius:999px;padding:4px 14px;font-family:var(--serif);}
+.elegy .sub-title{margin-top:16px;color:var(--ink-dim);font-size:12.5px;letter-spacing:.3em;font-family:var(--serif);}
+.elegy .quote-block{margin:38px auto 0;padding:42px 34px;position:relative;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 50px rgba(8,18,30,.55) inset;}
+.elegy .quote-block::before,.elegy .quote-block::after{content:"";position:absolute;left:50%;width:70px;height:1px;background:var(--gold);transform:translateX(-50%);opacity:.55;}
+.elegy .quote-block::before{top:0;}.elegy .quote-block::after{bottom:0;}
+.elegy .quote-text{font-family:var(--serif);color:var(--ink-bright);font-size:16.5px;line-height:2.15;text-align:left;white-space:pre-line;letter-spacing:.04em;}
+.elegy .quote-text .line-emph{color:var(--gold);font-weight:600;}
+.elegy .quote-text .line-sakura{color:var(--blood);font-weight:600;font-style:italic;}
+.elegy .signoff{margin-top:32px;color:var(--gold-soft);font-family:var(--serif);font-size:13.5px;letter-spacing:.15em;font-style:italic;}
+@media(max-width:600px){.hero h1{letter-spacing:.12em;}.elegy .quote-block{padding:28px 20px;}.elegy .quote-text{font-size:15px;}}
+</style>
+</head>
+<body>
+<div id="boot">
+  <div class="stage">
+    <div class="bg-img"></div>
+    <div class="boot-fog"></div>
+    <div class="vignette"></div><div class="bar top"></div><div class="bar bot"></div>
+  </div>
+  <button class="lang-switch boot-lang" type="button">EN</button>
+  <div class="boot-content">
+    <div class="boot-crest"><img src="img/crest.webp" alt="Crest"></div>
+    <div class="boot-kicker" data-i18n="boot_kicker">卡塞尔学院 · 招生委员会</div>
+    <div class="boot-notice-title"><span class="nt-ln"></span><span data-i18n="boot_notice_title">录 取 通 知</span><span class="nt-ln r"></span></div>
+    <div class="boot-letter" data-i18n-html="boot_letter"><span class="bl-salut">致 未来的屠龙者：</span><br>经卡塞尔学院血统鉴定委员会裁定，你体内流淌着古老的龙血。现正式通知——<br><span class="bl-emph">你已被录取为本届混血种学员。</span><br>钟声即将为你敲响。踏入此门，便再无回头。</div>
+    <div class="boot-rule" data-i18n="boot_rule">每个人心里都有一条龙</div>
+    <div class="boot-sub">DRAGON RAJA</div>
+    <div class="boot-seal-no" data-i18n="boot_seal_no">档案编号 · DR-0001</div>
+    <div class="boot-actions">
+      <button class="boot-enter" id="bootEnter" data-i18n="boot_enter">启 程</button>
+      <button class="boot-music" id="bootMusic" type="button" title="BGM">♪</button>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><img src="img/crest.webp" alt="crest"><div><span class="zh">龙族</span><span class="en">DRAGON RAJA</span></div><span class="tag" data-i18n="nav_tag">混血种档案</span></a>
+    <div class="nav-links">
+      <a href="story.html" data-i18n="nav_story">情节长卷</a>
+      <a href="codex.html" data-i18n="nav_codex">言灵图鉴</a>
+      <a href="kings.html" data-i18n="nav_kings">四大龙王</a>
+      <a href="#ritual" data-i18n="nav_ritual">血统鉴定</a>
+      <a href="#elegy" data-i18n="nav_elegy">绘梨衣</a>
+      <button id="langSwitch" class="lang-switch" type="button">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="kicker" data-i18n="hero_kicker">卡塞尔学院 · 混血种档案</div>
+  <h1>龙族</h1>
+  <div class="en">D R A G O N &nbsp; R A J A</div>
+  <div class="quote" data-i18n="hero_quote">凡王之血，必以剑终</div>
+  <p class="lead" data-i18n="hero_lead">世界上有一种生命，逆着时光的洪流而生。他们流淌着古老的龙血，在卡塞尔学院的钟声里，等待属于自己的言灵苏醒。</p>
+  <div class="scroll-hint" data-i18n="scroll_hint">▼ 下滑，开启你的混血种鉴定</div>
+</header>
+
+<section id="world" class="container">
+  <div class="sec-title"><span class="num">N ° 01</span><div class="kick">W O R L D V I E W</div><h2 data-i18n="s01_h2">世 界 观</h2><div class="sub" data-i18n="s01_sub">当龙血逆着时光流淌</div></div>
+  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
+  <div class="world">
+    <div class="art-frame"><img src="img/dragon-01.webp" alt="龙族史浮雕"><div class="cap">⟪ 龙族史浮雕 · 巨龙凌于残城之上 ⟫</div></div>
+    <p data-i18n="world_p1">《龙族》是作家江南创作的奇幻小说系列。故事里，一群被称为“混血种”的少年在卡塞尔学院（Cassell College）的庇护下，与沉眠于世界各处的龙族后裔战斗。他们既背负人类的身份，又流淌着龙的血——是异类，也是屠龙者中最后的希望。</p>
+    <p class="quote" data-i18n="world_quote">“每个人心里都有一条龙，有的人终其一生都在驯服它，而有的人，成了它的奴隶。”</p>
+    <p data-i18n="world_p3">在这个世界里，“言灵”是混血种觉醒后能够释放的先天能力，每种言灵都有专属序列号：从最普通的“蛇”（序列号22），到灭世级的“烛龙”（序列号114）。而你，究竟是第几代混血种，又能否听见血脉深处的那一句言灵？</p>
+    <div class="crest-line" data-i18n="crest_line">✦ 混血种名录 · 待你登记 ✦</div>
+  </div>
+</section>
+
+<section id="elegy" class="container">
+  <div class="sec-title"><span class="num">N ° 02</span><div class="kick">E L E G Y</div><h2 data-i18n="s02_h2">路 明 非 与 绘 梨 衣</h2><div class="sub" data-i18n="s02_sub">龙族Ⅲ · 黑月之潮 · 东京塔下的告别</div></div>
+  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
+  <div class="elegy">
+    <div class="badge" data-i18n="elegy_badge">同 人 创 作</div>
+    <div class="sub-title" data-i18n="elegy_subtitle">致 路 明 非 与 上 杉 绘 梨 衣</div>
+    <div class="quote-block"><div class="quote-text" data-i18n-html="elegy_text">东京的雨一直没停。
+绘梨衣靠在路明非肩头，浅色外套被雨水打湿了大半。她没有伞，也没有力气再撑起那把黑伞。她只是偏过头，用那双琥珀色的眼睛望着他：
+<span class="line-sakura">“Sakura，你说……我们还能再来这里吗？”</span>
+路明非没有说话。他把伞倾向她那一边，自己的半边肩膀暴露在雨里。
+这一刻，<span class="line-emph">路鸣泽在他脑海里轻笑</span>：“哥哥，你又要开始你的英雄梦了吗？”
+但他没有召唤路鸣泽。他只是轻声回答：
+<span class="line-emph">“会的，一定会的。”</span>
+绘梨衣的眼睛亮了一下，像东京塔顶那盏不灭的灯。</div></div>
+    <div class="signoff" data-i18n="elegy_signoff">—— 谨以此页，致每一个被这世界伤害过的孩子。</div>
+  </div>
+</section>
+
+<section id="ritual" class="container">
+  <div class="sec-title"><span class="num">N ° 03</span><div class="kick">B L O O D &nbsp; T E S T</div><h2 data-i18n="s03_h2">混血种资质鉴定仪式</h2><div class="sub" data-i18n="s03_sub">踏入卡塞尔学院的第一道门槛</div></div>
+  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
+  <div class="sim-wrap">
+    <div class="btn-box"><button class="act" id="checkBloodBtn" data-i18n="btn_check">启动血统检测</button><button class="act" id="callSpiritBtn" disabled data-i18n="btn_summon">召唤言灵</button></div>
+    <div id="scan"><i></i></div>
+    <div class="scan-tip" id="scanTip" data-i18n="scan_tip">正在解析你的基因序列……</div>
+    <div class="result-card" id="resultBox"><h2 data-i18n="result_h2">鉴 定 结 果</h2><p class="blood-line"><span data-i18n="blood_label">你的血统等级：</span><span id="bloodText"></span></p><p class="spirit-word"><span data-i18n="spirit_label">觉醒言灵：</span><span id="spiritText"></span></p><p class="desc" id="spiritDesc"></p></div>
+  </div>
+</section>
+
+<section id="codex-preview" class="container">
+  <div class="sec-title"><span class="num">N ° 04</span><div class="kick">S P I R I T &nbsp; C O D E X</div><h2 data-i18n="s04_h2">言 灵 图 鉴</h2><div class="sub" data-i18n="s04_sub">血脉深处的咒语 · 此处仅列六条</div></div>
+  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
+  <div class="codex" id="codexGrid"></div>
+  <div class="link-center"><a class="more-link" href="codex.html" data-i18n="more_codex">进入完整图鉴（共 36 条）<span class="arr">→</span></a></div>
+</section>
+
+<section id="story-preview" class="container">
+  <div class="sec-title"><span class="num">N ° 05</span><div class="kick">V O L U M E S</div><h2 data-i18n="s05_h2">龙 族 1 — 5 · 精 彩 情 节</h2><div class="sub" data-i18n="s05_sub">五卷血与火的编年</div></div>
+  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
+  <div class="preview-grid">
+    <a class="preview-card" href="story.html#v1"><div class="pc-no">Ⅰ</div><h3 data-i18n="v1_t">火之晨曦</h3><p data-i18n="v1_d">芝加哥的红发女孩、言灵·镰鼬觉醒、青铜城之战、康斯坦丁之死。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="story.html#v2"><div class="pc-no">Ⅱ</div><h3 data-i18n="v2_t">悼亡者之瞳</h3><p data-i18n="v2_d">夏弥与楚子航、耶梦加得、夏弥之死、冰海王女零。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="story.html#v3"><div class="pc-no">Ⅲ</div><h3 data-i18n="v3_t">黑月之潮</h3><p data-i18n="v3_d">绘梨衣登场、东京塔、4/4 献祭召唤路鸣泽、Sakura。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="story.html#v4"><div class="pc-no">Ⅳ</div><h3 data-i18n="v4_t">奥丁之渊</h3><p data-i18n="v4_d">楚子航的梦境、奥丁之枪、父亲的背影、走入暴风雨。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="story.html#v5"><div class="pc-no">Ⅴ</div><h3 data-i18n="v5_t">悼亡者的归来</h3><p data-i18n="v5_d">重返日本、赫尔佐格终局、世界树、诺诺与命运。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+  </div>
+  <div class="link-center"><a class="more-link" href="story.html" data-i18n="more_story">进入情节长卷（互动版）<span class="arr">→</span></a></div>
+</section>
+
+<section id="kings-preview" class="container">
+  <div class="sec-title"><span class="num">N ° 06</span><div class="kick">T H E &nbsp; F O U R &nbsp; K I N G S</div><h2 data-i18n="s06_h2">四 大 龙 王</h2><div class="sub" data-i18n="s06_sub">大地与山川的统治者 · 点击查看双生关系</div></div>
+  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
+  <div class="kings">
+    <a class="king-card" href="kings.html#fire"><div class="icon">🜂</div><h3 data-i18n="kf_t">青铜与火</h3><div class="en">NIDHOGG</div><p data-i18n="kf_d">执掌“青铜御座”与赤红烈焰，镇守青铜城深处。</p></a>
+    <a class="king-card" href="kings.html#sky"><div class="icon">🜄</div><h3 data-i18n="kw_t">白王·天空</h3><div class="en">WHITE KING</div><p data-i18n="kw_d">掌控风与精神，被黑王斩杀，留下千年权位之争。</p></a>
+    <a class="king-card" href="kings.html#earth"><div class="icon">🜃</div><h3 data-i18n="ke_t">大地与山</h3><div class="en">EARTH & MOUNTAIN</div><p data-i18n="ke_d">操纵大地与重力，沉眠于极北冰原之下。</p></a>
+    <a class="king-card" href="kings.html#sea"><div class="icon">🜁</div><h3 data-i18n="ks_t">海洋与水</h3><div class="en">SEA & WATER</div><p data-i18n="ks_d">执掌“归墟”，能掀起灭世海啸与无尽水压。</p></a>
+  </div>
+  <div class="link-center"><a class="more-link" href="kings.html" data-i18n="more_kings">查看四大龙王详情（双生关系）<span class="arr">→</span></a></div>
+</section>
+
+<footer>
+  <p class="disc" data-i18n-html="footer_disc">本页面为《龙族》读者自发制作的<b>非官方同人向个人志</b>，所有世界观、设定、人物与“言灵”名称均版权归属原作者江南及原著出版方，本页无任何商用、二次售卖行为。鉴定结果纯属随机模拟，与现实无关。</p>
+  <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
+</footer>
+
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+<script>
+(function(){const boot=document.getElementById('boot');const enter=document.getElementById('bootEnter'),bm=document.getElementById('bootMusic');let done=false;function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}function close(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}enter.addEventListener('click',()=>{close();if(window.AP)AP.play();syncBM();});if(bm)bm.addEventListener('click',()=>{if(!window.AP)return;if(window.AP.isPlaying())window.AP.pause();else window.AP.play();syncBM();});if(window.onLangChange)window.onLangChange(syncBM);syncBM();})();
+
+const bloodData=[
+  {id:"S",level:"S级混血种",level_en:"S-Class Hybrid",weight:6},
+  {id:"SA",level:"超A级混血种",level_en:"Super-A Class Hybrid",weight:12},
+  {id:"A",level:"A级混血种",level_en:"A-Class Hybrid",weight:18},
+  {id:"B",level:"B级混血种",level_en:"B-Class Hybrid",weight:22},
+  {id:"C",level:"C级混血种",level_en:"C-Class Hybrid",weight:22},
+  {id:"D",level:"D级混血种",level_en:"D-Class Hybrid",weight:14},
+  {id:"E",level:"E级微弱混血",level_en:"E-Class Faint Hybrid",weight:8},
+  {id:"N",level:"普通人类，无龙血",level_en:"Ordinary Human, No Dragon Blood",weight:18}
+];
+const spirits=[
+  {seq:114,name:"言灵·烛龙",name_en:"Spirit · Zhulong",desc:"序列号114，灭世级言灵，释放焚尽一切的赤红烈焰，足以摧毁城市。",desc_en:"Seq. 114. An apocalyptic-class spirit that unleashes city-consuming crimson flame.",high:true},
+  {seq:113,name:"言灵·归墟",name_en:"Spirit · Guixu",desc:"序列号113，操控水流，制造无边海啸与水压，海洋领域的终极言灵。",desc_en:"Seq. 113. Commands water, raising boundless tsunamis and pressure — the ultimate ocean spirit.",high:true},
+  {seq:91,name:"言灵·莱茵",name_en:"Spirit · Rhine",desc:"序列号91，制造极速声波共振，大范围爆破，短时间内产生毁灭性冲击波。",desc_en:"Seq. 91. Creates high-speed sonic resonance for wide-area blasts and shockwaves.",high:true},
+  {seq:71,name:"言灵·君焰",name_en:"Spirit · Junyan",desc:"序列号71，楚子航的言灵，凝聚高热于刀刃，斩出焚城烈焰之剑。",desc_en:"Seq. 71. Chu Zihang's spirit — condenses heat onto the blade, slashing a city-burning flame sword.",high:false},
+  {seq:59,name:"言灵·镰鼬",name_en:"Spirit · Kamaitachi",desc:"序列号59，路明非早期言灵，无形风刃切割范围内一切。",desc_en:"Seq. 59. Lu Mingfei's early spirit — invisible wind blades cut everything in range.",high:false},
+  {seq:22,name:"言灵·蛇",name_en:"Spirit · Serpent",desc:"序列号22，释放带有神经毒素的雾气，麻痹敌人感官。",desc_en:"Seq. 22. Releases neurotoxic mist that paralyzes the enemy's senses.",high:false}
+];
+function sp(n){return spirits.find(s=>s.name===n);}
+const spiritByBlood={
+  "S级混血种":[sp("言灵·烛龙"),sp("言灵·归墟"),sp("言灵·莱茵")],
+  "超A级混血种":[sp("言灵·莱茵"),sp("言灵·烛龙")],
+  "A级混血种":[sp("言灵·君焰")],
+  "B级混血种":[sp("言灵·君焰"),sp("言灵·镰鼬")],
+  "C级混血种":[sp("言灵·镰鼬"),sp("言灵·蛇")],
+  "D级混血种":[sp("言灵·蛇")],
+  "E级微弱混血":[sp("言灵·蛇")],
+  "普通人类，无龙血":[]
+};
+let nowBlood="",nowSpirit=null;
+const bloodBtn=document.getElementById("checkBloodBtn"),spiritBtn=document.getElementById("callSpiritBtn"),resultBox=document.getElementById("resultBox"),bloodText=document.getElementById("bloodText"),spiritText=document.getElementById("spiritText"),spiritDesc=document.getElementById("spiritDesc"),scan=document.getElementById("scan"),scanBar=scan.querySelector('i'),scanTip=document.getElementById("scanTip");
+function weightRandom(list){let t=list.reduce((s,i)=>s+i.weight,0);let r=Math.random()*t;for(let i of list){r-=i.weight;if(r<=0)return i;}return list[list.length-1];}
+function seqLabel(){return window.LANG==='en'?'Seq.':'序列号';}
+function shortName(s){return window.LANG==='en'?s.name_en.replace('Spirit · ',''):s.name.replace('言灵·','');}
+function renderCodexGrid(){const g=document.getElementById('codexGrid');g.innerHTML='';spirits.forEach(s=>{const c=document.createElement('div');c.className='codex-card'+(s.high?' high':'');c.innerHTML=`<div class="seq">${seqLabel()} ${s.seq}</div><h3>${shortName(s)}</h3><p>${tr(s,'desc')}</p>`;if(s.high)c.setAttribute('data-high',t('high_badge'));g.appendChild(c);});}
+bloodBtn.onclick=function(){bloodBtn.disabled=true;resultBox.style.display="none";spiritBtn.disabled=true;spiritText.innerText="";spiritDesc.innerText="";nowSpirit=null;scan.style.display="block";scanBar.style.width="0";scanTip.style.display="block";scanTip.textContent=window.MSG[window.LANG].scanning;let p=0;const tm=setInterval(()=>{p+=Math.random()*16+6;if(p>=100){p=100;clearInterval(tm);scanBar.style.width="100%";setTimeout(()=>{scan.style.display="none";scanTip.style.display="none";const res=weightRandom(bloodData);nowBlood=res.level;bloodText.innerText=tr(res,'level');resultBox.style.display="block";if(nowBlood==="普通人类，无龙血"){spiritBtn.disabled=true;spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;}else{spiritBtn.disabled=false;spiritText.innerText=window.MSG[window.LANG].notYet;spiritDesc.innerText=window.MSG[window.LANG].promptSummon;}bloodBtn.disabled=false;},350);}else{scanBar.style.width=p+"%";}},140);};
+spiritBtn.onclick=function(){const pool=spiritByBlood[nowBlood];if(!pool||!pool.length){spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;return;}const s=pool[Math.floor(Math.random()*pool.length)];nowSpirit=s;spiritText.innerText=tr(s,'name');spiritDesc.innerText=tr(s,'desc');};
+if(window.onLangChange)window.onLangChange(function(){renderCodexGrid();if(resultBox.style.display==="block"){const bObj=bloodData.find(b=>b.level===nowBlood);bloodText.innerText=bObj?tr(bObj,'level'):"";if(nowBlood==="普通人类，无龙血"){spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;}else if(nowSpirit){spiritText.innerText=tr(nowSpirit,'name');spiritDesc.innerText=tr(nowSpirit,'desc');}else{spiritText.innerText=window.MSG[window.LANG].notYet;spiritDesc.innerText=window.MSG[window.LANG].promptSummon;}}});
+renderCodexGrid();
+</script>
+</body>
+</html>
