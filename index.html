@@ -58,6 +58,39 @@
 .boot-music:hover{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 18px rgba(216,181,117,.25);}
 .boot-music.on{color:var(--gold-bright);border-color:var(--gold);box-shadow:0 0 16px rgba(216,181,117,.3);}
 .boot-lang{position:absolute;top:max(18px,env(safe-area-inset-top));right:max(18px,env(safe-area-inset-right));z-index:10;}
+.boot-enter:disabled{opacity:.45;border-color:var(--line);color:var(--ink-dim);cursor:not-allowed;}
+.boot-enter:disabled:hover{background:transparent;border-color:var(--line);color:var(--ink-dim);box-shadow:none;}
+.boot-enter.ready{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 26px rgba(216,181,117,.28);animation:readyPulse 2s ease-in-out infinite;}
+@keyframes readyPulse{0%,100%{box-shadow:0 0 18px rgba(216,181,117,.22);}50%{box-shadow:0 0 34px rgba(216,181,117,.45);}}
+.boot-enroll-btn{background:transparent;color:var(--gold);border:1px solid var(--gold);padding:14px 38px;font-family:var(--serif);font-size:14px;letter-spacing:.18em;cursor:pointer;border-radius:2px;transition:.35s;}
+.boot-enroll-btn:hover{background:rgba(216,181,117,.16);box-shadow:0 0 26px rgba(216,181,117,.28);}
+
+.adm-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.82);backdrop-filter:blur(4px);opacity:0;transition:opacity .35s ease;}
+.adm-modal.show{display:flex;opacity:1;}
+.adm-sheet{position:relative;width:min(640px,92vw);max-height:86vh;overflow-y:auto;background:linear-gradient(180deg,#fbf6e8 0%,#f3e9d0 100%);color:#2b2118;border:8px double #bfa36f;box-shadow:0 24px 80px rgba(0,0,0,.55),0 0 0 1px rgba(111,80,45,.2) inset;padding:34px 30px 28px;text-align:center;border-radius:2px;}
+.adm-close{position:absolute;top:10px;right:14px;background:none;border:none;font-size:26px;line-height:1;color:#7a6046;cursor:pointer;transition:.25s;}
+.adm-close:hover{color:#3e2f22;transform:scale(1.1);}
+.adm-crest{width:76px;height:76px;margin:0 auto 10px;border-radius:50%;box-shadow:0 0 0 2px #bfa36f,0 0 20px rgba(191,163,111,.35);}
+.adm-crest img{width:100%;height:100%;object-fit:contain;border-radius:50%;}
+.adm-college{font-family:var(--serif);letter-spacing:.28em;font-size:clamp(18px,3.6vw,26px);color:#3e2f22;font-weight:700;margin-bottom:4px;}
+.adm-title{font-family:var(--serif);letter-spacing:.4em;font-size:clamp(16px,3vw,22px);color:#8c6f3f;margin-bottom:18px;padding-left:.4em;}
+.adm-view.hidden{display:none;}
+.adm-form{display:flex;flex-direction:column;gap:12px;text-align:left;}
+.adm-form-title{color:#6b4f2f;font-family:var(--serif);font-size:13px;letter-spacing:.3em;margin-bottom:4px;text-align:center;}
+.adm-form input{background:rgba(255,255,255,.7);border:1px solid #c9b48a;color:#3e2f22;font-family:var(--serif);font-size:14px;padding:12px 14px;border-radius:2px;transition:.25s;}
+.adm-form input::placeholder{color:#9c8a6e;}
+.adm-form input:focus{outline:none;border-color:#8c6f3f;box-shadow:0 0 12px rgba(140,111,63,.25);}
+.adm-form .bf-hint{color:#7a6046;font-size:11px;letter-spacing:.12em;font-family:var(--serif);min-height:16px;transition:.3s;text-align:center;}
+.adm-form .bf-hint.err{color:#b33939;}
+.adm-submit,.adm-ready{background:#3e2f22;color:#fbf6e8;border:none;padding:13px 28px;font-family:var(--serif);font-size:14px;letter-spacing:.2em;cursor:pointer;border-radius:2px;transition:.3s;margin-top:8px;}
+.adm-submit:hover,.adm-ready:hover{background:#5a4431;}
+.adm-letter{text-align:left;font-family:var(--serif);color:#3e2f22;font-size:clamp(13px,1.7vw,15px);line-height:2.1;letter-spacing:.04em;padding:18px 20px;background:rgba(255,255,255,.45);border:1px solid #d9c9a8;box-shadow:0 0 24px rgba(191,163,111,.12) inset;}
+.adm-letter p{margin:.55em 0;}
+.adm-letter .salut{color:#6b4f2f;font-weight:700;font-size:1.05em;}
+.adm-letter .emph{color:#8c2432;font-weight:700;}
+.adm-sign{margin-top:18px;text-align:right;font-family:var(--serif);color:#5a4431;font-size:13px;line-height:1.9;font-style:italic;}
+.adm-sign-name{font-size:15px;font-weight:700;letter-spacing:.05em;}
+.adm-sign-role{font-size:11px;letter-spacing:.08em;color:#7a6046;font-style:normal;}
 
 .hero{height:92vh;min-height:580px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;z-index:1;padding:0 22px;overflow:hidden;}
 .hero::before{content:"";position:absolute;inset:-20%;z-index:0;background:radial-gradient(circle at 50% 120%,rgba(120,150,200,.1),transparent 45%),radial-gradient(circle at 20% 30%,rgba(216,181,117,.06),transparent 40%);animation:heroFog 18s ease-in-out infinite alternate;pointer-events:none;}
@@ -108,16 +141,39 @@
     <div class="boot-sub">DRAGON RAJA</div>
     <div class="boot-seal-no" data-i18n="boot_seal_no">档案编号 · DR-0001</div>
     <div class="boot-eva-disp" data-i18n="boot_eva_disp">由 EVA 智能终端派送</div>
-    <form class="boot-form" id="enrollForm" autocomplete="off" novalidate>
-      <div class="bf-title" data-i18n="boot_form_title">新生注册登记</div>
-      <input id="enName" type="text" placeholder="姓名 / Name" maxlength="40">
-      <input id="enAge" type="number" min="1" max="120" placeholder="年龄 / Age">
-      <input id="enEmail" type="email" placeholder="邮箱 / Email" maxlength="80">
-      <div class="bf-hint" id="enrollHint" data-i18n="boot_form_hint">填写注册信息后方可启程</div>
-    </form>
     <div class="boot-actions">
-      <button class="boot-enter" id="bootEnter" data-i18n="boot_enter">启 程</button>
+      <button class="boot-enroll-btn" id="bootEnrollBtn" data-i18n="boot_enroll_btn">录取登记</button>
+      <button class="boot-enter" id="bootEnter" data-i18n="boot_enter" disabled>启 程</button>
       <button class="boot-music" id="bootMusic" type="button" title="BGM">♪</button>
+    </div>
+  </div>
+</div>
+
+<div id="admissionModal" class="adm-modal" aria-hidden="true">
+  <div class="adm-sheet">
+    <button class="adm-close" id="admClose" type="button" aria-label="close">×</button>
+    <div class="adm-crest"><img src="img/cassell-seal-round.png" alt="Cassell College"></div>
+    <div class="adm-college">CASSELL COLLEGE</div>
+    <div class="adm-title" data-i18n="boot_notice_title">录 取 通 知</div>
+    <div class="adm-view" id="enrollView">
+      <form class="adm-form" id="enrollForm" autocomplete="off" novalidate>
+        <div class="adm-form-title" data-i18n="boot_form_title">新生注册登记</div>
+        <input id="enName" type="text" data-i18n-ph="ph_name" placeholder="姓名 / Name" maxlength="40">
+        <input id="enAge" type="number" min="1" max="120" data-i18n-ph="ph_age" placeholder="年龄 / Age">
+        <input id="enEmail" type="email" data-i18n-ph="ph_email" placeholder="邮箱 / Email" maxlength="80">
+        <div class="bf-hint" id="enrollHint" data-i18n="boot_form_hint">填写注册信息后方可启程</div>
+        <button class="adm-submit" type="submit" data-i18n="boot_form_submit">生成录取通知书</button>
+      </form>
+    </div>
+    <div class="adm-view hidden" id="letterView">
+      <div class="adm-letter" id="admLetter"></div>
+      <div class="adm-sign">
+        <div class="adm-sign-name">Hilbert Ron Anjou</div>
+        <div class="adm-sign-role" data-i18n="adm_sign_pres">校长签名</div>
+        <div class="adm-sign-name">EVA</div>
+        <div class="adm-sign-role" data-i18n="adm_sign_sec">首席秘书签名</div>
+      </div>
+      <button class="adm-ready" id="admReady" data-i18n="boot_ready">准备启程</button>
     </div>
   </div>
 </div>
@@ -211,36 +267,125 @@
 <script src="app.js"></script>
 <script src="eva.js"></script>
 <script>
-(function(){const boot=document.getElementById('boot');const enter=document.getElementById('bootEnter'),bm=document.getElementById('bootMusic');let done=false;function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}function close(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}enter.addEventListener('click',function(){
-  var name=(document.getElementById('enName').value||'').trim();
-  var age=(document.getElementById('enAge').value||'').trim();
-  var email=(document.getElementById('enEmail').value||'').trim();
-  var hint=document.getElementById('enrollHint');
-  if(!name||!age||!email||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
-    if(hint){hint.textContent=window.LANG==='en'?'Please fill name, age and a valid email':'请完整填写姓名、年龄与有效邮箱';hint.classList.add('err');}
-    return;
-  }
-  // 把录取通知书派送至 EVA 学院邮箱（localStorage dr-eva）
-  try{
-    var KEY='dr-eva';
-    var st=JSON.parse(localStorage.getItem(KEY)||'{}');
-    st.extraEmails=st.extraEmails||[];
-    if(!st.extraEmails.some(function(m){return m.id==='m-admission';})){
-      st.extraEmails.push({
-        id:'m-admission', from:'EVA · 招生委员会', tag:'录取',
-        zh_sub:'录取通知书 · 欢迎入校',
-        zh_body:'亲爱的 '+name+'：经卡塞尔学院 EVA 智能终端核验，你已正式注册为本届混血种学员（登记年龄 '+age+'）。你的录取通知书已由 EVA 派送至学院邮箱。钟声已为你敲响，请前往「EVA 终端 → 学院邮箱」查收。',
-        en_sub:'Admission Notice · Welcome',
-        en_body:'Dear '+name+': verified by Cassell EVA Terminal, you are now registered as a hybrid student (registered age '+age+'). Your admission notice has been dispatched by EVA to your academy inbox. The bells have tolled — open EVA Terminal → Academy Inbox to read it.'
-      });
-      localStorage.setItem(KEY,JSON.stringify(st));
+(function(){
+  const boot=document.getElementById('boot');
+  const enter=document.getElementById('bootEnter');
+  const enrollBtn=document.getElementById('bootEnrollBtn');
+  const bm=document.getElementById('bootMusic');
+  const modal=document.getElementById('admissionModal');
+  const closeModalBtn=document.getElementById('admClose');
+  const enrollForm=document.getElementById('enrollForm');
+  const enrollView=document.getElementById('enrollView');
+  const letterView=document.getElementById('letterView');
+  const admLetter=document.getElementById('admLetter');
+  const admReady=document.getElementById('admReady');
+  const enrollHint=document.getElementById('enrollHint');
+  let done=false, lastLetterData=null;
+
+  function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}
+  function closeBoot(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}
+  function openModal(){if(!modal)return;modal.classList.add('show');modal.setAttribute('aria-hidden','false');}
+  function closeModal(){if(!modal)return;modal.classList.remove('show');modal.setAttribute('aria-hidden','true');}
+
+  function buildLetter(name,age,email){
+    const isEn=window.LANG==='en';
+    const year=new Date().getFullYear();
+    lastLetterData={name,age,email};
+    if(isEn){
+      return '<p class="salut">To Candidate '+name+',</p>'+
+      '<p>On behalf of the Admission Office of Cassell College, we are honored to inform you that you have been admitted as a new student of the '+year+' class.</p>'+
+      '<p>As we often say, there is always another choice. We hope Cassell College may become one of yours. Founded in the northern part of Illinois, USA, our academy has a century-old history dedicated to the study of certain mysterious ancient creatures.</p>'+
+      '<p>You may wonder whether we are a paleontology institute. We are not. Our majors include mathematics, nuclear physics, precision mechanics, biological genealogy… and certain special majors that are highly secretive and demanding — yet, we assure you, extremely fascinating.</p>'+
+      '<p>In addition, we train our students to operate various vehicles — cars, yachts, even jet aircraft. Shooting, hand-to-hand combat, and sword mastery are also required courses. We also offer etiquette and dance classes. Rest assured, we are neither an American version of a vocational school, nor a spy academy.</p>'+
+      '<p>Our selection criteria are so strict and our curriculum so comprehensive because the enemy we face is extraordinarily powerful — the ancient beings that ruled the Earth long before mankind. They are violent and proud, noble and lonely, and they are not extinct; they still live among us.</p>'+
+      '<p>They have had many names, but one is known above all others — <span class="emph">Dragon</span>.</p>'+
+      '<p>You may be surprised, even disbelieving, but we have indeed opened a door for you: a door to the dark side of the world. Cassell College, or rather the Secret Party, extends this invitation. We are the keepers of secrets and the watchers of the world.</p>'+
+      '<p>Only a handful of people receive such an invitation, and you, <span class="emph">'+name+'</span>, are one in ten thousand.</p>'+
+      '<p class="emph">This is a warm invitation, and also a difficult trial. Those who pass through this door shall begin a new life.</p>'+
+      '<p>Enclosed are your ticket to the academy and your exclusive black card. Use the activation code on the black card to enter your own Dragon Raja fantasy world.</p>'+
+      '<p>Should you have any questions, please contact the college secretary, EVA.</p>';
     }
-    localStorage.setItem('dr_enroll',JSON.stringify({name:name,age:age,email:email,ts:Date.now()}));
+    return '<p class="salut">尊敬的候选者 '+name+'：</p>'+
+    '<p>这封信来自卡塞尔学院（CASSELL COLLEGE）招生委员会。我们很荣幸地通知您，您已被录取为本校 '+year+' 年的新学员。</p>'+
+    '<p>我们常说，永远有另一个选择，或许我们可以成为您的选择之一。首先请容我们自我介绍：我们是一家位于美国伊利诺伊州北部的贵族学院，拥有百年历史，致力于研究某种神秘的古代生物。</p>'+
+    '<p>您们是一所古生物研究所么？您或许会问。不，我们并非什么古生物研究所。本校覆盖的专业包括数学、核物理学、精密机械学、生物谱系学……和某些特殊专业，这些专业非常神秘，很难通过，但我们可以向您保证它们非常有趣。</p>'+
+    '<p>此外，我们还培训学生驾驶各种交通工具——请勿担心，我们并非美国版的蓝翔技校——汽车、游艇甚至喷气式飞机，射击、徒手搏斗和刀剑掌握也是必修科目。我们还有专门的礼仪课和舞蹈课，教会您在各种场合应对自如，但我们也不是一间间谍学院。</p>'+
+    '<p>我们挑选学生的标准如此苛刻，教授的知识如此全面，是因为我们要面对的敌人无比强大。那就是我们致力于研究的那种古代生物，早在人类之前，它们曾是地球的统治者，它们暴力而天骄，尊贵而孤独，而且它们并未灭绝，仍旧活在我们身边。</p>'+
+    '<p>它们有过各种各样的名字，但其中有一个最为人所知——<span class="emph">龙</span>。</p>'+
+    '<p>您或许会惊讶，或许会不信，但我们确实为您打开了一扇门，这扇门通往世界的暗面。卡塞尔学院，或者说秘党，在向您发出邀请。我们是秘密的掌握者，也是世界的守望者。</p>'+
+    '<p>只有极少数人能够收到这样的邀请，而您，<span class="emph">'+name+'</span>，恰恰是万中选一的人。</p>'+
+    '<p class="emph">这是一次盛情的邀请，也是一次艰难的考验。通过这扇门的人，将迎来新的人生。</p>'+
+    '<p>随信附赠通往学院的车票和专属黑卡，请使用黑卡上的激活码，进入专属于您的龙族幻想世界吧。</p>'+
+    '<p>如有疑问请和学院秘书 EVA 联系。</p>';
+  }
+
+  function saveAdmission(name,age,email){
+    try{
+      const KEY='dr-eva';
+      const st=JSON.parse(localStorage.getItem(KEY)||'{}');
+      st.extraEmails=st.extraEmails||[];
+      if(!st.extraEmails.some(function(m){return m.id==='m-admission';})){
+        st.extraEmails.push({
+          id:'m-admission', from:'EVA · 招生委员会', tag:'录取',
+          zh_sub:'录取通知书 · 欢迎入校',
+          zh_body:'亲爱的 '+name+'：经卡塞尔学院 EVA 智能终端核验，你已正式注册为本届混血种学员（登记年龄 '+age+'，联系邮箱 '+email+'）。你的录取通知书已由 EVA 派送至学院邮箱。',
+          en_sub:'Admission Notice · Welcome',
+          en_body:'Dear '+name+': verified by Cassell EVA Terminal, you are now registered as a hybrid student (age '+age+', email '+email+'). Your admission notice has been dispatched by EVA to your academy inbox.'
+        });
+        localStorage.setItem(KEY,JSON.stringify(st));
+      }
+      localStorage.setItem('dr_enroll',JSON.stringify({name:name,age:age,email:email,ts:Date.now()}));
+    }catch(e){}
+  }
+
+  if(enrollBtn)enrollBtn.addEventListener('click',function(){openModal();});
+  if(closeModalBtn)closeModalBtn.addEventListener('click',closeModal);
+  if(modal)modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+
+  if(enrollForm)enrollForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    const name=(document.getElementById('enName').value||'').trim();
+    const age=(document.getElementById('enAge').value||'').trim();
+    const email=(document.getElementById('enEmail').value||'').trim();
+    if(!name||!age||!email||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+      if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Please fill name, age and a valid email':'请完整填写姓名、年龄与有效邮箱';enrollHint.classList.add('err');}
+      return;
+    }
+    if(enrollHint){enrollHint.classList.remove('err');enrollHint.textContent=window.t('boot_form_hint');}
+    saveAdmission(name,age,email);
+    admLetter.innerHTML=buildLetter(name,age,email);
+    enrollView.classList.add('hidden');
+    letterView.classList.remove('hidden');
+  });
+
+  if(admReady)admReady.addEventListener('click',function(){
+    closeModal();
+    if(enter){enter.disabled=false;enter.classList.add('ready');enter.focus();}
+  });
+
+  if(enter)enter.addEventListener('click',function(){
+    if(enter.disabled)return;
+    closeBoot();
+    if(window.AP)AP.play();
+    syncBM();
+  });
+
+  if(bm)bm.addEventListener('click',()=>{if(!window.AP)return;if(window.AP.isPlaying())window.AP.pause();else window.AP.play();syncBM();});
+
+  // 已登记过则直接启用启程
+  try{
+    const saved=JSON.parse(localStorage.getItem('dr_enroll')||'null');
+    if(saved&&saved.name&&enter){enter.disabled=false;}
   }catch(e){}
-  close();
-  if(window.AP)AP.play();
+
+  if(window.onLangChange)window.onLangChange(function(){
+    syncBM();
+    if(lastLetterData&&letterView&&!letterView.classList.contains('hidden')){
+      admLetter.innerHTML=buildLetter(lastLetterData.name,lastLetterData.age,lastLetterData.email);
+    }
+  });
   syncBM();
-});if(bm)bm.addEventListener('click',()=>{if(!window.AP)return;if(window.AP.isPlaying())window.AP.pause();else window.AP.play();syncBM();});if(window.onLangChange)window.onLangChange(syncBM);syncBM();})();
+})();
 
 const bloodData=[
   {id:"S",level:"S级混血种",level_en:"S-Class Hybrid",weight:6},
