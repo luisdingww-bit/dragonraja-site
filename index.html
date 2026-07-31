@@ -33,7 +33,7 @@
 .boot-notice-title{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold-bright);font-family:var(--serif);font-size:clamp(22px,4.6vw,34px);letter-spacing:.28em;padding-left:.28em;margin-bottom:4px;text-shadow:0 0 22px rgba(216,181,117,.35),0 0 8px rgba(0,0,0,.98);font-weight:700;}
 .boot-notice-title .nt-ln{width:42px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
 .boot-notice-title .nt-ln.r{background:linear-gradient(90deg,var(--gold),transparent);}
-.boot-letter{font-family:var(--serif);color:var(--ink);font-size:clamp(13px,1.7vw,15.5px);line-height:2.1;letter-spacing:.05em;margin:22px auto 16px;max-width:480px;padding:24px 26px;border:1px solid rgba(216,181,117,.3);background:linear-gradient(180deg,rgba(8,16,28,.62),rgba(6,12,22,.8));box-shadow:0 0 40px rgba(8,18,30,.5) inset,0 0 24px rgba(0,0,0,.4);text-align:left;position:relative;}
+.boot-letter{font-family:var(--serif);color:var(--ink);font-size:clamp(13px,1.7vw,15.5px);line-height:2.1;letter-spacing:.05em;margin:14px auto 0;max-width:480px;padding:24px 26px;border:1px solid rgba(216,181,117,.3);background:linear-gradient(180deg,rgba(8,16,28,.62),rgba(6,12,22,.8));box-shadow:0 0 40px rgba(8,18,30,.5) inset,0 0 24px rgba(0,0,0,.4);text-align:left;position:relative;max-height:520px;overflow:hidden;transition:max-height .45s ease,opacity .4s ease,margin .4s ease,padding .4s ease;}
 .boot-letter::before,.boot-letter::after{content:"";position:absolute;width:14px;height:14px;border:1px solid var(--gold);}
 .boot-letter::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
 .boot-letter::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
@@ -64,28 +64,23 @@
 @keyframes readyPulse{0%,100%{box-shadow:0 0 18px rgba(216,181,117,.22);}50%{box-shadow:0 0 34px rgba(216,181,117,.45);}}
 .boot-enroll-btn{background:transparent;color:var(--gold);border:1px solid var(--gold);padding:14px 38px;font-family:var(--serif);font-size:14px;letter-spacing:.18em;cursor:pointer;border-radius:2px;transition:.35s;}
 .boot-enroll-btn:hover{background:rgba(216,181,117,.16);box-shadow:0 0 26px rgba(216,181,117,.28);}
-.boot-login-btn{background:transparent;color:var(--ink);border:1px solid var(--line-strong);padding:14px 38px;font-family:var(--serif);font-size:14px;letter-spacing:.18em;cursor:pointer;border-radius:2px;transition:.35s;}
-.boot-login-btn:hover{background:rgba(120,150,200,.12);border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 22px rgba(120,150,200,.22);}
+.boot-topbar{position:absolute;top:max(18px,env(safe-area-inset-top));right:max(18px,env(safe-area-inset-right));z-index:10;display:flex;align-items:center;gap:12px;}
+.boot-music-top{width:40px;height:40px;border-radius:50%;background:rgba(5,12,24,.6);border:1px solid var(--line-strong);color:var(--gold);font-size:14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.3s;}
+.boot-music-top:hover{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 16px rgba(216,181,117,.25);}
+.boot-music-top.on{color:var(--gold-bright);border-color:var(--gold);box-shadow:0 0 14px rgba(216,181,117,.3);}
+.boot-letter-wrap{margin:18px auto 0;max-width:480px;}
+.boot-letter-toggle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:none;border:none;cursor:pointer;color:var(--gold);font-family:var(--serif);font-size:12px;letter-spacing:.3em;padding:0 0 10px;text-shadow:0 0 8px rgba(0,0,0,.7);transition:.3s;}
+.boot-letter-toggle:hover{color:var(--gold-bright);}
+.boot-letter-toggle .lt-arrow{display:inline-block;transition:transform .3s ease;font-size:11px;}
+.boot-letter-wrap.collapsed .boot-letter-toggle .lt-arrow{transform:rotate(-90deg);}
 
-.login-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.82);backdrop-filter:blur(4px);opacity:0;transition:opacity .35s ease;}
-.login-modal.show{display:flex;opacity:1;}
-.login-sheet{position:relative;width:min(420px,90vw);background:linear-gradient(180deg,#0c1626 0%,#0a1018 100%);color:var(--ink);border:1px solid var(--gold);box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(216,181,117,.15) inset;padding:34px 30px 26px;text-align:center;border-radius:2px;}
-.login-close{position:absolute;top:8px;right:14px;background:none;border:none;font-size:26px;line-height:1;color:var(--gold-soft);cursor:pointer;transition:.25s;}
-.login-close:hover{color:var(--gold-bright);transform:scale(1.1);}
-.login-crest{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;box-shadow:0 0 0 2px var(--gold),0 0 18px rgba(216,181,117,.3);}
-.login-crest img{width:100%;height:100%;object-fit:contain;border-radius:50%;}
-.login-title{font-family:var(--serif);letter-spacing:.4em;font-size:clamp(16px,3vw,22px);color:var(--gold-bright);margin-bottom:18px;padding-left:.4em;}
-.login-form{display:flex;flex-direction:column;gap:12px;text-align:left;}
-.login-form input{background:rgba(5,12,24,.72);border:1px solid var(--line-strong);color:var(--ink);font-family:var(--serif);font-size:14px;padding:12px 14px;border-radius:2px;transition:.3s;}
-.login-form input::placeholder{color:var(--ink-dim);}
-.login-form input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 16px rgba(216,181,117,.25);}
-.login-form .bf-hint{color:var(--ink-dim);font-size:11px;letter-spacing:.14em;font-family:var(--serif);min-height:16px;text-align:center;transition:.3s;}
-.login-form .bf-hint.err{color:#e0566a;text-shadow:0 0 8px rgba(224,86,106,.45);}
-.login-submit{background:var(--gold);color:#1a120a;border:none;padding:12px 28px;font-family:var(--serif);font-size:14px;letter-spacing:.2em;cursor:pointer;border-radius:2px;transition:.3s;margin-top:6px;font-weight:600;}
-.login-submit:hover{background:var(--gold-bright);box-shadow:0 0 22px rgba(216,181,117,.4);}
 .login-foot{margin-top:14px;font-family:var(--serif);font-size:12px;letter-spacing:.1em;}
 .login-foot a{color:var(--gold-soft);text-decoration:none;border-bottom:1px dashed rgba(216,181,117,.4);}
 .login-foot a:hover{color:var(--gold-bright);}
+.adm-tabs{display:flex;margin:0 0 18px;border-bottom:1px solid #d9c9a8;}
+.adm-tab{flex:1;background:none;border:none;padding:11px 0;font-family:var(--serif);font-size:13px;letter-spacing:.2em;color:#8c6f3f;cursor:pointer;position:relative;transition:.25s;}
+.adm-tab.active{color:#3e2f22;font-weight:700;}
+.adm-tab.active::after{content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);width:58%;height:2px;background:#3e2f22;}
 
 .account-area{display:inline-flex;align-items:center;gap:10px;font-family:var(--serif);font-size:12px;letter-spacing:.08em;color:var(--gold);}
 .account-area .acc-name{color:var(--gold-soft);}
@@ -158,21 +153,28 @@
     <div class="boot-fog"></div>
     <div class="vignette"></div><div class="bar top"></div><div class="bar bot"></div>
   </div>
-  <button class="lang-switch boot-lang" type="button">EN</button>
+  <div class="boot-topbar">
+    <button class="boot-music-top" id="bootMusic" type="button" title="BGM" aria-label="BGM">♪</button>
+    <button class="lang-switch boot-lang" type="button">EN</button>
+  </div>
   <div class="boot-content">
     <div class="boot-crest"><img src="img/crest.webp" alt="Crest"></div>
     <div class="boot-kicker" data-i18n="boot_kicker">卡塞尔学院 · 招生委员会</div>
     <div class="boot-notice-title"><span class="nt-ln"></span><span data-i18n="boot_notice_title">录 取 通 知</span><span class="nt-ln r"></span></div>
-    <div class="boot-letter" data-i18n-html="boot_letter"><span class="bl-salut">致 未来的屠龙者：</span><br>经卡塞尔学院血统鉴定委员会裁定，你体内流淌着古老的龙血。现正式通知——<br><span class="bl-emph">你已被录取为本届混血种学员。</span><br>钟声即将为你敲响。踏入此门，便再无回头。</div>
+    <div class="boot-letter-wrap" id="letterWrap">
+      <button class="boot-letter-toggle" id="letterToggle" type="button" aria-expanded="true">
+        <span class="lt-label" data-i18n="boot_letter_toggle">录取通知书</span>
+        <span class="lt-arrow">▾</span>
+      </button>
+      <div class="boot-letter" data-i18n-html="boot_letter"><span class="bl-salut">致 未来的屠龙者：</span><br>经卡塞尔学院血统鉴定委员会裁定，你体内流淌着古老的龙血。现正式通知——<br><span class="bl-emph">你已被录取为本届混血种学员。</span><br>钟声即将为你敲响。踏入此门，便再无回头。</div>
+    </div>
     <div class="boot-rule" data-i18n="boot_rule">每个人心里都有一条龙</div>
     <div class="boot-sub">DRAGON RAJA</div>
     <div class="boot-seal-no" data-i18n="boot_seal_no">档案编号 · DR-0001</div>
     <div class="boot-eva-disp" data-i18n="boot_eva_disp">由 EVA 智能终端派送</div>
     <div class="boot-actions">
-      <button class="boot-login-btn" id="bootLoginBtn" data-i18n="boot_login_btn">登 录</button>
-      <button class="boot-enroll-btn" id="bootEnrollBtn" data-i18n="boot_enroll_btn">录取登记</button>
+      <button class="boot-enroll-btn" id="bootEnrollBtn" data-i18n="boot_account_btn">录取登记 / 登录</button>
       <button class="boot-enter" id="bootEnter" data-i18n="boot_enter" disabled>启 程</button>
-      <button class="boot-music" id="bootMusic" type="button" title="BGM">♪</button>
     </div>
   </div>
 </div>
@@ -183,6 +185,10 @@
     <div class="adm-crest"><img src="img/cassell-seal-round.png" alt="Cassell College"></div>
     <div class="adm-college">CASSELL COLLEGE</div>
     <div class="adm-title" data-i18n="boot_notice_title">录 取 通 知</div>
+    <div class="adm-tabs" id="admTabs">
+      <button class="adm-tab active" id="tabEnroll" data-i18n="boot_enroll_btn" type="button">录取登记</button>
+      <button class="adm-tab" id="tabLogin" data-i18n="boot_login_btn" type="button">登录</button>
+    </div>
     <div class="adm-view" id="enrollView">
       <form class="adm-form" id="enrollForm" autocomplete="off" novalidate>
         <div class="adm-form-title" data-i18n="boot_form_title">新生注册登记</div>
@@ -194,6 +200,15 @@
         <button class="adm-submit" type="submit" data-i18n="boot_form_submit">生成录取通知书</button>
       </form>
     </div>
+    <div class="adm-view hidden" id="loginView">
+      <form class="adm-form" id="loginForm" autocomplete="off" novalidate>
+        <input id="lgEmail" type="email" data-i18n-ph="ph_email" placeholder="邮箱 / Email" maxlength="80">
+        <input id="lgPass" type="password" data-i18n-ph="ph_password" placeholder="密码 / Password" maxlength="64">
+        <div class="bf-hint" id="loginHint" data-i18n="login_hint">请输入邮箱与密码</div>
+        <button class="adm-submit" type="submit" data-i18n="boot_login_btn">登 录</button>
+      </form>
+      <div class="login-foot"><a href="#" id="toEnroll" data-i18n="login_to_enroll">还没有账号？去登记</a></div>
+    </div>
     <div class="adm-view hidden" id="letterView">
       <div class="adm-letter" id="admLetter"></div>
       <div class="adm-sign">
@@ -204,21 +219,6 @@
       </div>
       <button class="adm-ready" id="admReady" data-i18n="boot_ready">准备启程</button>
     </div>
-  </div>
-</div>
-
-<div id="loginModal" class="login-modal" aria-hidden="true">
-  <div class="login-sheet">
-    <button class="login-close" id="loginClose" type="button" aria-label="close">×</button>
-    <div class="login-crest"><img src="img/cassell-seal-round.png" alt="Cassell College"></div>
-    <div class="login-title" data-i18n="login_title">学 员 登 录</div>
-    <form class="login-form" id="loginForm" autocomplete="off" novalidate>
-      <input id="lgEmail" type="email" data-i18n-ph="ph_email" placeholder="邮箱 / Email" maxlength="80">
-      <input id="lgPass" type="password" data-i18n-ph="ph_password" placeholder="密码 / Password" maxlength="64">
-      <div class="bf-hint" id="loginHint" data-i18n="login_hint">请输入邮箱与密码</div>
-      <button class="login-submit" type="submit" data-i18n="boot_login_btn">登 录</button>
-    </form>
-    <div class="login-foot"><a href="#" id="toEnroll" data-i18n="login_to_enroll">还没有账号？去登记</a></div>
   </div>
 </div>
 
@@ -327,19 +327,20 @@
   const admLetter=document.getElementById('admLetter');
   const admReady=document.getElementById('admReady');
   const enrollHint=document.getElementById('enrollHint');
-  const loginBtn=document.getElementById('bootLoginBtn');
-  const loginModal=document.getElementById('loginModal');
-  const loginClose=document.getElementById('loginClose');
+  const tabEnroll=document.getElementById('tabEnroll');
+  const tabLogin=document.getElementById('tabLogin');
+  const loginView=document.getElementById('loginView');
+  const admTabs=document.getElementById('admTabs');
   const loginForm=document.getElementById('loginForm');
   const loginHint=document.getElementById('loginHint');
   const toEnroll=document.getElementById('toEnroll');
   const accountArea=document.getElementById('accountArea');
+  const letterToggle=document.getElementById('letterToggle');
+  const letterWrap=document.getElementById('letterWrap');
   let done=false, lastLetterData=null;
 
   function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}
   function closeBoot(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}
-  function openModal(){if(!modal)return;modal.classList.add('show');modal.setAttribute('aria-hidden','false');}
-  function closeModal(){if(!modal)return;modal.classList.remove('show');modal.setAttribute('aria-hidden','true');}
 
   function buildLetter(name,age,email){
     const isEn=window.LANG==='en';
@@ -411,8 +412,10 @@
     }catch(e){}
   }
 
-  function openLogin(){if(!loginModal)return;loginModal.classList.add('show');loginModal.setAttribute('aria-hidden','false');}
-  function closeLogin(){if(!loginModal)return;loginModal.classList.remove('show');loginModal.setAttribute('aria-hidden','true');}
+  function showEnrollTab(){ if(enrollView)enrollView.classList.remove('hidden'); if(loginView)loginView.classList.add('hidden'); if(letterView)letterView.classList.add('hidden'); if(tabEnroll)tabEnroll.classList.add('active'); if(tabLogin)tabLogin.classList.remove('active'); if(admTabs)admTabs.classList.remove('hidden'); }
+  function showLoginTab(){ if(enrollView)enrollView.classList.add('hidden'); if(loginView)loginView.classList.remove('hidden'); if(letterView)letterView.classList.add('hidden'); if(tabLogin)tabLogin.classList.add('active'); if(tabEnroll)tabEnroll.classList.remove('active'); if(admTabs)admTabs.classList.remove('hidden'); }
+  function openModal(){ if(!modal)return; showEnrollTab(); modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); }
+  function closeModal(){ if(!modal)return; modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); showEnrollTab(); }
 
   function enableEnter(){ if(enter){enter.disabled=false;enter.classList.add('ready');} }
 
@@ -477,6 +480,7 @@
     if(user)injectMemberEmail(name,email);
     admLetter.innerHTML=buildLetter(name,age,email);
     enrollView.classList.add('hidden');
+    if(admTabs)admTabs.classList.add('hidden');
     letterView.classList.remove('hidden');
   });
 
@@ -485,10 +489,9 @@
     if(enter){enter.disabled=false;enter.classList.add('ready');enter.focus();}
   });
 
-  if(loginBtn)loginBtn.addEventListener('click',function(){openLogin();});
-  if(loginClose)loginClose.addEventListener('click',closeLogin);
-  if(loginModal)loginModal.addEventListener('click',function(e){if(e.target===loginModal)closeLogin();});
-  if(toEnroll)toEnroll.addEventListener('click',function(e){e.preventDefault();closeLogin();openModal();});
+  if(tabEnroll)tabEnroll.addEventListener('click',showEnrollTab);
+  if(tabLogin)tabLogin.addEventListener('click',showLoginTab);
+  if(toEnroll)toEnroll.addEventListener('click',function(e){e.preventDefault();showEnrollTab();});
 
   if(loginForm)loginForm.addEventListener('submit',async function(e){
     e.preventDefault();
@@ -506,7 +509,7 @@
       try{ const meta=(user&&user.user_metadata)||{}; localStorage.setItem('dr_enroll',JSON.stringify({name:meta.name||email,age:meta.age||'',email:email,ts:Date.now()})); }catch(e){}
       if(user)injectMemberEmail((user.user_metadata&&user.user_metadata.name)||email,email);
       updateAccount(user);
-      closeLogin();
+      closeModal();
       enableEnter();
       syncBM();
     }catch(err){
@@ -527,6 +530,9 @@
   });
 
   if(bm)bm.addEventListener('click',()=>{if(!window.AP)return;if(window.AP.isPlaying())window.AP.pause();else window.AP.play();syncBM();});
+
+  // 录取通知可折叠
+  if(letterToggle&&letterWrap)letterToggle.addEventListener('click',function(){ const c=letterWrap.classList.toggle('collapsed'); letterToggle.setAttribute('aria-expanded', c?'false':'true'); });
 
   // 会话恢复：已登录 / 已登记则直接启用启程
   (function restore(){
