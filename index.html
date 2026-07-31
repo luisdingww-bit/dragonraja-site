@@ -42,6 +42,15 @@
 .boot-rule{font-family:var(--serif);color:var(--ink-bright);font-size:clamp(16px,3.4vw,26px);letter-spacing:.16em;padding-left:.16em;text-shadow:0 0 22px rgba(120,150,200,.4),0 0 10px rgba(0,0,0,.98);font-weight:600;margin-top:6px;}
 .boot-sub{margin-top:10px;color:var(--ink-dim);font-size:11px;letter-spacing:.4em;font-family:var(--serif);text-shadow:0 0 6px #000;}
 .boot-seal-no{margin-top:8px;color:var(--gold-soft);font-size:10px;letter-spacing:.3em;font-family:var(--serif);}
+.boot-eva-disp{margin:18px auto 0;color:var(--gold-soft);font-size:11px;letter-spacing:.32em;font-family:var(--serif);opacity:.85;text-shadow:0 0 8px rgba(0,0,0,.7);}
+.boot-enroll{margin:18px auto 0;max-width:380px;width:100%;}
+.bf-title{color:var(--gold);font-family:var(--serif);font-size:13px;letter-spacing:.3em;margin-bottom:12px;text-shadow:0 0 10px rgba(0,0,0,.8);}
+.boot-form{display:flex;flex-direction:column;gap:10px;}
+.boot-form input{background:rgba(5,12,24,.72);border:1px solid var(--line-strong);color:var(--ink);font-family:var(--serif);font-size:14px;padding:11px 14px;border-radius:2px;letter-spacing:.05em;transition:.3s;}
+.boot-form input::placeholder{color:var(--ink-dim);}
+.boot-form input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 16px rgba(216,181,117,.25);}
+.bf-hint{margin-top:6px;color:var(--ink-dim);font-size:11px;letter-spacing:.18em;font-family:var(--serif);transition:.3s;}
+.bf-hint.err{color:#e0566a;text-shadow:0 0 8px rgba(224,86,106,.45);}
 .boot-actions{margin-top:24px;display:flex;align-items:center;justify-content:center;gap:14px;}
 .boot-enter{background:transparent;color:var(--ink);border:1px solid var(--line-strong);padding:14px 46px;font-family:var(--serif);font-size:14px;letter-spacing:.5em;padding-left:calc(.5em + 46px);cursor:pointer;border-radius:2px;transition:.35s;}
 .boot-enter:hover{background:rgba(216,181,117,.14);border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 26px rgba(216,181,117,.28);}
@@ -98,6 +107,14 @@
     <div class="boot-rule" data-i18n="boot_rule">每个人心里都有一条龙</div>
     <div class="boot-sub">DRAGON RAJA</div>
     <div class="boot-seal-no" data-i18n="boot_seal_no">档案编号 · DR-0001</div>
+    <div class="boot-eva-disp" data-i18n="boot_eva_disp">由 EVA 智能终端派送</div>
+    <form class="boot-form" id="enrollForm" autocomplete="off" novalidate>
+      <div class="bf-title" data-i18n="boot_form_title">新生注册登记</div>
+      <input id="enName" type="text" placeholder="姓名 / Name" maxlength="40">
+      <input id="enAge" type="number" min="1" max="120" placeholder="年龄 / Age">
+      <input id="enEmail" type="email" placeholder="邮箱 / Email" maxlength="80">
+      <div class="bf-hint" id="enrollHint" data-i18n="boot_form_hint">填写注册信息后方可启程</div>
+    </form>
     <div class="boot-actions">
       <button class="boot-enter" id="bootEnter" data-i18n="boot_enter">启 程</button>
       <button class="boot-music" id="bootMusic" type="button" title="BGM">♪</button>
@@ -194,7 +211,36 @@
 <script src="app.js"></script>
 <script src="eva.js"></script>
 <script>
-(function(){const boot=document.getElementById('boot');const enter=document.getElementById('bootEnter'),bm=document.getElementById('bootMusic');let done=false;function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}function close(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}enter.addEventListener('click',()=>{close();if(window.AP)AP.play();syncBM();});if(bm)bm.addEventListener('click',()=>{if(!window.AP)return;if(window.AP.isPlaying())window.AP.pause();else window.AP.play();syncBM();});if(window.onLangChange)window.onLangChange(syncBM);syncBM();})();
+(function(){const boot=document.getElementById('boot');const enter=document.getElementById('bootEnter'),bm=document.getElementById('bootMusic');let done=false;function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}function close(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}enter.addEventListener('click',function(){
+  var name=(document.getElementById('enName').value||'').trim();
+  var age=(document.getElementById('enAge').value||'').trim();
+  var email=(document.getElementById('enEmail').value||'').trim();
+  var hint=document.getElementById('enrollHint');
+  if(!name||!age||!email||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+    if(hint){hint.textContent=window.LANG==='en'?'Please fill name, age and a valid email':'请完整填写姓名、年龄与有效邮箱';hint.classList.add('err');}
+    return;
+  }
+  // 把录取通知书派送至 EVA 学院邮箱（localStorage dr-eva）
+  try{
+    var KEY='dr-eva';
+    var st=JSON.parse(localStorage.getItem(KEY)||'{}');
+    st.extraEmails=st.extraEmails||[];
+    if(!st.extraEmails.some(function(m){return m.id==='m-admission';})){
+      st.extraEmails.push({
+        id:'m-admission', from:'EVA · 招生委员会', tag:'录取',
+        zh_sub:'录取通知书 · 欢迎入校',
+        zh_body:'亲爱的 '+name+'：经卡塞尔学院 EVA 智能终端核验，你已正式注册为本届混血种学员（登记年龄 '+age+'）。你的录取通知书已由 EVA 派送至学院邮箱。钟声已为你敲响，请前往「EVA 终端 → 学院邮箱」查收。',
+        en_sub:'Admission Notice · Welcome',
+        en_body:'Dear '+name+': verified by Cassell EVA Terminal, you are now registered as a hybrid student (registered age '+age+'). Your admission notice has been dispatched by EVA to your academy inbox. The bells have tolled — open EVA Terminal → Academy Inbox to read it.'
+      });
+      localStorage.setItem(KEY,JSON.stringify(st));
+    }
+    localStorage.setItem('dr_enroll',JSON.stringify({name:name,age:age,email:email,ts:Date.now()}));
+  }catch(e){}
+  close();
+  if(window.AP)AP.play();
+  syncBM();
+});if(bm)bm.addEventListener('click',()=>{if(!window.AP)return;if(window.AP.isPlaying())window.AP.pause();else window.AP.play();syncBM();});if(window.onLangChange)window.onLangChange(syncBM);syncBM();})();
 
 const bloodData=[
   {id:"S",level:"S级混血种",level_en:"S-Class Hybrid",weight:6},
