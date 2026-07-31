@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="eva-extra.css">
 <style>
-/* index 专属：电影感开场 + hero + 世界观 + 绘梨衣 + 卷目预览 */
+/* index 专属：电影感开场 + hero + 世界观 + 卷目预览 */
 #boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
 #boot.hide{opacity:0;visibility:hidden;}
 .stage{position:absolute;inset:0;overflow:hidden;animation:kenburns 28s ease-in-out infinite alternate;}
@@ -115,7 +115,6 @@
       <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
       <a href="characters.html" data-i18n="nav_chars">人物</a>
       <a href="#ritual" data-i18n="nav_ritual">血统鉴定</a>
-      <a href="characters.html#eri" data-i18n="nav_elegy">绘梨衣</a>
       <button id="langSwitch" class="lang-switch" type="button">EN</button>
     </div>
   </div>
@@ -142,26 +141,8 @@
   </div>
 </section>
 
-<section id="elegy" class="container">
-  <div class="sec-title"><span class="num">N ° 02</span><div class="kick">E L E G Y</div><h2 data-i18n="s02_h2">路 明 非 与 绘 梨 衣</h2><div class="sub" data-i18n="s02_sub">龙族Ⅲ · 黑月之潮 · 东京塔下的告别</div></div>
-  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
-  <div class="elegy">
-    <div class="badge" data-i18n="elegy_badge">同 人 创 作</div>
-    <div class="sub-title" data-i18n="elegy_subtitle">致 路 明 非 与 上 杉 绘 梨 衣</div>
-    <div class="quote-block"><div class="quote-text" data-i18n-html="elegy_text">东京的雨一直没停。
-绘梨衣靠在路明非肩头，浅色外套被雨水打湿了大半。她没有伞，也没有力气再撑起那把黑伞。她只是偏过头，用那双琥珀色的眼睛望着他：
-<span class="line-sakura">“Sakura，你说……我们还能再来这里吗？”</span>
-路明非没有说话。他把伞倾向她那一边，自己的半边肩膀暴露在雨里。
-这一刻，<span class="line-emph">路鸣泽在他脑海里轻笑</span>：“哥哥，你又要开始你的英雄梦了吗？”
-但他没有召唤路鸣泽。他只是轻声回答：
-<span class="line-emph">“会的，一定会的。”</span>
-绘梨衣的眼睛亮了一下，像东京塔顶那盏不灭的灯。</div></div>
-    <div class="signoff" data-i18n="elegy_signoff">—— 谨以此页，致每一个被这世界伤害过的孩子。</div>
-  </div>
-</section>
-
 <section id="ritual" class="container">
-  <div class="sec-title"><span class="num">N ° 03</span><div class="kick">B L O O D &nbsp; T E S T</div><h2 data-i18n="s03_h2">混血种资质鉴定仪式</h2><div class="sub" data-i18n="s03_sub">踏入卡塞尔学院的第一道门槛</div></div>
+  <div class="sec-title"><span class="num">N ° 02</span><div class="kick">B L O O D &nbsp; T E S T</div><h2 data-i18n="s03_h2">混血种资质鉴定仪式</h2><div class="sub" data-i18n="s03_sub">踏入卡塞尔学院的第一道门槛</div></div>
   <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
   <div class="sim-wrap">
     <div class="btn-box"><button class="act" id="checkBloodBtn" data-i18n="btn_check">启动血统检测</button><button class="act" id="callSpiritBtn" disabled data-i18n="btn_summon">召唤言灵</button></div>
@@ -172,14 +153,14 @@
 </section>
 
 <section id="codex-preview" class="container">
-  <div class="sec-title"><span class="num">N ° 04</span><div class="kick">S P I R I T &nbsp; C O D E X</div><h2 data-i18n="s04_h2">言 灵 图 鉴</h2><div class="sub" data-i18n="s04_sub">血脉深处的咒语 · 此处仅列六条</div></div>
+  <div class="sec-title"><span class="num">N ° 03</span><div class="kick">S P I R I T &nbsp; C O D E X</div><h2 data-i18n="s04_h2">言 灵 图 鉴</h2><div class="sub" data-i18n="s04_sub">血脉深处的咒语 · 此处仅列六条</div></div>
   <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
   <div class="codex" id="codexGrid"></div>
   <div class="link-center"><a class="more-link" href="codex.html" data-i18n="more_codex">进入完整图鉴（共 36 条）<span class="arr">→</span></a></div>
 </section>
 
 <section id="story-preview" class="container">
-  <div class="sec-title"><span class="num">N ° 05</span><div class="kick">V O L U M E S</div><h2 data-i18n="s05_h2">龙 族 1 — 5 · 精 彩 情 节</h2><div class="sub" data-i18n="s05_sub">五卷血与火的编年</div></div>
+  <div class="sec-title"><span class="num">N ° 04</span><div class="kick">V O L U M E S</div><h2 data-i18n="s05_h2">龙 族 1 — 5 · 精 彩 情 节</h2><div class="sub" data-i18n="s05_sub">五卷血与火的编年</div></div>
   <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
   <div class="preview-grid">
     <a class="preview-card" href="story.html#v1"><div class="pc-no">Ⅰ</div><h3 data-i18n="v1_t">火之晨曦</h3><p data-i18n="v1_d">芝加哥的红发女孩、言灵·镰鼬觉醒、青铜城之战、康斯坦丁之死。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
@@ -192,7 +173,7 @@
 </section>
 
 <section id="kings-preview" class="container">
-  <div class="sec-title"><span class="num">N ° 06</span><div class="kick">T H E &nbsp; F O U R &nbsp; K I N G S</div><h2 data-i18n="s06_h2">四 大 龙 王</h2><div class="sub" data-i18n="s06_sub">大地与山川的统治者 · 点击查看双生关系</div></div>
+  <div class="sec-title"><span class="num">N ° 05</span><div class="kick">T H E &nbsp; F O U R &nbsp; K I N G S</div><h2 data-i18n="s06_h2">四 大 龙 王</h2><div class="sub" data-i18n="s06_sub">大地与山川的统治者 · 点击查看双生关系</div></div>
   <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
   <div class="kings">
     <a class="king-card" href="kings.html#fire"><div class="icon">🜂</div><h3 data-i18n="kf_t">青铜与火</h3><div class="en">NIDHOGG</div><p data-i18n="kf_d">执掌“青铜御座”与赤红烈焰，镇守青铜城深处。</p></a>

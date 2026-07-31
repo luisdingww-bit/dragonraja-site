@@ -125,10 +125,17 @@
       ch_h1: "人 物 交 织",
       ch_kick: "命运的网络",
       ch_sub: "点 击 人 物 · 看 他 们 如 何 纠 缠",
-      ch_hint: "路明非 · 楚子航 · 凯撒 · 绘梨衣 · 昂热",
+      ch_hint: "路明非 · 楚子航 · 恺撒 · 绘梨衣 · 零 · 昂热",
       ch_ev_title: "交 织 事 件 · 多 视 角",
       ch_spirit: "言灵",
-      ch_rel_title: "与他人的羁绊"
+      ch_rel_title: "与他人的羁绊",
+      ch_el_kick: "挽 歌",
+      ch_el_h2: "绘 梨 衣",
+      ch_el_sub: "白王容器 · 权天使 · 东京塔下的告别",
+      ch_net_kick: "交织之网",
+      ch_net_sub: "人 物 交 织 网",
+      ch_net_hint: "点击任意节点，展开他与所有人的羁绊",
+      ch_net_tip: "◇ 点击节点查看羁绊 · 点击空白处复位"
     },
     en: {
       boot_kicker: "CASSELL COLLEGE · ADMISSION OFFICE",
@@ -250,10 +257,17 @@
       ch_h1: "INTERTWINED FATES",
       ch_kick: "A Web of Destiny",
       ch_sub: "CLICK A CHARACTER · SEE HOW THEY ENTANGLE",
-      ch_hint: "Lu Mingfei · Chu Zihang · Caesar · Eri · Angers",
+      ch_hint: "Lu Mingfei · Chu Zihang · Caesar · Eri · Zero · Angers",
       ch_ev_title: "ENTANGLED EVENTS · MULTI-PERSPECTIVE",
       ch_spirit: "Spirit",
-      ch_rel_title: "Bonds With Others"
+      ch_rel_title: "Bonds With Others",
+      ch_el_kick: "ELEGY",
+      ch_el_h2: "ERI",
+      ch_el_sub: "White King Vessel · Power Angel · Farewell Beneath Tokyo Tower",
+      ch_net_kick: "THE WEB",
+      ch_net_sub: "CHARACTER WEB",
+      ch_net_hint: "Click any node to reveal his bonds",
+      ch_net_tip: "◇ Click a node to see its bonds · click empty space to reset"
     }
   };
 
