@@ -1,0 +1,77 @@
+/* 龙族 · 七宗罪（从 sins.html 合并而来，服务于单页 index.html 的 #sins 段）
+ * 依赖：i18n.js（window.t / window.LANG / window.onLangChange）、eva-extra.css 样式
+ */
+(function () {
+  "use strict";
+  if (!window.t) return;
+
+  var SINS = [
+    { id: "pride", zh: "傲 慢", en: "PRIDE", tp_zh: "利剑 · 长刃", tp_en: "Longsword", tg_zh: "青铜与火之王", tg_en: "Bronze & Fire", used: true,
+      sc_zh: "七宗罪之首。传闻由路鸣泽以青铜与火之王遗骨锻造，专斩第一位龙王。剑身修长如傲者之脊，出鞘时赤红烈焰自剑脊流淌。",
+      sc_en: "First of the Sins. Forged by Lu Mingze from the Bronze & Fire King's bone, it slays the first King. A long blade like a proud spine; crimson flame runs down its edge when drawn." },
+    { id: "envy", zh: "妒 忌", en: "ENVY", tp_zh: "剧剑 · 双刃", tp_en: "Twin-blade", tg_zh: "白王 · 天空", tg_en: "White King · Sky", used: true,
+      sc_zh: "双刃如镜，映出持有者最深的渴望。本为斩杀白王之刃——千年权位之争里，白王被黑王亲手了结，此剑遂成 spare。东京一役，路明非借它刺穿篡位的赫尔佐格。",
+      sc_en: "Twin blades like mirrors reflecting the wielder's deepest want. Meant to slay the White King — who was ended by the Black King himself, leaving this sword spare. In Tokyo, Mingfei drove it through the usurper Herzog." },
+    { id: "wrath", zh: "暴 怒", en: "WRATH", tp_zh: "烈剑 · 巨刃", tp_en: "Greatsword", tg_zh: "大地与山之王", tg_en: "Earth & Mountain", used: true,
+      sc_zh: "剑身宽厚，挥落如山崩。曾斩大地与山之王于极北冰原。其怒非失控，而是岁月积压的审判——落地时重力倍增，万物成尘。",
+      sc_en: "A wide blade whose fall is a mountain's collapse. It beheaded the Earth & Mountain King on the northern ice. Its wrath is no loss of control but accumulated judgement — where it lands, gravity doubles and all turns to dust." },
+    { id: "sloth", zh: "懒 惰", en: "SLOTH", tp_zh: "镰剑 · 长柄", tp_en: "Scythe", tg_zh: "海洋与水之王", tg_en: "Sea & Water", used: true,
+      sc_zh: "长柄巨镰，收割如潮。专斩海洋与水之王，剑风过处海水倒悬。它最沉，也最静——像深海本身，不动声色地吞没一切。",
+      sc_en: "A long-poled scythe that reaps like the tide. It beheads the Sea & Water King; its wind suspends the sea. Heaviest yet stillest — like the deep itself, swallowing all without a sound." },
+    { id: "greed", zh: "贪 婪", en: "GREED", tp_zh: "藤剑 · 链刃", tp_en: "Chain-blade", tg_zh: "（备用）", tg_en: "(Spare)", used: false,
+      sc_zh: "链刃如藤，缠缚夺舍。原著中未用于斩王，作为三柄备用之刃之一。它象征对权与力永不餍足的索取——恰如龙族对王座的贪恋。",
+      sc_en: "A chain-blade like grasping vines. Unused to slay a King, one of three spares. It is the never-sated grasping for power and throne — the dragons' own greed." },
+    { id: "gluttony", zh: "饕 餮", en: "GLUTTONY", tp_zh: "噬剑 · 锯齿", tp_en: "Devourer", tg_zh: "（备用）", tg_en: "(Spare)", used: false,
+      sc_zh: "锯齿噬剑，以龙血为食。同为空置的备用之刃。它的存在提醒：吞噬者终将被吞噬，正如双子相食的加冕法则。",
+      sc_en: "A serrated devourer that feeds on dragon blood. Another idle spare. It warns: the devourer is devoured — as in the twin-devouring law of coronation." },
+    { id: "lust", zh: "色 欲", en: "LUST", tp_zh: "欲剑 · 细刃", tp_en: "Rapier", tg_zh: "（备用）", tg_en: "(Spare)", used: false,
+      sc_zh: "纤细如丝的刺剑，最是致命。七宗罪中最安静的一柄，亦为空置备用。它对应「渴望」本身——屠龙者最危险的，从来是对力量的迷恋。",
+      sc_en: "A hair-thin rapier, the deadliest of all. The quietest of the seven, also a spare. It is 'desire' itself — a dragon-slayer's greatest peril is the lust for power." }
+  ];
+
+  var grid = document.getElementById("sins-grid");
+  var detail = document.getElementById("sins-detail");
+  if (!grid || !detail) return;
+
+  function render() {
+    grid.innerHTML = "";
+    SINS.forEach(function (s, i) {
+      var c = document.createElement("div");
+      c.className = "sin-card" + (s.used ? " used" : "");
+      c.innerHTML =
+        '<div class="sin-no">' + (i + 1) + "</div>" +
+        '<div class="sin-name">' + s.zh + "</div>" +
+        '<div class="sin-en">' + s.en + "</div>" +
+        '<div class="sin-tp">' + s[window.LANG === "en" ? "tp_en" : "tp_zh"] + "</div>" +
+        (s.used ? '<div class="sin-badge" data-i18n="sins_used">已斩王</div>' : '<div class="sin-badge spare" data-i18n="sins_spare">备用</div>');
+      c.addEventListener("click", function () {
+        show(s);
+        document.querySelectorAll(".sin-card").forEach(function (x) { x.classList.remove("sel"); });
+        c.classList.add("sel");
+      });
+      grid.appendChild(c);
+    });
+    if (window.t) document.querySelectorAll(".sin-card [data-i18n]").forEach(function (el) { el.textContent = window.t(el.getAttribute("data-i18n")); });
+  }
+  function show(s) {
+    detail.classList.remove("hidden");
+    detail.innerHTML =
+      '<div class="sd-card">' +
+      '<div class="sd-head"><span class="sd-name">' + s.zh + '</span><span class="sd-en">' + s.en + "</span>" +
+      (s.used ? '<span class="sd-used" data-i18n="sins_used">已斩王</span>' : '<span class="sd-spare" data-i18n="sins_spare">备用</span>') + "</div>" +
+      '<div class="sd-rows">' +
+      '<div class="sd-row"><span class="sd-k" data-i18n="sins_type">形制</span><span>' + s[window.LANG === "en" ? "tp_en" : "tp_zh"] + "</span></div>" +
+      '<div class="sd-row"><span class="sd-k" data-i18n="sins_target">斩杀目标</span><span>' + s[window.LANG === "en" ? "tg_en" : "tg_zh"] + "</span></div>" +
+      '<div class="sd-row"><span class="sd-k" data-i18n="sins_owner">持有者</span><span>' + (window.LANG === "en" ? "Lu Mingze → Lu Mingfei" : "路鸣泽 → 路明非") + "</span></div>" +
+      "</div>" +
+      '<div class="sd-scene">' + s[window.LANG === "en" ? "sc_en" : "sc_zh"] + "</div>" +
+      "</div>";
+    if (window.t) detail.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = window.t(el.getAttribute("data-i18n")); });
+  }
+
+  render();
+  show(SINS[0]);
+  var first = document.querySelectorAll(".sin-card")[0];
+  if (first) first.classList.add("sel");
+  if (window.onLangChange) window.onLangChange(function () { render(); });
+})();

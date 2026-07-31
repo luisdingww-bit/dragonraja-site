@@ -1,0 +1,292 @@
+/* 龙族 · 人物交织（从 characters.html 合并而来，服务于单页 index.html 的 #characters 段）
+ * 依赖：i18n.js（window.t / window.LANG / window.onLangChange）、eva-extra.css 样式
+ */
+(function () {
+  "use strict";
+  if (!window.t) return;
+
+  var CH = {
+    mingfei: { zh: "路明非", en: "Lu Mingfei", role_zh: "S 级混血种 · 衰小孩→屠龙者", role_en: "S-class hybrid · loser → dragon-slayer",
+      sp_zh: "未稳定（镰鼬等）", sp_en: "Unstable (Kamaitachi, etc.)",
+      arc_zh: "自称最普通的少年，却在青铜城第一次为一条叫他「哥哥」的小龙落泪；在东京塔把红白护腕系在绘梨衣腕上；为救所有人，一次次向路鸣泽租借四分之一条命。",
+      arc_en: "A self-called ordinary boy who wept in Bronze City for a little dragon that called him 'brother'; who tied the red-white wristband on Eri beneath Tokyo Tower; who, to save everyone, leased a quarter of his life from Lu Mingze again and again.",
+      links: ["zihang", "caesar", "eri", "angers", "mingze"] },
+    zihang: { zh: "楚子航", en: "Chu Zihang", role_zh: "狮心会会长 · A 级", role_en: "Lionheart president · A-class",
+      sp_zh: "言灵·君焰（序列号89）", sp_en: "Spirit · King's Inferno (Seq.89)",
+      arc_zh: "为找回失踪的父亲追猎奥丁。他在地铁站识破夏弥的双生身份，却选择不攻击——因为学会了「比屠龙更难的是温柔」。他是路明非的兄弟，凯撒的对手与挚友。",
+      arc_en: "He hunts Odin to find his lost father. In the subway he saw Xia Mi's twin truth yet chose not to strike — he learned 'gentler than slaying is harder'. Brother to Mingfei, rival and dearest friend to Caesar.",
+      links: ["mingfei", "caesar", "angers", "xiami"] },
+    caesar: { zh: "凯撒", en: "Caesar", role_zh: "学生会主席 · 加图索家族", role_en: "Student Union president · Gattuso",
+      sp_zh: "言灵·吸血镰（序列号71）", sp_en: "Spirit · Bloodsucking Scythe (Seq.71)",
+      arc_zh: "骄傲的贵族之子，初把路明非当笑柄，后在东京与他、楚子航结为生死兄弟。他爱诺诺，也把「屠龙者的荣光」扛在肩上。",
+      arc_en: "Proud noble heir who first mocked Mingfei, then in Tokyo forged a bond of life and death with him and Zihang. He loves Nono and carries 'the glory of dragon-slayers' on his shoulders.",
+      links: ["mingfei", "zihang", "angers", "nono"] },
+    eri: { zh: "绘梨衣", en: "Eri", role_zh: "白王容器 · 权天使", role_en: "White King vessel · Power Angel",
+      sp_zh: "言灵·审判（序列号111）", sp_en: "Spirit · Judgment (Seq.111)",
+      arc_zh: "上杉绘梨衣，源稚生与源稚女的妹妹，白王力量的容器。她不会说话，却把整本《东京爱情故事》画给 Sakura。4 月 4 日的献祭里，她把世界留给路明非。",
+      arc_en: "Uesugi Eri, sister of Yubetsu and Minamoto, vessel of the White King's power. Unable to speak, she drew a whole 'Tokyo Love Story' for her Sakura. In the 4/4 sacrifice she left the world to Mingfei.",
+      links: ["mingfei", "yubetsu"] },
+    zero: { zh: "零", en: "Zero", role_zh: "执行部王牌 · 极致的纯血", role_en: "Execution Dept. ace · the ultimate pureblood",
+      sp_zh: "言灵未明（近战 · 居合）", sp_en: "Spirit unknown (close-combat · iaido)",
+      arc_zh: "卡塞尔学院执行部的王牌，代号「零」。小说里她美得近乎非人，永远面无表情，黑色风衣下藏着一柄短刀，居合一闪便可斩落龙类。她的血统高到让血统鉴定仪器失语——所有人都猜她是「冰海王女」，是白王血裔藏在人形里的回响。她极少开口，开口时声音平板而冷，像在陈述一件与己无关的事。她是恺撒与明非的同级、对手，也是学院最深的谜题：当「人」与「龙」的界限在她身上消失，屠龙者该向谁举刀？",
+      arc_en: "The ace of Cassell's execution department, codename \"Zero\". In the novel she is beautiful almost beyond human, forever expressionless; beneath her black windbreaker hides a short blade whose iaido flash fells dragons. Her bloodline runs so pure the testing instruments fall silent — everyone suspects she is the \"Ice Sea Princess\", the echo of the White King's blood concealed in a human shell. She rarely speaks; when she does, her voice is flat and cold, stating facts that concern her not at all. Peer and rival to Caesar and Mingfei, she is the college's deepest riddle: when the line between \"human\" and \"dragon\" vanishes in her, at whom does the dragon-slayer raise his blade?",
+      links: ["caesar", "zihang", "mingfei", "angers", "kings"] },
+    angers: { zh: "昂热", en: "Angers", role_zh: "卡塞尔学院校长", role_en: "Headmaster of Cassell",
+      sp_zh: "言灵·时间零（序列号07）", sp_en: "Spirit · Time Zero (Seq.07)",
+      arc_zh: "初代狮心会唯一幸存者，千年屠龙者。他追猎四大龙王，把最后的希望寄托在路明非身上。每一次钟声，都是他为屠龙者而鸣。",
+      arc_en: "Sole survivor of the first Lionheart, a millennial dragon-slayer. He hunts the Four Kings and pins his last hope on Mingfei. Every bell he tolls is for the slayers.",
+      links: ["mingfei", "zihang", "caesar", "kings"] },
+    tianshu: { zh: "楚天骄", en: "Chu Tianjiao", hide: true, role_zh: "楚子航之父 · 迈巴赫的方向盘后", role_en: "Zihang's father · behind the Maybach wheel",
+      sp_zh: "普通人（无言灵）", sp_en: "Ordinary (no spirit)",
+      arc_zh: "他在高架桥上把儿子锁进车里，自己走向雨中的死神。世界后来把他从所有人的记忆里抹去，只有楚子航还记得那双握方向盘的手。",
+      arc_en: "On the viaduct he locked his son in the car and walked toward the death-god in the rain. The world later erased him from all memory; only Zihang remembers the hands on the wheel.",
+      links: [] }
+  };
+  var REL = {
+    "mingfei-eri": { zh: "东京塔下，她把红白护腕留给他，说「Sakura，我们还能再来吗」。他答「一定会的」——可雨里的人，再没回来。", en: "Beneath Tokyo Tower she left him the red-white wristband: \"Sakura, can we come again?\" He said \"yes\" — yet the one in the rain never returned." },
+    "mingfei-zihang": { zh: "青铜城的血让他们成了兄弟。楚子航说：「路明非，你是我见过最强大的混血种。」——因为他肯为陌生人落泪。", en: "Blood in Bronze City made them brothers. Zihang: \"Mingfei, you are the strongest hybrid I've known\" — because he weeps for strangers." },
+    "mingfei-caesar": { zh: "从橄榄球场的对手，到东京生死与共的兄弟。凯撒举杯：「为了屠龙者。」路明非第一次觉得自己配得上这个名字。", en: "From rugby rivals to brothers-in-arms in Tokyo. Caesar raised his glass: \"To the dragon-slayers.\" Mingfei first felt worthy of the name." },
+    "mingfei-angers": { zh: "昂热在录取通知上写：「钟声为你敲响。」他护着这个总在哭的少年，像护着屠龙时代的最后一束光。", en: "Angers wrote on the admission: \"The bells toll for you.\" He shields the boy who always weeps, like the last light of the slaying age." },
+    "mingfei-mingze": { zh: "路鸣泽是他心里的魔鬼，也是唯一的家人。「哥哥，我帮你把所有人都赢回来。」——租金是四分之一条命。", en: "Mingze is the devil in his heart and his only family. \"Brother, I'll win everyone back for you\" — the rent is a quarter of his life." },
+    "zihang-caesar": { zh: "学生会与狮心会的 rivalry，在橄榄球场见了真章。输赢之外，两个骄傲的人彼此尊重。", en: "The Student Union vs Lionheart rivalry played out on the rugby field. Beyond winning, two proud men respected each other." },
+    "zihang-angers": { zh: "昂热是楚子航的导师，也是他追猎奥丁路上的引灯。校长信他，所以把最危险的真相留给了他。", en: "Angers is Zihang's mentor and the lantern on his hunt for Odin. The headmaster trusted him with the deadliest truths." },
+    "zihang-xiami": { zh: "夏弥是他隔壁「笨拙学人」的女孩，也是大地与山之王。她为他挡下致命一击，化作风：「因为我爱你，所以我是世界上最强的龙。」", en: "Xia Mi was the \"clumsy human\" next door, and the Earth & Mountain King. She took a fatal blow for him, turning to wind: \"Because I loved you, I am the strongest dragon.\"" },
+    "caesar-nono": { zh: "诺诺是凯撒的红发巫女，也是把他从骄傲里拉回来的人。她说：「凯撒，你不必证明给任何人看。」", en: "Nono is Caesar's red-haired witch, the one who pulled him back from pride. \"Caesar, you need prove nothing to anyone,\" she said." },
+    "caesar-angers": { zh: "昂热赏识凯撒的领袖气度，却也警告他：「加图索的血脉，别成了屠龙的枷锁。」", en: "Angers admired Caesar's leadership yet warned: \"The Gattuso blood must not become a cage for slaying.\"" },
+    "eri-yubetsu": { zh: "源稚生是绘梨衣的哥哥，也是把她锁进笼里的人。血缘与使命之间，他选择了后者——这是绘梨衣悲剧的起点。", en: "Minamoto was Eri's brother and the one who caged her. Between blood and duty he chose duty — the start of Eri's tragedy." },
+    "angers-kings": { zh: "昂热追猎四大龙王逾千年。每杀一王，他就老去一分；可他说：「只要还有一个孩子要保护，钟声就不会停。」", en: "Angers has hunted the Four Kings for over a thousand years. Each King felled ages him; yet: \"As long as one child needs protecting, the bells won't stop.\"" },
+    "caesar-zero": { zh: "恺撒与零在训练场对峙过。他举杯挑衅，她只回以一刀的寒光——贵族的骄傲，第一次在一柄沉默的短刀前凝住。", en: "Caesar faced Zero on the training floor. He raised his glass in challenge; she answered only with the cold glint of a blade — a noble's pride, for the first time, frozen before a silent short sword." },
+    "zihang-zero": { zh: "楚子航与零，是两个都不肯先出手的屠戮者。他们隔着雨幕对视，都读懂了对方眼底那句：我也可以为你去死。", en: "Zihang and Zero — two slayers who refuse to strike first. Across the rain they met eyes, each reading the other's unspoken line: I could die for you too." },
+    "mingfei-zero": { zh: "在路明非眼里，零是比楚子航更让人不敢靠近的「学姐」。她偶尔看他一眼，像在打量一件尚未拆封的武器。", en: "To Mingfei, Zero is a \"senior\" even more unapproachable than Zihang. She glances at him now and then, like appraising a weapon still in its wrap." },
+    "angers-zero": { zh: "昂热把零当作最后的暗棋。他说：她不是龙，却比许多龙更接近「王」——这才是最危险的命题。", en: "Angers keeps Zero as his last hidden piece. He said: she is no dragon, yet closer to \"King\" than many — and that is the most dangerous proposition of all." },
+    "kings-zero": { zh: "零的血脉里，残留着白王的回响。当她拔刀，连龙王也要侧目——这具人形里，住着古老的潮汐。", en: "In Zero's blood lingers the White King's echo. When she draws her blade, even the Kings turn their gaze — within this human form dwells an ancient tide." }
+  };
+  var EVENTS = [
+    { id: "tokyo", zh: "东京塔的告别", en: "Farewell at Tokyo Tower",
+      ps: [
+        { char: "mingfei", zh: "我把伞倾向她，自己的肩膀淋在雨里。她说「还能再来吗」，我答「一定」。可我知道，这一次的英雄梦，要拿命去填。", en: "I tilted the umbrella to her, my own shoulder in the rain. \"Can we come again?\" she asked; I said \"yes\". But I knew this hero dream would be paid in life." },
+        { char: "eri", zh: "Sakura 的伞好暖。我把护腕留给他，这样他就不会忘了我。东京塔的灯灭了，可我心里还亮着。", en: "Sakura's umbrella is warm. I left him my wristband so he won't forget me. Tokyo Tower's light went out, but mine stays lit." },
+        { char: "caesar", zh: "明非在雨里站成了一座雕像。我从没见他那么安静——这个衰小孩，原来扛着整个东京的雨。", en: "Mingfei stood in the rain like a statue. Never seen him so quiet — this loser was carrying all Tokyo's rain." }
+      ] },
+    { id: "lionheart", zh: "狮心会 vs 学生会", en: "Lionheart vs Student Union",
+      ps: [
+        { char: "caesar", zh: "橄榄球场上，楚子航的君焰烧穿了半边夜空。我笑了：这才配做我的对手。", en: "On the field, Zihang's Inferno lit half the night. I laughed — now that's a worthy rival." },
+        { char: "zihang", zh: "凯撒的吸血镰划过我的脸颊。我们都不是为了赢，是为了确认：这世上还有配得上并肩的人。", en: "Caesar's scythe grazed my cheek. Neither of us played to win — only to confirm someone worthy stands beside us." }
+      ] },
+    { id: "bronze", zh: "青铜城之战", en: "Battle of Bronze City",
+      ps: [
+        { char: "mingfei", zh: "康斯坦丁叫我「哥哥」，然后在我怀里化成灰。那一刻我懂了：屠龙，是要还命的。", en: "Constantine called me \"brother\", then turned to ash in my arms. That moment I knew: slaying dragons demands a life in return." },
+        { char: "angers", zh: "第一世代的龙死于少年之手。历史总是这样开始——一个会哭的孩子，举起弑王的剑。", en: "A First-Generation dragon died by a boy's hand. History always begins so — a weeping child raising the king-slaying blade." }
+      ] },
+    { id: "white", zh: "白王终局", en: "The White King's End",
+      ps: [
+        { char: "mingfei", zh: "七宗罪在我手中震颤。赫尔佐格借白王之力咆哮，可他不懂——真正的王，甘愿为一个人停下。", en: "The Seven Sins trembled in my grip. Herzog roared with the White King's power, yet he never understood — a true King stops for one person." },
+        { char: "eri", zh: "哥哥说会带我回家。可世界树的影子太长，我先把路让给了他。Sakura，下次见面，换你请我吃冰淇淋。", en: "Brother said he'd take me home. But the World Tree's shadow was long; I gave him the road first. Sakura, next time, you buy me ice cream." },
+        { char: "angers", zh: "千年了。白王的血终于安静。我合上档案，听见钟声——为明非，也为所有没能回来的孩子。", en: "A thousand years. The White King's blood is quiet at last. I close the file, hear the bells — for Mingfei, and for every child who didn't return." }
+      ] },
+    { id: "odin", zh: "迈巴赫高架桥·奥丁降临", en: "Odin on the Maybach Viaduct",
+      img: "img/zihang-odin.jpg",
+      ps: [
+        { char: "zihang", zh: "迈巴赫的大灯切开雨幕。爸爸把我锁在车里，说「你数到一百，我就回来」。可他走向的那个东西，戴着面具、骑着八足的马——是死神。他没回头。", en: "The Maybach's headlights cut the rain. Father locked me in and said count to a hundred, I'll be back. But the thing he walked toward wore a mask and rode an eight-legged horse — Death. He never looked back." },
+        { char: "tianshu", zh: "我在后视镜里看了他最后一眼。高架桥上没有退路，只有那个戴单眼面具的神。我把车门锁死，告诉自己：这一次，换父亲挡在前面。", en: "I saw him one last time in the mirror. No way off the viaduct, only the one-eyed masked god. I locked the doors and told myself: this time, the father stands in front." },
+        { char: "angers", zh: "高架桥的监控里没有事故，只有一段被抹去的夜。后来我才拼出真相——奥丁取走了一个父亲，也取走了楚子航往后所有的「普通早晨」。", en: "The viaduct's cameras show no crash, only an erased night. Later I pieced the truth — Odin took a father, and with him every ordinary morning Zihang would ever have." }
+      ] }
+  ];
+
+  var roster = document.getElementById("ch-roster");
+  var stage = document.getElementById("ch-stage");
+  var evTabs = document.getElementById("ch-event-tabs");
+  var evPickers = document.getElementById("ch-ev-pickers");
+  var evText = document.getElementById("ch-ev-text");
+  var evMedia = document.getElementById("ch-ev-media");
+  if (!roster || !stage) return;
+
+  function L(o) { return (window.LANG === "en" && o.en !== undefined) ? o.en : o.zh; }
+
+  var _hc = (location.hash || "").slice(1);
+  var cur = CH[_hc] ? _hc : "mingfei";
+
+  function renderRoster() {
+    roster.innerHTML = "";
+    Object.keys(CH).forEach(function (id) {
+      var c = CH[id];
+      if (c.hide) return;
+      var d = document.createElement("div");
+      d.className = "ch-ava" + (id === cur ? " sel" : "");
+      d.innerHTML = '<div class="ch-ava-n">' + c.zh + '</div><div class="ch-ava-e">' + c.en + "</div>";
+      d.addEventListener("click", function () { cur = id; renderRoster(); renderStage(); });
+      roster.appendChild(d);
+    });
+  }
+  function renderStage() {
+    var c = CH[cur];
+    var relHtml = c.links.map(function (lid) {
+      var other = CH[lid];
+      if (!other) return "";
+      var r = REL[[cur, lid].join("-")] || REL[[lid, cur].join("-")];
+      if (!r) return "";
+      return '<div class="ch-rel" data-link="' + lid + '"><div class="ch-rel-head"><span class="ch-rel-to">' + other.zh + '</span><span class="ch-rel-en">' + other.en + '</span></div><div class="ch-rel-text">' + L(r) + "</div></div>";
+    }).join("");
+    stage.innerHTML =
+      '<div class="ch-dossier">' +
+      '<div class="ch-d-name">' + c.zh + '<span class="ch-d-en">' + c.en + "</span></div>" +
+      '<div class="ch-d-role">' + c[window.LANG === "en" ? "role_en" : "role_zh"] + "</div>" +
+      '<div class="ch-d-row"><span class="ch-d-k" data-i18n="ch_spirit">言灵</span><span>' + c[window.LANG === "en" ? "sp_en" : "sp_zh"] + "</span></div>" +
+      '<div class="ch-d-arc">' + c[window.LANG === "en" ? "arc_en" : "arc_zh"] + "</div>" +
+      '<div class="ch-rel-title" data-i18n="ch_rel_title">与他人的羁绊</div>' +
+      '<div class="ch-rels">' + relHtml + "</div>" +
+      "</div>";
+    stage.querySelectorAll("[data-i18n]").forEach(function (el) { if (window.t) el.textContent = window.t(el.getAttribute("data-i18n")); });
+    stage.querySelectorAll(".ch-rel").forEach(function (r) {
+      r.addEventListener("click", function () { var l = r.getAttribute("data-link"); if (CH[l]) { cur = l; renderRoster(); renderStage(); } });
+    });
+  }
+
+  var curEv = EVENTS[0].id, curPersp = EVENTS[0].ps[0].char;
+  function renderEvTabs() {
+    evTabs.innerHTML = "";
+    EVENTS.forEach(function (ev) {
+      var b = document.createElement("button");
+      b.className = "ch-ev-tab" + (ev.id === curEv ? " active" : "");
+      b.textContent = L(ev);
+      b.addEventListener("click", function () { curEv = ev.id; curPersp = ev.ps[0].char; renderEvTabs(); renderEvPickers(); renderEvMedia(); renderEvText(); });
+      evTabs.appendChild(b);
+    });
+  }
+  function renderEvPickers() {
+    var ev = EVENTS.filter(function (e) { return e.id === curEv; })[0];
+    evPickers.innerHTML = "";
+    ev.ps.forEach(function (p) {
+      var b = document.createElement("button");
+      b.className = "ch-ev-pick" + (p.char === curPersp ? " active" : "");
+      b.textContent = CH[p.char].zh;
+      b.addEventListener("click", function () { curPersp = p.char; renderEvPickers(); renderEvText(); });
+      evPickers.appendChild(b);
+    });
+  }
+  function renderEvText() {
+    var ev = EVENTS.filter(function (e) { return e.id === curEv; })[0];
+    var p = ev.ps.filter(function (x) { return x.char === curPersp; })[0];
+    evText.innerHTML = '<div class="ch-ev-char">' + CH[p.char].zh + " · " + CH[p.char].en + '</div><div class="ch-ev-line">' + L(p) + "</div>";
+  }
+  function renderEvMedia() {
+    var ev = EVENTS.filter(function (e) { return e.id === curEv; })[0];
+    evMedia.innerHTML = ev.img ? '<div class="ch-ev-media-wrap"><img src="' + ev.img + '" alt="' + L(ev) + '"><div class="ch-ev-cap">' + L(ev) + "</div></div>" : "";
+  }
+
+  renderRoster(); renderStage();
+  if (evTabs && evPickers && evText && evMedia) { renderEvTabs(); renderEvPickers(); renderEvMedia(); renderEvText(); }
+
+  window.addEventListener("hashchange", function () {
+    var h = (location.hash || "").slice(1);
+    if (CH[h] && h !== cur) {
+      cur = h; renderRoster(); renderStage();
+      var box = document.getElementById("ch-stage");
+      if (box) box.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+
+  if (window.onLangChange) window.onLangChange(function () {
+    renderRoster(); renderStage();
+    if (evTabs && evPickers && evText && evMedia) { renderEvTabs(); renderEvPickers(); renderEvMedia(); renderEvText(); }
+  });
+
+  /* ===== 人物交织网 ===== */
+  (function () {
+    var svg = document.getElementById("ch-net");
+    if (!svg) return;
+    var NS = "http://www.w3.org/2000/svg";
+    var CX = 340, CY = 230, R1 = 185, R2 = 110;
+    var primaries = ["mingfei", "zihang", "caesar", "eri", "angers", "zero"];
+    var angleOf = {};
+    primaries.forEach(function (id, i) { angleOf[id] = -90 + i * 60; });
+    var SEC = { nono: { zh: "诺诺", en: "Nono", tag: "恺撒的红发巫女" }, xiami: { zh: "夏弥", en: "Xia Mi", tag: "大地与山之王" }, mingze: { zh: "路鸣泽", en: "Lu Mingze", tag: "明非之弟·魔鬼" }, yubetsu: { zh: "源稚生", en: "Minamoto", tag: "绘梨衣之兄" }, kings: { zh: "四大龙王", en: "Four Kings", tag: "龙族之巅" } };
+    var secPrimary = { nono: "caesar", xiami: "zihang", mingze: "mingfei", yubetsu: "eri", kings: "angers" };
+    var pos = {};
+    primaries.forEach(function (id) { var a = angleOf[id] * Math.PI / 180; pos[id] = { x: CX + R1 * Math.cos(a), y: CY + R1 * Math.sin(a) }; });
+    Object.keys(secPrimary).forEach(function (id) { var p = secPrimary[id]; var a = angleOf[p] * Math.PI / 180; pos[id] = { x: CX + R2 * Math.cos(a), y: CY + R2 * Math.sin(a) }; });
+
+    var edges = Object.keys(REL).map(function (k) { var p = k.split("-"); return [p[0], p[1]]; });
+    var nb = {};
+    edges.forEach(function (e) { nb[e[0]] = nb[e[0]] || []; nb[e[0]].push(e[1]); nb[e[1]] = nb[e[1]] || []; nb[e[1]].push(e[0]); });
+
+    function labelOf(id) { if (CH[id]) return CH[id].zh; if (SEC[id]) return SEC[id].zh; return id; }
+    function engOf(id) { if (CH[id]) return CH[id].en; if (SEC[id]) return SEC[id].en; return id; }
+
+    var edgeEls = [];
+    edges.forEach(function (e) {
+      var a = pos[e[0]], b = pos[e[1]];
+      if (!a || !b) return;
+      var ln = document.createElementNS(NS, "line");
+      ln.setAttribute("x1", a.x.toFixed(1)); ln.setAttribute("y1", a.y.toFixed(1));
+      ln.setAttribute("x2", b.x.toFixed(1)); ln.setAttribute("y2", b.y.toFixed(1));
+      ln.setAttribute("class", "edge");
+      svg.appendChild(ln); edgeEls.push({ el: ln, a: e[0], b: e[1] });
+    });
+    var nodeEls = {};
+    function drawNode(id, primary) {
+      var p = pos[id];
+      if (!p) return;
+      var g = document.createElementNS(NS, "g");
+      g.setAttribute("class", "node" + (primary ? " primary" : " sec"));
+      var c = document.createElementNS(NS, "circle");
+      c.setAttribute("cx", p.x.toFixed(1)); c.setAttribute("cy", p.y.toFixed(1)); c.setAttribute("r", primary ? 9 : 6.5);
+      var t = document.createElementNS(NS, "text");
+      t.setAttribute("x", p.x.toFixed(1)); t.setAttribute("y", (p.y + (primary ? 24 : 19)).toFixed(1)); t.textContent = labelOf(id);
+      g.appendChild(c); g.appendChild(t);
+      g.addEventListener("click", function (ev) { ev.stopPropagation(); focusNode(id); });
+      svg.appendChild(g); nodeEls[id] = g;
+    }
+    primaries.forEach(function (id) { drawNode(id, true); });
+    Object.keys(SEC).forEach(function (id) { drawNode(id, false); });
+
+    var cap = document.getElementById("ch-net-cap");
+    var legend = document.getElementById("ch-net-legend");
+    if (legend) legend.innerHTML = '<span class="lg lg-pri">● 主要人物</span><span class="lg lg-sec">● 关联角色</span>';
+
+    var focusActive = false, focusId = null;
+    function clearFocus() {
+      focusActive = false; focusId = null;
+      edgeEls.forEach(function (o) { o.el.setAttribute("class", "edge"); });
+      Object.keys(nodeEls).forEach(function (nid) { var g = nodeEls[nid]; g.setAttribute("class", g.getAttribute("class").replace(/\s*(hot|dim)/g, "").trim()); });
+      if (cap) {
+        cap.innerHTML = '<span data-i18n="ch_net_tip">◇ 点击节点查看羁绊 · 点击空白处复位</span>';
+        if (window.t) { var s = cap.querySelector("[data-i18n]"); if (s) s.textContent = window.t("ch_net_tip"); }
+      }
+    }
+    function focusNode(id) {
+      focusActive = true; focusId = id;
+      var neigh = nb[id] || [];
+      var keep = {};
+      keep[id] = true; neigh.forEach(function (n) { keep[n] = true; });
+      edgeEls.forEach(function (o) { o.el.setAttribute("class", "edge" + ((o.a === id || o.b === id) ? " hot" : " dim")); });
+      Object.keys(nodeEls).forEach(function (nid) {
+        var g = nodeEls[nid];
+        var cls = g.getAttribute("class").replace(/\s*(hot|dim)/g, "");
+        cls += (keep[nid] ? " hot" : " dim");
+        g.setAttribute("class", cls.trim());
+      });
+      if (cap) {
+        if (CH[id]) {
+          var c = CH[id];
+          var relLines = (c.links || []).map(function (l) {
+            var r = REL[[id, l].join("-")] || REL[[l, id].join("-")];
+            if (!r) return "";
+            return '<div class="cap-rel"><b>' + labelOf(l) + "</b> · " + L(r) + "</div>";
+          }).join("");
+          cap.innerHTML = '<div class="cap-name">' + c.zh + '<span class="cap-en">' + c.en + '</span></div><div class="cap-role">' + L({ zh: c.role_zh, en: c.role_en }) + '</div><div class="cap-rels">' + relLines + "</div>";
+        } else if (SEC[id]) {
+          var s = SEC[id];
+          cap.innerHTML = '<div class="cap-name">' + s.zh + '<span class="cap-en">' + s.en + '</span></div><div class="cap-role">' + s.tag + '</div><div class="cap-rels"><div class="cap-rel"><b>' + labelOf(secPrimary[id]) + "</b> · " + L({ zh: "命运与" + labelOf(secPrimary[id]) + "交织。", en: "Fate entwines with " + engOf(secPrimary[id]) + "." }) + "</div></div>";
+        }
+      }
+      if (CH[id] && cur !== id) { cur = id; renderRoster(); renderStage(); }
+    }
+    svg.addEventListener("click", function (ev) { if (ev.target === svg) clearFocus(); });
+    if (window.onLangChange) window.onLangChange(function () {
+      if (focusActive) focusNode(focusId);
+      else clearFocus();
+    });
+    clearFocus();
+  })();
+})();
