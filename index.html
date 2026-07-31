@@ -103,9 +103,11 @@
 .adm-form .bf-hint.err{color:#b33939;}
 .adm-submit,.adm-ready{background:#3e2f22;color:#fbf6e8;border:none;padding:13px 28px;font-family:var(--serif);font-size:14px;letter-spacing:.2em;cursor:pointer;border-radius:2px;transition:.3s;margin-top:8px;}
 .adm-submit:hover,.adm-ready:hover{background:#5a4431;}
-.adm-letter{text-align:left;font-family:var(--serif);color:#3e2f22;font-size:clamp(13px,1.7vw,15px);line-height:2.1;letter-spacing:.04em;padding:18px 20px;background:rgba(255,255,255,.45);border:1px solid #d9c9a8;box-shadow:0 0 24px rgba(191,163,111,.12) inset;}
-.adm-letter p{margin:.55em 0;text-indent:2em;}
-.adm-letter .salut{text-indent:0;color:#6b4f2f;font-weight:700;font-size:1.05em;}
+.adm-letter{text-align:left;font-family:var(--serif);color:#3e2f22;font-size:clamp(13.5px,1.75vw,15.5px);line-height:2.25;letter-spacing:.04em;padding:8px 10px 0;}
+.adm-letter .adm-date{text-indent:0;margin:0 0 1.4em;color:#5a4431;font-size:.95em;letter-spacing:.06em;}
+.adm-letter p{margin:0 0 1.35em;text-indent:2.4em;}
+.adm-letter p:last-of-type{margin-bottom:.6em;}
+.adm-letter .salut{text-indent:0;margin:0 0 1.25em;color:#3e2f22;font-weight:700;font-size:1.08em;letter-spacing:.06em;}
 .adm-letter .emph{color:#8c2432;font-weight:700;}
 .adm-sign{margin-top:22px;text-align:left;font-family:var(--serif);color:#5a4431;font-size:13px;line-height:2;}
 .adm-sign .sign-row{display:flex;align-items:baseline;gap:10px;margin:.3em 0;}
@@ -350,15 +352,20 @@
 
   // 录取通知书正文（弹窗 + 邮件共享文案，严格按用户提供的纸质通知书图片）
   function letterContent(isEn,name,year){
+    const now=new Date();
+    const dateStr=isEn
+      ? now.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+      : now.getFullYear()+' 年 '+(now.getMonth()+1)+' 月 '+now.getDate()+' 日';
     if(isEn){
       return {
-        salut:'To Candidate '+name+',',
+        date:dateStr,
+        salut:'Dear '+name+',',
         paras:[
-          'On behalf of the Admission Office of Cassell College (CASSELL COLLEGE), we are honored to inform you that you have been admitted as a new student of the '+year+' class.',
-          'As we often say, there is always another choice. Perhaps we can become one of your choices. First, please allow us to introduce ourselves: we are a noble academy located in the northern part of Illinois, USA, with a century-old history dedicated to the study of certain mysterious ancient creatures.',
-          'Are we a paleontology institute? You may wonder. No, we are not a paleontology institute. Our majors include mathematics, nuclear physics, precision mechanics, biological genealogy… and certain special majors that are highly secretive and demanding — yet, we assure you, extremely fascinating.',
-          'In addition, we train our students to operate various vehicles — please do not worry, we are not an American version of a vocational school — cars, yachts, even jet aircraft. Shooting, hand-to-hand combat, and sword mastery are also required courses. We also offer etiquette and dance classes to teach you how to handle all occasions with ease, yet we are not a spy academy either.',
-          'Our selection criteria are so strict and our curriculum so comprehensive because the enemy we face is extraordinarily powerful. These are the ancient beings we are devoted to studying. Long before mankind, they were the rulers of the Earth. They are violent and proud, noble and lonely, and they are not extinct; they still live among us.',
+          'On behalf of the Admission Office of Cassell College (CASSELL COLLEGE), we have the honor of informing you that you have been admitted as a new student of the Class of '+year+'.',
+          'As we often say, there is always another choice. Perhaps we may become one of yours. First, allow us to introduce ourselves: we are a noble academy located in the northern part of Illinois, USA, with a century-long history devoted to the study of certain mysterious ancient creatures.',
+          'Are we a paleontology institute? you may ask. No, we are not. Our curriculum spans mathematics, nuclear physics, precision mechanics, biological genealogy… and certain special majors that are highly secretive and demanding — yet, we assure you, utterly fascinating.',
+          'In addition, we train our students to operate every kind of vehicle — rest assured, we are not an American vocational school — cars, yachts, even jet aircraft. Shooting, hand-to-hand combat, and sword mastery are also required. We further offer etiquette and dance classes to prepare you for any occasion with ease, though we are not a spy academy either.',
+          'Our selection criteria are so strict and our curriculum so comprehensive because the enemy we face is extraordinarily powerful. These are the ancient beings we are devoted to studying. Long before mankind, they ruled the Earth. They are violent and proud, noble and lonely, and they are not extinct; they still live among us.',
           'They have had many names, but one is known above all others — Dragon.',
           'You may be surprised, even disbelieving, but we have indeed opened a door for you: a door to the dark side of the world. Cassell College, or rather the Secret Party, extends this invitation. We are the keepers of secrets and the watchers of the world.',
           'Only a handful of people receive such an invitation, and you, '+name+', are precisely the one in ten thousand.',
@@ -369,7 +376,8 @@
       };
     }
     return {
-      salut:'尊敬的候选者：',
+      date:dateStr,
+      salut:'尊敬的 '+name+'：',
       paras:[
         '这封信来自卡塞尔学院（CASSELL COLLEGE）招生委员会，我们很荣幸地通知您，您已被录取为本校 '+year+' 年的新学员。',
         '我们常说，永远有另一个选择，或许我们可以成为您的选择之一。首先请容我们自我介绍：我们是一家位于美国伊利诺伊州北部的贵族学院，拥有百年历史，致力于研究某种神秘的古代生物。',
@@ -391,7 +399,8 @@
     const year=new Date().getFullYear();
     lastLetterData={name,age,email};
     const c=letterContent(isEn,name,year);
-    let html='<p class="salut">'+escHtml(c.salut)+'</p>';
+    let html='<p class="adm-date">'+escHtml(c.date)+'</p>';
+    html+='<p class="salut">'+escHtml(c.salut)+'</p>';
     c.paras.forEach(function(p){ html+='<p>'+escHtml(p)+'</p>'; });
     return html;
   }
@@ -440,22 +449,23 @@
     const bg='#fbf6e8', panelFrom='#fbf6e8', panelTo='#f3e9d0', ink='#2b2118', gold='#8c6f3f', label='#7a6046';
     const crest=(typeof location!=='undefined'&&location.origin&&location.origin.indexOf('http')===0?location.origin:'https://luisdingww-bit.github.io/dragonraja-site')+'/img/cassell-seal-round.png';
     const title=isEn?'LETTER OF ADMISSION':'录 取 通 知';
-    const presLabel=isEn?'President:':'校长签名：';
-    const secLabel=isEn?'Chief Secretary:':'首席秘书签名：';
-    const paras=c.paras.map(function(p){ return '<p style="margin:.75em 0;text-indent:2em;color:'+ink+';font-size:15px;line-height:1.95;">'+escHtml(p)+'</p>'; }).join('');
+    const presLabel=isEn?'President':'校长签名';
+    const secLabel=isEn?'Chief Secretary':'首席秘书签名';
+    const paras=c.paras.map(function(p){ return '<p style="margin:0 0 1.35em;text-indent:2.4em;color:'+ink+';font-size:15px;line-height:2.05;">'+escHtml(p)+'</p>'; }).join('');
     return ''
     +'<div style="margin:0;padding:0;background:'+bg+';">'
     +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:'+bg+';padding:28px 0;"><tr><td align="center">'
     +'<div style="max-width:600px;width:100%;background:linear-gradient(180deg,'+panelFrom+' 0%,'+panelTo+' 100%);border:8px double #bfa36f;color:'+ink+';padding:34px 30px 28px;text-align:center;font-family:Georgia,\'Times New Roman\',\'Songti SC\',serif;box-shadow:0 18px 60px rgba(0,0,0,.45);">'
     +'<img src="'+crest+'" width="76" height="76" style="border-radius:50%;border:2px solid #bfa36f;box-shadow:0 0 20px rgba(191,163,111,.35);margin-bottom:10px;" alt="Cassell College">'
     +'<div style="letter-spacing:.28em;color:'+ink+';font-size:clamp(18px,3.6vw,26px);font-weight:700;margin-bottom:4px;">CASSELL COLLEGE</div>'
-    +'<div style="letter-spacing:.4em;color:'+gold+';font-size:clamp(16px,3vw,22px);margin-bottom:18px;padding-left:.4em;">'+title+'</div>'
-    +'<div style="text-align:left;padding:18px 20px;background:rgba(255,255,255,.45);border:1px solid #d9c9a8;box-shadow:0 0 24px rgba(191,163,111,.12) inset;">'
-    +'<p style="margin:.55em 0;color:'+label+';font-weight:700;font-size:1.05em;">'+escHtml(c.salut)+'</p>'
+    +'<div style="letter-spacing:.4em;color:'+gold+';font-size:clamp(16px,3vw,22px);margin-bottom:22px;padding-left:.4em;">'+title+'</div>'
+    +'<div style="text-align:left;padding:0 8px;">'
+    +'<p style="margin:0 0 1.6em;text-indent:0;color:'+label+';font-size:14px;letter-spacing:.06em;">'+escHtml(c.date)+'</p>'
+    +'<p style="margin:0 0 1.25em;text-indent:0;color:'+ink+';font-weight:700;font-size:1.05em;letter-spacing:.06em;">'+escHtml(c.salut)+'</p>'
     +paras
     +'</div>'
-    +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:22px;color:#5a4431;font-size:13px;line-height:2;text-align:left;">'
-    +'<tr><td style="color:'+label+';white-space:nowrap;vertical-align:baseline;">'+presLabel+'</td><td style="font-size:15px;font-weight:700;letter-spacing:.05em;font-style:italic;vertical-align:baseline;">Hilbert Ron Anjou</td></tr>'
+    +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:18px;color:#5a4431;font-size:13px;line-height:2;text-align:left;">'
+    +'<tr><td style="color:'+label+';white-space:nowrap;vertical-align:baseline;width:110px;">'+presLabel+'</td><td style="font-size:15px;font-weight:700;letter-spacing:.05em;font-style:italic;vertical-align:baseline;">Hilbert Ron Anjou</td></tr>'
     +'<tr><td style="color:'+label+';white-space:nowrap;vertical-align:baseline;">'+secLabel+'</td><td style="font-size:15px;font-weight:700;letter-spacing:.05em;font-style:italic;vertical-align:baseline;">EVA</td></tr>'
     +'</table>'
     +'</div>'
