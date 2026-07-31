@@ -345,15 +345,13 @@
     window.DR_ACC.config.openLogin=function(){ if(openModal)openModal(); if(showLoginTab)showLoginTab(); };
     window.DR_ACC.config.onLogin=function(){ if(typeof enableEnter==='function')enableEnter(); };
     window.DR_ACC.init();
-    // ★ 会话恢复后自动跳过 boot：已登录/已登记的老用户回来时，boot 仅闪现 1.2s 后自动消退
+    // 会话恢复后仅启用「启程」按钮，不自动进入——用户必须点击「启程」才进入
     if(window.DR_ACC.current()){
       enableEnter();
-      setTimeout(closeBoot, 1200);
     } else {
-      // 本地兜底：检查 dr_enroll（纯游客登记态）
       try{
         var saved=JSON.parse(localStorage.getItem('dr_enroll')||'null');
-        if(saved&&saved.name){ enableEnter(); setTimeout(closeBoot, 1200); }
+        if(saved&&saved.name){ enableEnter(); }
       }catch(e){}
     }
   })();
