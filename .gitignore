@@ -3,3 +3,4 @@ Thumbs.db
 *.mp4bak
 .npmcache/
 node_modules/
+CNAME
