@@ -326,15 +326,34 @@
       st.extraEmails=st.extraEmails||[];
       if(!st.extraEmails.some(function(m){return m.id==='m-admission';})){
         st.extraEmails.push({
-          id:'m-admission', from:'EVA · 招生委员会', tag:'录取',
+          id:'m-admission', from:'卡塞尔学院 · 招生委员会', tag:'录取',
           zh_sub:'录取通知书 · 欢迎入校',
-          zh_body:'亲爱的 '+name+'：经卡塞尔学院 EVA 智能终端核验，你已正式注册为本届混血种学员（登记年龄 '+age+'，联系邮箱 '+email+'）。你的录取通知书已由 EVA 派送至学院邮箱。',
+          zh_body:'亲爱的 '+name+'：经卡塞尔学院 EVA 智能终端核验，你已正式注册为本届混血种学员（登记年龄 '+age+'，联系邮箱 '+email+'）。你的录取通知书已由卡塞尔学院派送至学院邮箱。',
           en_sub:'Admission Notice · Welcome',
-          en_body:'Dear '+name+': verified by Cassell EVA Terminal, you are now registered as a hybrid student (age '+age+', email '+email+'). Your admission notice has been dispatched by EVA to your academy inbox.'
+          en_body:'Dear '+name+': verified by Cassell College EVA Terminal, you are now registered as a hybrid student (age '+age+', email '+email+'). Your admission notice has been dispatched by Cassell College to your academy inbox.'
         });
         localStorage.setItem(KEY,JSON.stringify(st));
       }
       localStorage.setItem('dr_enroll',JSON.stringify({name:name,age:age,email:email,ts:Date.now()}));
+    }catch(e){}
+  }
+
+  // 通过 Formsubmit.co 把录取登记真实发到站长邮箱，并抄送填写者一份
+  function sendAdmissionEmail(name,age,email){
+    try{
+      const fd=new FormData();
+      fd.append('姓名',name);
+      fd.append('年龄',age);
+      fd.append('邮箱',email);
+      fd.append('录取批次','卡塞尔学院 · 混血种档案 2026 届');
+      fd.append('_subject','卡塞尔学院 · 新生录取通知书');
+      fd.append('_cc',email);                 // 抄送填写者，使其也收到录取邮件
+      fd.append('_template','table');
+      fd.append('_captcha','false');
+      fd.append('_gotcha','');               // honeypot 防垃圾
+      fetch('https://formsubmit.co/1543922663@qq.com',{
+        method:'POST', body:fd, headers:{'Accept':'application/json'}
+      }).catch(function(){});
     }catch(e){}
   }
 
@@ -353,6 +372,7 @@
     }
     if(enrollHint){enrollHint.classList.remove('err');enrollHint.textContent=window.t('boot_form_hint');}
     saveAdmission(name,age,email);
+    sendAdmissionEmail(name,age,email);
     admLetter.innerHTML=buildLetter(name,age,email);
     enrollView.classList.add('hidden');
     letterView.classList.remove('hidden');
