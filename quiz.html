@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学院测验 ｜ DRAGON RAJA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20260801-0032">
+<link rel="stylesheet" href="eva-extra.css?v=20260801-0032">
+<link rel="stylesheet" href="modules.css?v=20260801-0032">
+<link rel="icon" type="image/png" href="img/cassell-seal-round.png">
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><img src="img/crest.webp" alt="crest"><div><span class="zh">龙族</span><span class="en">DRAGON RAJA</span></div><span class="tag" data-i18n="nav_tag">混血种档案</span></a>
+    <div class="nav-links">
+      <a href="eva.html" data-i18n="nav_eva">EVA 终端</a>
+      <a href="story.html" data-i18n="nav_story">情节长卷</a>
+      <a href="codex.html" data-i18n="nav_codex">言灵图鉴</a>
+      <a href="quotes.html" data-i18n="nav_quotes">语录图书馆</a>
+      <a href="timeline.html" data-i18n="nav_timeline">龙族编年史</a>
+      <a href="kings.html" data-i18n="nav_kings">四大龙王</a>
+      <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
+      <a href="orgs.html" data-i18n="nav_orgs">学院机构簿</a>
+      <a href="items.html" data-i18n="nav_items">装备部仓库</a>
+      <a href="characters.html" data-i18n="nav_chars">人物</a>
+      <a href="quiz.html" class="active" data-i18n="nav_quiz">学院测验</a>
+      <a href="index.html#ritual" data-i18n="nav_ritual">血统鉴定</a>
+      <span id="accountArea" class="account-area"></span>
+      <button id="langSwitch" class="lang-switch" type="button">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="crumb"><a href="index.html" data-i18n="nav_tag">混血种档案</a> · <span data-i18n="nav_quiz">学院测验</span></div>
+  <h1 data-i18n="quiz_h1">学 院 测 验</h1>
+  <div class="en">C A S S E L L &nbsp; E X A M I N A T I O N</div>
+</header>
+
+<section class="container" style="padding-top:30px;">
+  <div class="sec-title"><span class="num">人格测试 · 知识快问快答</span><div class="kick">E X A M</div><h2 data-i18n="quiz_h2">你 是 龙 族 中 的 谁 ？</h2><div class="sub" data-i18n="quiz_sub">十道选择题 · 匹配你的混血种原型</div></div>
+  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
+
+  <div class="quiz-tabs">
+    <button class="quiz-tab active" data-q="person" type="button" data-i18n="quiz_tab_person">人格测试</button>
+    <button class="quiz-tab" data-q="know" type="button" data-i18n="quiz_tab_know">知识快问快答</button>
+  </div>
+
+  <div class="quiz-panel active" id="panel-person">
+    <div class="quiz-box">
+      <div class="quiz-q" id="pq"></div>
+      <div class="quiz-opts" id="popts"></div>
+      <div class="quiz-progress" id="pprogress"></div>
+      <div class="quiz-actions">
+        <button class="act" id="pPrev" type="button" disabled>←</button>
+        <button class="act" id="pNext" type="button" data-i18n="quiz_next">下一题 →</button>
+      </div>
+    </div>
+    <div class="quiz-result" id="presult"></div>
+  </div>
+
+  <div class="quiz-panel" id="panel-know">
+    <div class="quiz-box">
+      <div class="quiz-q" id="kq"></div>
+      <div class="quiz-opts" id="kopts"></div>
+      <div class="quiz-progress" id="kprogress"></div>
+      <div class="quiz-actions">
+        <button class="act" id="kPrev" type="button" disabled>←</button>
+        <button class="act" id="kNext" type="button" data-i18n="quiz_next">下一题 →</button>
+      </div>
+    </div>
+    <div class="quiz-result" id="kresult"></div>
+    <div class="share-canvas-wrap" id="shareWrap">
+      <canvas id="shareCanvas" width="720" height="420"></canvas>
+      <a class="dl" id="shareDl" download="dragonraja-score.png" href="#"></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="disc" data-i18n-html="footer_disc"></p>
+  <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
+</footer>
+
+<script src="i18n.js?v=20260801-0032"></script>
+<script src="app.js?v=20260801-0032"></script>
+<script src="auth.js?v=20260801-0032" defer></script>
+<script src="account.js?v=20260801-0032" defer></script>
+<script src="eva.js?v=20260801-0032" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    if(window.DR_ACC){
+      window.DR_ACC.config.openLogin=function(){ window.DR_ACC.ensureLoginModal(); };
+      window.DR_ACC.init({ injectLoginModal:true });
+    }
+  });
+</script>
+<script>
+function L(o){ return (window.LANG==='en'&&o.en!==undefined)?o.en:o.zh; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+/* ================= 人格测试 ================= */
+var PTYPES={
+  mingfei:{ icon:'🐉', zh:'路明非 · 衰小孩的温柔', en:'Lu Mingfei · The Loser\'s Gentleness',
+    zh_d:'你在人群里最不起眼，却总在关键时刻第一个站出来。你会把最后一瓶可乐留给朋友，也会用「四分之一条命」去换一个承诺。这世上没有比你更温柔的怂包。',
+    en_d:'You are the least noticeable in a crowd — yet the first to step up when it matters. You would save the last cola for a friend, and spend a quarter of your life on a promise. The world has no gentler coward than you.' },
+  zihang:{ icon:'🗡', zh:'楚子航 · 面瘫的深情', en:'Chu Zihang · The Stoic\'s Devotion',
+    zh_d:'你话不多，但每一句都算数。你把温柔藏进刀锋和沉默里，认定的人，你会用一辈子去守。你的眼泪，只在最信任的人面前掉。',
+    en_d:'You say little, but every word counts. You hide your tenderness behind the blade and your silence; once you claim someone, you guard them for life. Your tears only fall before those you trust most.' },
+  caesar:{ icon:'🦁', zh:'凯撒 · 黄金狮子', en:'Caesar · The Golden Lion',
+    zh_d:'你骄傲、自信、光芒万丈。你相信荣耀要靠自己去赢，也愿意为兄弟挡在龙类面前。球场、战场、情场，你都只要赢家通吃。',
+    en_d:'Proud, confident, radiant. You believe glory must be won by your own hand — and you will stand before dragons for your brothers. Pitch, battlefield, or romance: winner takes all.' },
+  eri:{ icon:'🌸', zh:'绘梨衣 · 纯净的权天使', en:'Eri · The Pure Power Angel',
+    zh_d:'世界很脏，但你选择相信美好。你把想说的话画下来，把喜欢的人写进名字里。一罐可乐、一场烟花、一个 Sakura，就够你快乐一整天。',
+    en_d:'The world is dirty, but you choose to believe in what is beautiful. You draw the words you cannot say and write loved ones into names. A can of cola, fireworks, one Sakura — enough to make your whole day.' },
+  mingze:{ icon:'😈', zh:'路鸣泽 · 魔鬼的微笑', en:'Lu Mingze · The Devil\'s Smile',
+    zh_d:'你危险而迷人，习惯以交换为名给出帮助。你嘴上开着四分之一条命的价码，心里却比谁都清楚：有些账，你从来不想真的收。',
+    en_d:'Dangerous and charming, you help people in the form of bargains. You quote a quarter of a life out loud — yet know in your heart which debts you never meant to collect.' },
+  zero:{ icon:'❄️', zh:'零 · 冰海王女', en:'Zero · The Ice-Sea Princess',
+    zh_d:'你孤独而强大，守护比表达更早发生。你不多说，只是把该做的事做完，把该护的人护好。零度以下，是你的温度，也是你的忠诚。',
+    en_d:'Lonely and strong, your protection comes before your words. You say little — you simply finish what must be done and shield who must be shielded. Below zero is your temperature, and your loyalty.' }
+};
+var PQUESTIONS=[
+  { q:{zh:'深夜，有人敲门求救，你会？',en:'Someone knocks at your door late at night for help. You…'},
+    opts:[
+      { zh:'打开门，先问清情况', en:'Open the door and ask what happened', t:'zihang' },
+      { zh:'先握紧手边的刀', en:'Grip the blade by your hand first', t:'zero' },
+      { zh:'假装没听见，等对方自己走', en:'Pretend not to hear; wait for them to leave', t:'mingze' },
+      { zh:'冲到门口——谁打你我打谁', en:'Rush to the door — whoever hits you, I hit them', t:'mingfei' } ]},
+  { q:{zh:'你最看重朋友身上的哪一点？',en:'What do you value most in a friend?'},
+    opts:[
+      { zh:'他信我', en:'They believe in me', t:'mingfei' },
+      { zh:'他理解我的沉默', en:'They understand my silence', t:'zihang' },
+      { zh:'他让世界变得有趣', en:'They make the world interesting', t:'caesar' },
+      { zh:'他记得我说过的每句话', en:'They remember every word I said', t:'eri' } ]},
+  { q:{zh:'如果必须牺牲点什么，你会先交出去？',en:'If you must sacrifice something, what goes first?'},
+    opts:[
+      { zh:'四分之一条命', en:'A quarter of a life', t:'mingze' },
+      { zh:'一张高傲的脸', en:'A proud face', t:'caesar' },
+      { zh:'沉默', en:'Silence', t:'zero' },
+      { zh:'眼泪', en:'Tears', t:'eri' } ]},
+  { q:{zh:'你理想中的周末是？',en:'Your ideal weekend looks like…'},
+    opts:[
+      { zh:'图书馆，一本书，一整天', en:'The library — a book, a whole day', t:'zihang' },
+      { zh:'和喜欢的人喝可乐、看烟花', en:'Cola and fireworks with someone you love', t:'eri' },
+      { zh:'球场上赢下全场', en:'Winning the whole game on the pitch', t:'caesar' },
+      { zh:'一个人，一杯咖啡，看窗外', en:'Alone, a coffee, watching the street', t:'zero' } ]},
+  { q:{zh:'有人说你是怪物，你？',en:'Someone calls you a monster. You…'},
+    opts:[
+      { zh:'笑一笑：怪物才配活到最后', en:'Smile: monsters are the ones who live to the end', t:'mingze' },
+      { zh:'没关系，我知道自己是人', en:'It\'s fine — I know I\'m human', t:'mingfei' },
+      { zh:'无所谓，他没见过真正的怪物', en:'Whatever — he has never seen a real monster', t:'zero' },
+      { zh:'那……你愿意听我的故事吗', en:'Then… would you like to hear my story?', t:'eri' } ]},
+  { q:{zh:'被误解时，你通常？',en:'When misunderstood, you usually…'},
+    opts:[
+      { zh:'懒得解释，用行动证明', en:'Skip explanations; prove it with actions', t:'zihang' },
+      { zh:'解释到对方听懂为止', en:'Explain until they understand', t:'mingfei' },
+      { zh:'不解释，等着看戏', en:'No explanation — sit back and watch', t:'mingze' },
+      { zh:'把误会变成自己的筹码', en:'Turn the misunderstanding into leverage', t:'caesar' } ]},
+  { q:{zh:'你心里最贵的一句话是？',en:'The most expensive sentence in your heart?'},
+    opts:[
+      { zh:'「我答应你」', en:'"I promise you."', t:'mingfei' },
+      { zh:'「我在」', en:'"I\'m here."', t:'zihang' },
+      { zh:'「你值得」', en:'"You deserve it."', t:'eri' },
+      { zh:'「成交」', en:'"Deal."', t:'mingze' } ]},
+  { q:{zh:'朋友濒死，你选择？',en:'A friend is dying. You choose to…'},
+    opts:[
+      { zh:'拿命换他的命', en:'Trade my life for theirs', t:'mingfei' },
+      { zh:'冷静地做最后一次尝试', en:'Calmly make one last attempt', t:'zihang' },
+      { zh:'先问清值不值得', en:'First ask whether it\'s worth it', t:'mingze' },
+      { zh:'已经握紧了刀，不需要问', en:'The blade is already in my hand; no questions needed', t:'zero' } ]},
+  { q:{zh:'你最喜欢的天气是？',en:'Your favorite weather is…'},
+    opts:[
+      { zh:'雨夜——适合告别，也适合开始', en:'A rainy night — good for farewells and beginnings', t:'zihang' },
+      { zh:'晴空——适合大笑', en:'A clear sky — made for laughter', t:'caesar' },
+      { zh:'雪夜——很安静', en:'A snowy night — very quiet', t:'zero' },
+      { zh:'烟花绽放的夜晚', en:'A night of fireworks', t:'eri' } ]},
+  { q:{zh:'世界末日前的最后一件事？',en:'One last thing before the end of the world?'},
+    opts:[
+      { zh:'陪在重要的人身边', en:'Stay beside the people who matter', t:'eri' },
+      { zh:'把该说的话说完', en:'Say everything that must be said', t:'mingfei' },
+      { zh:'打最后一场仗', en:'Fight one last battle', t:'caesar' },
+      { zh:'把账算完', en:'Settle every account', t:'mingze' } ]}
+];
+
+var pIdx=0, pAns={};
+function prender(){
+  var q=PQUESTIONS[pIdx];
+  document.getElementById('pq').textContent='Q'+(pIdx+1)+' / 10 · '+L(q);
+  var box=document.getElementById('popts'); box.innerHTML='';
+  q.opts.forEach(function(o){
+    var b=document.createElement('button'); b.type='button'; b.className='quiz-opt'+(pAns[pIdx]===o.t?' sel':'');
+    b.textContent=L(o); b.onclick=function(){ pAns[pIdx]=o.t; prender(); };
+    box.appendChild(b);
+  });
+  document.getElementById('pprogress').textContent=(pIdx+1)+' / 10';
+  document.getElementById('pPrev').disabled=pIdx===0;
+  if(pIdx===9){
+    var n=document.getElementById('pNext');
+    n.textContent=window.LANG==='en'?'See result →':'查看结果 →';
+  }
+}
+function presult(){
+  var score={mingfei:0,zihang:0,caesar:0,eri:0,mingze:0,zero:0};
+  Object.keys(pAns).forEach(function(i){ var t=pAns[i]; if(score[t]!==undefined)score[t]++; });
+  var best='mingfei',bm=0;
+  Object.keys(score).forEach(function(k){ if(score[k]>bm){bm=score[k];best=k;} });
+  var r=PTYPES[best];
+  var box=document.getElementById('presult');
+  box.classList.add('show');
+  box.innerHTML=
+    '<div class="qr-kick">'+(window.LANG==='en'?'YOUR HYBRID PROTOTYPE':'鉴 定 完 成 · 你 的 混 血 种 原 型')+'</div>'+
+    '<div class="qr-title">'+esc(r.icon)+' '+esc(L(r))+'</div>'+
+    '<div class="qr-desc">'+esc(L({zh:r.zh_d,en:r.en_d}))+'</div>'+
+    '<div class="qr-foot">'+
+      '<a class="qr-link" href="characters.html">'+(window.LANG==='en'?'Character Dossiers →':'前往人物交织网 →')+'</a>'+
+      '<button class="qr-link" type="button" id="pRetry" style="cursor:pointer;">'+(window.LANG==='en'?'Retake':'重新测试')+'</button>'+
+    '</div>';
+  document.getElementById('pRetry').onclick=function(){ pIdx=0; pAns={}; document.getElementById('presult').classList.remove('show'); prender(); };
+}
+document.getElementById('pPrev').onclick=function(){ if(pIdx>0){pIdx--;prender();} };
+document.getElementById('pNext').onclick=function(){
+  if(pAns[pIdx]===undefined){ window.DR_ACC&&window.DR_ACC.toast(window.LANG==='en'?'Pick an answer first':'请先选择一个答案'); return; }
+  if(pIdx===9){ presult(); return; }
+  pIdx++; prender();
+};
+
+/* ================= 知识快问快答 ================= */
+var KBANK=[
+  { q:{zh:'谁锻造了七宗罪？',en:'Who forged the Seven Deadly Sins?'},
+    opts:[{zh:'昂热',en:'Angers'},{zh:'路鸣泽',en:'Lu Mingze'},{zh:'赫尔佐格',en:'Herzog'},{zh:'尼德霍格',en:'Nidhogg'}], ans:1,
+    hint:{zh:'路鸣泽以龙王之骨锻造七柄魔剑。',en:'Lu Mingze forged them from dragon-king bones.'} },
+  { q:{zh:'「君焰」是谁的言灵？',en:'Whose spirit is "King\'s Inferno"?'},
+    opts:[{zh:'楚子航',en:'Chu Zihang'},{zh:'凯撒',en:'Caesar'},{zh:'路明非',en:'Lu Mingfei'},{zh:'源稚生',en:'Yubetsu'}], ans:0,
+    hint:{zh:'楚子航的刀与君焰相配，出鞘即是焚城烈焰。',en:'Zihang\'s blade matches King\'s Inferno — city-burning flame.'} },
+  { q:{zh:'绘梨衣叫路明非什么？',en:'What does Eri call Lu Mingfei?'},
+    opts:[{zh:'Sakura',en:'Sakura'},{zh:'哥哥',en:'Brother'},{zh:'衰小孩',en:'Loser'},{zh:'同学',en:'Classmate'}], ans:0,
+    hint:{zh:'「从今天起，你的名字叫 Sakura。」',en:'"From today, your name is Sakura."'} },
+  { q:{zh:'黑王的名字是？',en:'What is the Black King\'s name?'},
+    opts:[{zh:'尼德霍格',en:'Nidhogg'},{zh:'耶梦加得',en:'Jörmungandr'},{zh:'芬里厄',en:'Fenrir'},{zh:'奥丁',en:'Odin'}], ans:0,
+    hint:{zh:'尼德霍格是龙族之祖，所有龙血的来源。',en:'Nidhogg is the progenitor of all dragons.'} },
+  { q:{zh:'夏弥是哪个龙王的双生？',en:'Which King\'s twin is Xia Mi?'},
+    opts:[{zh:'青铜与火',en:'Bronze & Fire'},{zh:'白王 · 天空',en:'White King · Sky'},{zh:'海洋与水',en:'Sea & Water'},{zh:'大地与山',en:'Earth & Mountain'}], ans:3,
+    hint:{zh:'夏弥与芬里厄是大地与山之王的双生。',en:'Xia Mi and Fenrir are the twins of the Earth & Mountain King.'} },
+  { q:{zh:'七宗罪中，哪三柄始终是备用？',en:'Which three Sins remained spare?'},
+    opts:[{zh:'贪婪 · 饕餮 · 色欲',en:'Greed · Gluttony · Lust'},{zh:'傲慢 · 妒忌 · 暴怒',en:'Pride · Envy · Wrath'},{zh:'懒惰 · 贪婪 · 色欲',en:'Sloth · Greed · Lust'},{zh:'七柄都已斩王',en:'All seven slew a King'}], ans:0,
+    hint:{zh:'贪婪、饕餮、色欲静默见证一场未竟的加冕。',en:'Greed, Gluttony and Lust witnessed an unfinished coronation.'} },
+  { q:{zh:'红白护腕是谁留下的？',en:'Who left the red-white wristband?'},
+    opts:[{zh:'绘梨衣',en:'Eri'},{zh:'夏弥',en:'Xia Mi'},{zh:'零',en:'Zero'},{zh:'诺诺',en:'Nono'}], ans:0,
+    hint:{zh:'东京塔下，绘梨衣把护腕留给了 Sakura。',en:'Beneath Tokyo Tower, Eri left it for Sakura.'} },
+  { q:{zh:'昂热的言灵是？',en:'What is Angers\' spirit?'},
+    opts:[{zh:'君焰',en:'King\'s Inferno'},{zh:'时间零',en:'Time Zero'},{zh:'审判',en:'Judgment'},{zh:'镰鼬',en:'Kamaitachi'}], ans:1,
+    hint:{zh:'时间零让昂热可以一个人面对一支军团。',en:'Time Zero lets Angers face an army alone.'} },
+  { q:{zh:'龙族Ⅲ的副标题是？',en:'The subtitle of Dragon Raja III?'},
+    opts:[{zh:'火之晨曦',en:'Dawn of Fire'},{zh:'黑月之潮',en:'Dark Moon Tide'},{zh:'奥丁之渊',en:'Odin\'s Abyss'},{zh:'悼亡者之瞳',en:'Mourner\'s Eyes'}], ans:1,
+    hint:{zh:'东京雨夜的故事，叫《黑月之潮》。',en:'The Tokyo tale is called Dark Moon Tide.'} },
+  { q:{zh:'芬里厄的姐姐是？',en:'Who is Fenrir\'s sister?'},
+    opts:[{zh:'诺诺',en:'Nono'},{zh:'夏弥',en:'Xia Mi'},{zh:'零',en:'Zero'},{zh:'绘梨衣',en:'Eri'}], ans:1,
+    hint:{zh:'「姐姐……我的姐姐。」',en:'"Sister… my sister."'} },
+  { q:{zh:'青铜与火之王的双生是？',en:'The twin of the Bronze & Fire King?'},
+    opts:[{zh:'芬里厄',en:'Fenrir'},{zh:'诺顿',en:'Norton'},{zh:'康斯坦丁',en:'Constantine'},{zh:'耶梦加得',en:'Jörmungandr'}], ans:2,
+    hint:{zh:'那个叫路明非「哥哥」的小龙。',en:'The little dragon who called Mingfei "brother".'} },
+  { q:{zh:'「四分之一条命」的租金是谁定的？',en:'Who set the "quarter of a life" rent?'},
+    opts:[{zh:'昂热',en:'Angers'},{zh:'赫尔佐格',en:'Herzog'},{zh:'路鸣泽',en:'Lu Mingze'},{zh:'庞贝',en:'Pompeius'}], ans:2,
+    hint:{zh:'路鸣泽：「很便宜的，哥哥。」',en:'Lu Mingze: "Cheap, brother."'} }
+];
+var ks=[],ki=0,kscore=0,kpicked=null;
+function shuffle(a){ var arr=a.slice(); for(var i=arr.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=arr[i];arr[i]=arr[j];arr[j]=t; } return arr; }
+function kstart(){
+  ks=shuffle(KBANK).slice(0,10); ki=0; kscore=0; kpicked=null;
+  document.getElementById('kresult').classList.remove('show');
+  document.getElementById('shareWrap').classList.remove('show');
+  document.getElementById('kPrev').disabled=true;
+  document.getElementById('kNext').disabled=false;
+  document.getElementById('kNext').textContent=window.LANG==='en'?'Next →':'下一题 →';
+  krender();
+}
+function krender(){
+  var q=ks[ki];
+  document.getElementById('kq').textContent='Q'+(ki+1)+' / 10 · '+L(q);
+  var box=document.getElementById('kopts'); box.innerHTML='';
+  q.opts.forEach(function(o,i){
+    var b=document.createElement('button'); b.type='button'; b.className='quiz-opt';
+    b.textContent=String.fromCharCode(65+i)+'. '+L(o);
+    b.onclick=function(){ pick(i); };
+    box.appendChild(b);
+  });
+  document.getElementById('kprogress').textContent=(ki+1)+' / 10 · '+(window.LANG==='en'?'score':'得分')+' '+kscore;
+  document.getElementById('kPrev').disabled=ki===0;
+}
+function pick(i){
+  var q=ks[ki];
+  if(kpicked!==null) return;
+  kpicked=i;
+  if(i===q.ans) kscore++;
+  var box=document.getElementById('kopts');
+  Array.prototype.forEach.call(box.children,function(b,idx){
+    b.disabled=true;
+    if(idx===q.ans){ b.classList.add('sel'); }
+    else if(idx===i){ b.classList.add('sel'); b.style.borderColor='var(--blood)'; b.style.color='#eaa7b0'; }
+  });
+  document.getElementById('kprogress').textContent=(ki+1)+' / 10 · '+(window.LANG==='en'?'score':'得分')+' '+kscore+(i===q.ans?'':' · '+L({zh:'正确答案',en:'Correct answer'})+': '+String.fromCharCode(65+q.ans));
+  var hint=document.createElement('div');
+  hint.className='count-line'; hint.style.marginTop='14px';
+  hint.textContent=L(q.hint);
+  box.appendChild(hint);
+  document.getElementById('kNext').textContent=(ki===9)?(window.LANG==='en'?'See result →':'查看结果 →'):(window.LANG==='en'?'Next →':'下一题 →');
+}
+document.getElementById('kPrev').onclick=function(){ if(ki>0){ki--;kpicked=null;document.getElementById('kNext').disabled=false;krender();} };
+document.getElementById('kNext').onclick=function(){
+  if(kpicked===null && ki<ks.length-1){ window.DR_ACC&&window.DR_ACC.toast(window.LANG==='en'?'Pick an answer first':'请先选择一个答案'); return; }
+  if(ki<9){ ki++; kpicked=null; document.getElementById('kNext').disabled=false; krender(); }
+  else kresult();
+};
+function krank(){
+  var r=[
+    { min:9, zh:'S 级 · 屠龙者之姿', en:'S-Class · Dragon-Slayer' },
+    { min:7, zh:'A 级 · 执行部新星', en:'A-Class · Execution Rising Star' },
+    { min:5, zh:'B 级 · 狮心会预备役', en:'B-Class · Lionheart Reserve' },
+    { min:3, zh:'C 级 · 图书馆常驻', en:'C-Class · Library Regular' },
+    { min:0, zh:'D 级 · 芬格尔的学弟', en:'D-Class · Fingel\'s Junior' }
+  ];
+  for(var i=0;i<r.length;i++){ if(kscore>=r[i].min) return r[i]; }
+  return r[r.length-1];
+}
+function kresult(){
+  var r=krank();
+  var best=kscore>=3;
+  try{ localStorage.setItem('dr-quiz-best', Math.max(kscore, Number(localStorage.getItem('dr-quiz-best'))||0)); }catch(e){}
+  var box=document.getElementById('kresult');
+  box.classList.add('show');
+  box.innerHTML=
+    '<div class="qr-kick">'+(window.LANG==='en'?'FINAL SCORE':'答 题 完 成 · 最 终 得 分')+'</div>'+
+    '<div class="qr-title">'+esc(L(r))+'</div>'+
+    '<div class="qr-score">'+(window.LANG==='en'?'Score':'得分')+' '+kscore+' / 10</div>'+
+    '<div class="qr-desc">'+(window.LANG==='en'
+      ? (best?'The Execution Bureau has its eye on you, cadet. Keep training — Bronze City awaits.'
+          :'The library misses you. A few more volumes and you will be ready for the pitch.')
+      : (best?'执行部已经注意到你了，学员。继续训练——青铜城在等你。'
+          :'图书馆想你了。再多读几卷，就能上球场了。'))+'</div>'+
+    '<div class="qr-foot">'+
+      '<button class="qr-link" type="button" id="kRetry" style="cursor:pointer;">'+(window.LANG==='en'?'Retake':'再来一次')+'</button>'+
+      '<button class="qr-link" type="button" id="kShare" style="cursor:pointer;">'+(window.LANG==='en'?'Share score card':'生成成绩分享卡')+'</button>'+
+    '</div>';
+  document.getElementById('kRetry').onclick=kstart;
+  document.getElementById('kShare').onclick=drawShare;
+}
+function drawShare(){
+  var c=document.getElementById('shareCanvas'); var ctx=c.getContext('2d');
+  ctx.clearRect(0,0,720,420);
+  var g=ctx.createLinearGradient(0,0,0,420);
+  g.addColorStop(0,'#081120'); g.addColorStop(0.5,'#0d1e33'); g.addColorStop(1,'#160b12');
+  ctx.fillStyle=g; ctx.fillRect(0,0,720,420);
+  ctx.strokeStyle='rgba(216,181,117,.55)'; ctx.lineWidth=2;
+  ctx.strokeRect(24,24,672,372);
+  var img=new Image(); img.onload=function(){
+    ctx.save(); ctx.beginPath(); ctx.arc(360,92,34,0,Math.PI*2); ctx.clip();
+    ctx.drawImage(img,326,58,68,68); ctx.restore();
+    ctx.strokeStyle='rgba(216,181,117,.8)'; ctx.beginPath(); ctx.arc(360,92,34,0,Math.PI*2); ctx.stroke();
+    ctx.fillStyle='#d8b575'; ctx.font='600 26px "Noto Serif SC",serif'; ctx.textAlign='center';
+    ctx.fillText('CASSELL COLLEGE',360,152);
+    ctx.fillStyle='#f4cf68'; ctx.font='600 40px "Noto Serif SC",serif';
+    var r=krank();
+    ctx.fillText(L(r),360,220);
+    ctx.fillStyle='#dbe8f6'; ctx.font='20px "Noto Serif SC",serif';
+    ctx.fillText((window.LANG==='en'?'Score: ':'得分：')+kscore+' / 10',360,268);
+    ctx.fillStyle='#8b673c'; ctx.font='15px "Noto Serif SC",serif';
+    var d=new Date();
+    ctx.fillText('DRAGON RAJA · '+(d.getFullYear())+'/'+(d.getMonth()+1)+'/'+d.getDate(),360,340);
+    var dl=document.getElementById('shareDl');
+    dl.href=c.toDataURL('image/png');
+    dl.textContent=window.LANG==='en'?'Download score card ⬇':'下载成绩卡 ⬇';
+    document.getElementById('shareWrap').classList.add('show');
+  };
+  img.src='img/cassell-seal-round.png';
+}
+
+/* 标签切换 */
+document.querySelectorAll('.quiz-tab').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.quiz-tab').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
+    var t=b.getAttribute('data-q');
+    document.getElementById('panel-person').classList.toggle('active',t==='person');
+    document.getElementById('panel-know').classList.toggle('active',t==='know');
+  };
+});
+
+prender();
+kstart();
+if(window.onLangChange)window.onLangChange(function(){
+  var qn=document.getElementById('pNext');
+  if(pIdx<9){ qn.textContent=window.LANG==='en'?'Next →':'下一题 →'; }
+  document.getElementById('kNext').textContent=(ki===9)?(window.LANG==='en'?'See result →':'查看结果 →'):(window.LANG==='en'?'Next →':'下一题 →');
+  prender(); krender();
+});
+</script>
+</body>
+</html>

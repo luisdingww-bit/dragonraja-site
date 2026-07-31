@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语录图书馆 ｜ DRAGON RAJA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20260801-0032">
+<link rel="stylesheet" href="eva-extra.css?v=20260801-0032">
+<link rel="stylesheet" href="modules.css?v=20260801-0032">
+<link rel="icon" type="image/png" href="img/cassell-seal-round.png">
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><img src="img/crest.webp" alt="crest"><div><span class="zh">龙族</span><span class="en">DRAGON RAJA</span></div><span class="tag" data-i18n="nav_tag">混血种档案</span></a>
+    <div class="nav-links">
+      <a href="eva.html" data-i18n="nav_eva">EVA 终端</a>
+      <a href="story.html" data-i18n="nav_story">情节长卷</a>
+      <a href="codex.html" data-i18n="nav_codex">言灵图鉴</a>
+      <a href="quotes.html" class="active" data-i18n="nav_quotes">语录图书馆</a>
+      <a href="timeline.html" data-i18n="nav_timeline">龙族编年史</a>
+      <a href="kings.html" data-i18n="nav_kings">四大龙王</a>
+      <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
+      <a href="orgs.html" data-i18n="nav_orgs">学院机构簿</a>
+      <a href="items.html" data-i18n="nav_items">装备部仓库</a>
+      <a href="characters.html" data-i18n="nav_chars">人物</a>
+      <a href="quiz.html" data-i18n="nav_quiz">学院测验</a>
+      <a href="index.html#ritual" data-i18n="nav_ritual">血统鉴定</a>
+      <span id="accountArea" class="account-area"></span>
+      <button id="langSwitch" class="lang-switch" type="button">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="crumb"><a href="index.html" data-i18n="nav_tag">混血种档案</a> · <span data-i18n="nav_quotes">语录图书馆</span></div>
+  <h1 data-i18n="quotes_h1">语 录 图 书 馆</h1>
+  <div class="en">Q U O T E &nbsp; L I B R A R Y</div>
+</header>
+
+<section class="container" style="padding-top:30px;">
+  <div class="sec-title"><span class="num">卷宗 · 台词留声机</span><div class="kick">W O R D S &nbsp; I N &nbsp; T H E &nbsp; B L O O D</div><h2 data-i18n="quotes_h2">名 句 · 人 物 · 主 题 · 卷 次</h2><div class="sub" data-i18n="quotes_sub">按人物 / 主题 / 卷次筛选 · 支持搜索与收藏</div></div>
+  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
+
+  <div class="quote-daily">
+    <div class="qd-kick" id="qdKick">— 每 日 一 句 · 今 日 留 声 —</div>
+    <div class="qd-text" id="qdText"></div>
+    <div class="qd-who" id="qdWho"></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="filter-tabs" id="themeTabs"></div>
+    <div class="search-box"><input id="qsearch" type="text" data-i18n-ph="quotes_search_ph" placeholder="搜索语录 / 人物…"></div>
+    <select id="qperson" class="ftab" style="padding:9px 12px;background:rgba(8,14,24,.6);color:var(--ink);"></select>
+    <select id="qvol" class="ftab" style="padding:9px 12px;background:rgba(8,14,24,.6);color:var(--ink);"></select>
+    <button class="ftab" id="favOnly" type="button" data-i18n="quotes_fav_only">仅看收藏</button>
+  </div>
+  <div class="count-line" id="qcount"></div>
+  <div class="quotes-grid" id="qgrid"></div>
+
+  <div class="link-center"><a class="more-link" href="story.html" data-i18n="quotes_to_story">回到情节长卷 <span class="arr">→</span></a></div>
+</section>
+
+<footer>
+  <p class="disc" data-i18n-html="footer_disc"></p>
+  <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
+</footer>
+
+<script src="i18n.js?v=20260801-0032"></script>
+<script src="app.js?v=20260801-0032"></script>
+<script src="auth.js?v=20260801-0032" defer></script>
+<script src="account.js?v=20260801-0032" defer></script>
+<script src="eva.js?v=20260801-0032" defer></script>
+<script src="achievements.js?v=20260801-0032" defer></script>
+<script src="data/quotes-data.js?v=20260801-0032"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    if(window.DR_ACC){
+      window.DR_ACC.config.openLogin=function(){ window.DR_ACC.ensureLoginModal(); };
+      window.DR_ACC.init({ injectLoginModal:true });
+    }
+  });
+</script>
+<script>
+var DATA=window.QUOTES_DATA||[];
+var PEOPLE=window.QUOTES_PEOPLE||{};
+var THEMES=window.QUOTES_THEMES||{};
+var VOLS=window.QUOTES_VOLUMES||{};
+var curTheme='all', curPerson='all', curVol='all', favOnly=false;
+var FAVKEY='dr-fav-quotes';
+function favs(){ try{ return JSON.parse(localStorage.getItem(FAVKEY))||[]; }catch(e){ return []; } }
+function saveFavs(a){ try{ localStorage.setItem(FAVKEY, JSON.stringify(a)); }catch(e){} }
+function L(o){ return (window.LANG==='en'&&o.en!==undefined)?o.en:o.zh; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+/* 每日一句：按日期 seed 伪随机 */
+function dailyIndex(){
+  var d=new Date();
+  return (d.getFullYear()*372 + (d.getMonth()+1)*31 + d.getDate()) % DATA.length;
+}
+function renderDaily(){
+  var q=DATA[dailyIndex()];
+  var p=PEOPLE[q.who]||{zh:'—',en:'—'};
+  document.getElementById('qdText').textContent='「'+L(q)+'」';
+  document.getElementById('qdWho').textContent=L(p)+' · '+(q.source?L({zh:q.source,en:q.source_en}):'')+' · '+L({zh:'每日一句',en:'Daily Quote'});
+  var k=document.getElementById('qdKick');
+  k.textContent=window.LANG==='en'?'— TODAY\'S QUOTE —':'— 每 日 一 句 · 今 日 留 声 —';
+}
+
+/* 筛选器 */
+function buildFilters(){
+  var tt=document.getElementById('themeTabs'); tt.innerHTML='';
+  var all={zh:'全部',en:'All'};
+  function mk(label,key,onclick){
+    var b=document.createElement('button'); b.type='button'; b.className='ftab'+(onclick?' active':'');
+    b.textContent=L(label); b.setAttribute('data-f',key);
+    b.onclick=function(){ document.querySelectorAll('#themeTabs .ftab').forEach(function(x){x.classList.remove('active');}); b.classList.add('active'); curTheme=key; render(); };
+    tt.appendChild(b);
+  }
+  mk(all,'all',true);
+  Object.keys(THEMES).forEach(function(k){ mk(THEMES[k],k); });
+
+  var ps=document.getElementById('qperson'); ps.innerHTML='';
+  var o=document.createElement('option'); o.value='all'; o.textContent=L({zh:'全部人物',en:'All speakers'}); ps.appendChild(o);
+  Object.keys(PEOPLE).forEach(function(k){
+    var op=document.createElement('option'); op.value=k; op.textContent=L(PEOPLE[k]); ps.appendChild(op);
+  });
+  ps.onchange=function(){ curPerson=ps.value; render(); };
+
+  var vs=document.getElementById('qvol'); vs.innerHTML='';
+  var ov=document.createElement('option'); ov.value='all'; ov.textContent=L({zh:'全部卷次',en:'All volumes'}); vs.appendChild(ov);
+  Object.keys(VOLS).forEach(function(k){
+    var op=document.createElement('option'); op.value=k; op.textContent=L(VOLS[k]); vs.appendChild(op);
+  });
+  vs.onchange=function(){ curVol=vs.value; render(); };
+
+  document.getElementById('favOnly').onclick=function(){
+    favOnly=!favOnly; this.classList.toggle('active',favOnly); render();
+  };
+  document.getElementById('qsearch').addEventListener('input',function(){ render(); });
+}
+
+function match(){
+  var q=document.getElementById('qsearch').value.trim().toLowerCase();
+  return DATA.filter(function(x){
+    if(curTheme!=='all'&&x.theme!==curTheme)return false;
+    if(curPerson!=='all'&&x.who!==curPerson)return false;
+    if(curVol!=='all'&&x.vol!==curVol)return false;
+    if(favOnly&&favs().indexOf(x.id)<0)return false;
+    if(q){
+      var hay=(L(x)+' '+(L(PEOPLE[x.who]||{}))+' '+(x.source?L({zh:x.source,en:x.source_en}):'')).toLowerCase();
+      if(hay.indexOf(q)<0)return false;
+    }
+    return true;
+  });
+}
+
+function render(){
+  var list=match();
+  document.getElementById('qcount').textContent=window.t('count_tmpl').replace('{{n}}',list.length).replace('{{t}}',DATA.length);
+  var g=document.getElementById('qgrid'); g.innerHTML='';
+  if(!list.length){ g.innerHTML='<div class="empty">'+window.t('empty_tmpl')+'</div>'; return; }
+  var fv=favs();
+  list.forEach(function(x){
+    var p=PEOPLE[x.who]||{zh:'—',en:'—'};
+    var th=THEMES[x.theme]||{zh:'—',en:'—'};
+    var vo=VOLS[x.vol]||{zh:'—',en:'—'};
+    var on=fv.indexOf(x.id)>=0;
+    var c=document.createElement('div'); c.className='quote-card';
+    c.innerHTML=
+      '<div class="qc-text">「'+esc(L(x))+'」</div>'+
+      '<div class="qc-who">—— '+esc(L(p))+(x.source?' · '+esc(L({zh:x.source,en:x.source_en})):'')+'</div>'+
+      '<div class="qc-meta">'+
+        '<span class="qc-tag">'+esc(L(th))+'</span>'+
+        '<span class="qc-tag">'+esc(L(vo))+'</span>'+
+        '<button class="qc-fav'+(on?' on':'')+'" type="button">'+(on?(window.LANG==='en'?'♥ Faved':'♥ 已收藏'):(window.LANG==='en'?'♡ Fav':'♡ 收藏'))+'</button>'+
+      '</div>';
+    c.querySelector('.qc-fav').onclick=function(){
+      var a=favs();
+      var i=a.indexOf(x.id);
+      if(i>=0)a.splice(i,1); else a.push(x.id);
+      saveFavs(a);
+      if(a.length>=5&&window.ACH)window.ACH.earn('quotes');
+      render();
+    };
+    g.appendChild(c);
+  });
+}
+
+/* 樱花彩蛋：搜索 绘梨衣 / sakura / 樱花 */
+function sakura(){
+  var n=16;
+  for(var i=0;i<n;i++){
+    var p=document.createElement('span'); p.className='sakura-petal';
+    p.style.left=(Math.random()*100)+'vw';
+    p.style.animationDuration=(Math.random()*3.4+2.4)+'s';
+    p.style.animationDelay=(Math.random()*0.8)+'s';
+    p.style.width=p.style.height=(Math.random()*5+6)+'px';
+    document.body.appendChild(p);
+    setTimeout(function(el){ if(el.parentNode)el.parentNode.removeChild(el); }, 6500);
+  }
+}
+document.getElementById('qsearch').addEventListener('input',function(){
+  var v=this.value.toLowerCase();
+  if(/绘梨衣|sakura|樱花|eri/.test(v)) sakura();
+});
+
+buildFilters();
+renderDaily();
+render();
+if(window.onLangChange)window.onLangChange(function(){ renderDaily(); buildFilters(); render(); });
+</script>
+</body>
+</html>

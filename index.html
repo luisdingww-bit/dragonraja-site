@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260731">
-<link rel="stylesheet" href="eva-extra.css?v=20260731">
+<link rel="stylesheet" href="style.css?v=20260801-0032">
+<link rel="stylesheet" href="eva-extra.css?v=20260801-0032">
 <style>
 /* index 专属：电影感开场 + hero + 世界观 + 卷目预览 */
 #boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
@@ -227,9 +227,14 @@
       <a href="eva.html" data-i18n="nav_eva">EVA 终端</a>
       <a href="story.html" data-i18n="nav_story">情节长卷</a>
       <a href="codex.html" data-i18n="nav_codex">言灵图鉴</a>
+      <a href="quotes.html" data-i18n="nav_quotes">语录图书馆</a>
+      <a href="timeline.html" data-i18n="nav_timeline">龙族编年史</a>
       <a href="kings.html" data-i18n="nav_kings">四大龙王</a>
       <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
+      <a href="orgs.html" data-i18n="nav_orgs">学院机构簿</a>
+      <a href="items.html" data-i18n="nav_items">装备部仓库</a>
       <a href="characters.html" data-i18n="nav_chars">人物</a>
+      <a href="quiz.html" data-i18n="nav_quiz">学院测验</a>
       <a href="#ritual" data-i18n="nav_ritual">血统鉴定</a>
       <span id="accountArea" class="account-area"></span>
       <button id="langSwitch" class="lang-switch" type="button">EN</button>
@@ -267,6 +272,15 @@
     <div class="scan-tip" id="scanTip" data-i18n="scan_tip">正在解析你的基因序列……</div>
     <div class="result-card" id="resultBox"><h2 data-i18n="result_h2">鉴 定 结 果</h2><p class="blood-line"><span data-i18n="blood_label">你的血统等级：</span><span id="bloodText"></span></p><p class="spirit-word"><span data-i18n="spirit_label">觉醒言灵：</span><span id="spiritText"></span></p><p class="desc" id="spiritDesc"></p></div>
   </div>
+  <div class="archive-progress">
+    <div class="ach-progress">
+      <span class="ap-label" data-i18n="ach_title">档案完成度</span>
+      <span class="ap-track"><span class="ap-fill" data-ach-bar></span></span>
+      <span class="ap-pct" data-ach-pct>0%</span>
+    </div>
+    <div class="ach-inline" data-ach-mini></div>
+    <div style="margin-top:10px;color:var(--ink-dim);font-size:11px;letter-spacing:.14em;font-family:var(--serif);" data-i18n="ach_mini_hint">完成鉴定与互动即可点亮徽章</div>
+  </div>
 </section>
 
 <section id="codex-preview" class="container">
@@ -301,18 +315,31 @@
   <div class="link-center"><a class="more-link" href="kings.html" data-i18n="more_kings">查看四大龙王详情（双生关系）<span class="arr">→</span></a></div>
 </section>
 
+<section id="new-preview" class="container">
+  <div class="sec-title"><span class="num">N ° 06</span><div class="kick">N E W &nbsp; W I N G S</div><h2 data-i18n="s07_h2">档 案 新 馆</h2><div class="sub" data-i18n="s07_sub">语录 · 编年史 · 机构 · 装备 · 测验</div></div>
+  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
+  <div class="preview-grid">
+    <a class="preview-card" href="quotes.html"><div class="pc-no">语录图书馆</div><h3 data-i18n="pv_quotes_t">名 句 留 声</h3><p data-i18n="pv_quotes_d">按人物 / 主题 / 卷次检索经典台词，支持收藏与每日一句。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="timeline.html"><div class="pc-no">龙族编年史</div><h3 data-i18n="pv_tl_t">时 间 长 河</h3><p data-i18n="pv_tl_d">从黑王诞生到世界树终局，垂直时间轴纵览全史。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="orgs.html"><div class="pc-no">学院机构簿</div><h3 data-i18n="pv_orgs_t">机 构 档 案</h3><p data-i18n="pv_orgs_d">秘党 / 执行部 / 装备部 / 狮心会 / 学生会 / 蛇岐八家。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="items.html"><div class="pc-no">装备部仓库</div><h3 data-i18n="pv_items_t">道 具 图 鉴</h3><p data-i18n="pv_items_d">黑卡 / 红白护腕 / 迈巴赫 / 七宗罪，一件藏品一段名场面。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="quiz.html"><div class="pc-no">学院测验</div><h3 data-i18n="pv_quiz_t">混 血 种 考 场</h3><p data-i18n="pv_quiz_d">「你是龙族中的谁」人格测试 + 龙族知识快问快答。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+  </div>
+</section>
+
 <footer>
   <p class="disc" data-i18n-html="footer_disc">本页面为《龙族》读者自发制作的<b>非官方同人向个人志</b>，所有世界观、设定、人物与“言灵”名称均版权归属原作者江南及原著出版方，本页无任何商用、二次售卖行为。鉴定结果纯属随机模拟，与现实无关。</p>
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
 
-<script src="i18n.js?v=20260731"></script>
-<script src="app.js?v=20260731"></script>
-<script src="eva.js?v=20260731"></script>
+<script src="i18n.js?v=20260801-0032"></script>
+<script src="app.js?v=20260801-0032"></script>
+<script src="eva.js?v=20260801-0032"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="auth.js?v=20260731"></script>
-<script src="account.js?v=20260731"></script>
+<script src="auth.js?v=20260801-0032"></script>
+<script src="account.js?v=20260801-0032"></script>
+<script src="achievements.js?v=20260801-0032"></script>
 <script>
 (function(){
   const boot=document.getElementById('boot');

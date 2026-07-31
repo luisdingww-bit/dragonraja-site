@@ -130,4 +130,24 @@
   window.addEventListener('pagehide',saveState);
 
   if(window.onLangChange) window.onLangChange(()=>{ if(started) setName(); });
+  /* ---- Service Worker：网络优先 + 缓存兜底，发布即更新 ---- */
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+
+  /* ---- EVA 低语彩蛋：停留 60s 后 EVA 悄悄说一句台词 ---- */
+  setTimeout(function(){
+    var l=document.getElementById('eva-launch');
+    var p=document.getElementById('eva-panel');
+    if(!l || (p && !p.classList.contains('hidden'))) return;
+    var q=null;
+    try{
+      if(window.EVA && window.EVA.QUOTES && window.EVA.QUOTES.length){
+        q=window.EVA.QUOTES[Math.floor(Math.random()*window.EVA.QUOTES.length)];
+      }
+    }catch(e){}
+    if(q) l.title=(window.LANG==='en'?'EVA whispers: "'+q.en+'"':'EVA 低语：「'+q.zh+'」');
+    l.classList.add('whisper');
+    setTimeout(function(){ l.classList.remove('whisper'); }, 6000);
+  }, 60000);
 })();

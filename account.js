@@ -95,6 +95,14 @@
           '<div class="apb-name">' + esc(CURRENT.name) + "</div></div>" +
           '<button class="acc-out" type="button">' + esc(t("acc_logout")) + "</button>" +
         "</div>" + rows +
+        '<div class="ach-strip">' +
+          '<div class="ach-progress">' +
+            '<span class="ap-label">' + esc(t("ach_title")) + "</span>" +
+            '<span class="ap-track"><span class="ap-fill" data-ach-bar></span></span>' +
+            '<span class="ap-pct" data-ach-pct>0%</span>' +
+          "</div>" +
+          '<div class="ach-list" data-ach-list></div>' +
+        "</div>" +
       "</div>";
     var ob = box.querySelector(".acc-out");
     if (ob) ob.onclick = logout;
@@ -106,6 +114,7 @@
   function renderAll() {
     document.querySelectorAll(".account-area").forEach(renderArea);
     renderProfileBox();
+    if (window.ACH && window.ACH.render) { try { window.ACH.render(); } catch (e) {} }
   }
 
   /* ============ 账号邮件（写入 EVA 共享的 dr-eva，跨页持久） ============ */

@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260731">
-<link rel="stylesheet" href="eva-extra.css?v=20260731">
+<link rel="stylesheet" href="style.css?v=20260801-0032">
+<link rel="stylesheet" href="eva-extra.css?v=20260801-0032">
 <link rel="icon" type="image/png" href="img/cassell-seal-round.png">
 </head>
 <body>
@@ -19,9 +19,14 @@
       <a href="eva.html" class="active" data-i18n="nav_eva">EVA 终端</a>
       <a href="story.html" data-i18n="nav_story">情节长卷</a>
       <a href="codex.html" data-i18n="nav_codex">言灵图鉴</a>
+      <a href="quotes.html" data-i18n="nav_quotes">语录图书馆</a>
+      <a href="timeline.html" data-i18n="nav_timeline">龙族编年史</a>
       <a href="kings.html" data-i18n="nav_kings">四大龙王</a>
       <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
+      <a href="orgs.html" data-i18n="nav_orgs">学院机构簿</a>
+      <a href="items.html" data-i18n="nav_items">装备部仓库</a>
       <a href="characters.html" data-i18n="nav_chars">人物</a>
+      <a href="quiz.html" data-i18n="nav_quiz">学院测验</a>
       <a href="index.html#ritual" data-i18n="nav_ritual">血统鉴定</a>
       <span id="accountArea" class="account-area"></span>
       <button id="langSwitch" class="lang-switch" type="button">EN</button>
@@ -73,11 +78,12 @@
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
 
-<script src="i18n.js?v=20260731"></script>
-<script src="app.js?v=20260731" defer></script>
-<script src="auth.js?v=20260731" defer></script>
-<script src="account.js?v=20260731" defer></script>
-<script src="eva.js?v=20260731" defer></script>
+<script src="i18n.js?v=20260801-0032"></script>
+<script src="app.js?v=20260801-0032" defer></script>
+<script src="auth.js?v=20260801-0032" defer></script>
+<script src="account.js?v=20260801-0032" defer></script>
+<script src="eva.js?v=20260801-0032" defer></script>
+<script src="achievements.js?v=20260801-0032" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', function(){
     if(window.DR_ACC){
@@ -87,8 +93,8 @@
   });
 </script>
 <script>
-(function(){
-  var E=window.EVA; if(!E) return;
+function bootDashboard(){
+  var E=window.EVA; if(!E){ setTimeout(bootDashboard, 60); return; }
   var L=E.L;
 
   /* 标签切换 */
@@ -200,7 +206,9 @@
 
   // 语言切换时重渲染
   if(window.onLangChange) window.onLangChange(function(){ renderNotices(); renderTasks(); renderMail(); });
-})();
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bootDashboard);
+else bootDashboard();
 </script>
 </body>
 </html>
