@@ -64,6 +64,33 @@
 @keyframes readyPulse{0%,100%{box-shadow:0 0 18px rgba(216,181,117,.22);}50%{box-shadow:0 0 34px rgba(216,181,117,.45);}}
 .boot-enroll-btn{background:transparent;color:var(--gold);border:1px solid var(--gold);padding:14px 38px;font-family:var(--serif);font-size:14px;letter-spacing:.18em;cursor:pointer;border-radius:2px;transition:.35s;}
 .boot-enroll-btn:hover{background:rgba(216,181,117,.16);box-shadow:0 0 26px rgba(216,181,117,.28);}
+.boot-login-btn{background:transparent;color:var(--ink);border:1px solid var(--line-strong);padding:14px 38px;font-family:var(--serif);font-size:14px;letter-spacing:.18em;cursor:pointer;border-radius:2px;transition:.35s;}
+.boot-login-btn:hover{background:rgba(120,150,200,.12);border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 22px rgba(120,150,200,.22);}
+
+.login-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.82);backdrop-filter:blur(4px);opacity:0;transition:opacity .35s ease;}
+.login-modal.show{display:flex;opacity:1;}
+.login-sheet{position:relative;width:min(420px,90vw);background:linear-gradient(180deg,#0c1626 0%,#0a1018 100%);color:var(--ink);border:1px solid var(--gold);box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(216,181,117,.15) inset;padding:34px 30px 26px;text-align:center;border-radius:2px;}
+.login-close{position:absolute;top:8px;right:14px;background:none;border:none;font-size:26px;line-height:1;color:var(--gold-soft);cursor:pointer;transition:.25s;}
+.login-close:hover{color:var(--gold-bright);transform:scale(1.1);}
+.login-crest{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;box-shadow:0 0 0 2px var(--gold),0 0 18px rgba(216,181,117,.3);}
+.login-crest img{width:100%;height:100%;object-fit:contain;border-radius:50%;}
+.login-title{font-family:var(--serif);letter-spacing:.4em;font-size:clamp(16px,3vw,22px);color:var(--gold-bright);margin-bottom:18px;padding-left:.4em;}
+.login-form{display:flex;flex-direction:column;gap:12px;text-align:left;}
+.login-form input{background:rgba(5,12,24,.72);border:1px solid var(--line-strong);color:var(--ink);font-family:var(--serif);font-size:14px;padding:12px 14px;border-radius:2px;transition:.3s;}
+.login-form input::placeholder{color:var(--ink-dim);}
+.login-form input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 16px rgba(216,181,117,.25);}
+.login-form .bf-hint{color:var(--ink-dim);font-size:11px;letter-spacing:.14em;font-family:var(--serif);min-height:16px;text-align:center;transition:.3s;}
+.login-form .bf-hint.err{color:#e0566a;text-shadow:0 0 8px rgba(224,86,106,.45);}
+.login-submit{background:var(--gold);color:#1a120a;border:none;padding:12px 28px;font-family:var(--serif);font-size:14px;letter-spacing:.2em;cursor:pointer;border-radius:2px;transition:.3s;margin-top:6px;font-weight:600;}
+.login-submit:hover{background:var(--gold-bright);box-shadow:0 0 22px rgba(216,181,117,.4);}
+.login-foot{margin-top:14px;font-family:var(--serif);font-size:12px;letter-spacing:.1em;}
+.login-foot a{color:var(--gold-soft);text-decoration:none;border-bottom:1px dashed rgba(216,181,117,.4);}
+.login-foot a:hover{color:var(--gold-bright);}
+
+.account-area{display:inline-flex;align-items:center;gap:10px;font-family:var(--serif);font-size:12px;letter-spacing:.08em;color:var(--gold);}
+.account-area .acc-name{color:var(--gold-soft);}
+.account-area .acc-out{background:none;border:1px solid var(--line-strong);color:var(--ink-dim);font-family:var(--serif);font-size:11px;letter-spacing:.1em;padding:4px 10px;border-radius:2px;cursor:pointer;transition:.3s;}
+.account-area .acc-out:hover{border-color:var(--gold);color:var(--gold-bright);}
 
 .adm-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.82);backdrop-filter:blur(4px);opacity:0;transition:opacity .35s ease;}
 .adm-modal.show{display:flex;opacity:1;}
@@ -142,6 +169,7 @@
     <div class="boot-seal-no" data-i18n="boot_seal_no">档案编号 · DR-0001</div>
     <div class="boot-eva-disp" data-i18n="boot_eva_disp">由 EVA 智能终端派送</div>
     <div class="boot-actions">
+      <button class="boot-login-btn" id="bootLoginBtn" data-i18n="boot_login_btn">登 录</button>
       <button class="boot-enroll-btn" id="bootEnrollBtn" data-i18n="boot_enroll_btn">录取登记</button>
       <button class="boot-enter" id="bootEnter" data-i18n="boot_enter" disabled>启 程</button>
       <button class="boot-music" id="bootMusic" type="button" title="BGM">♪</button>
@@ -161,7 +189,8 @@
         <input id="enName" type="text" data-i18n-ph="ph_name" placeholder="姓名 / Name" maxlength="40">
         <input id="enAge" type="number" min="1" max="120" data-i18n-ph="ph_age" placeholder="年龄 / Age">
         <input id="enEmail" type="email" data-i18n-ph="ph_email" placeholder="邮箱 / Email" maxlength="80">
-        <div class="bf-hint" id="enrollHint" data-i18n="boot_form_hint">填写注册信息后方可启程</div>
+        <input id="enPass" type="password" data-i18n-ph="ph_password" placeholder="密码 / Password" minlength="6" maxlength="64">
+        <div class="bf-hint" id="enrollHint" data-i18n="boot_form_hint">填写注册信息并设置密码后方可启程</div>
         <button class="adm-submit" type="submit" data-i18n="boot_form_submit">生成录取通知书</button>
       </form>
     </div>
@@ -178,6 +207,21 @@
   </div>
 </div>
 
+<div id="loginModal" class="login-modal" aria-hidden="true">
+  <div class="login-sheet">
+    <button class="login-close" id="loginClose" type="button" aria-label="close">×</button>
+    <div class="login-crest"><img src="img/cassell-seal-round.png" alt="Cassell College"></div>
+    <div class="login-title" data-i18n="login_title">学 员 登 录</div>
+    <form class="login-form" id="loginForm" autocomplete="off" novalidate>
+      <input id="lgEmail" type="email" data-i18n-ph="ph_email" placeholder="邮箱 / Email" maxlength="80">
+      <input id="lgPass" type="password" data-i18n-ph="ph_password" placeholder="密码 / Password" maxlength="64">
+      <div class="bf-hint" id="loginHint" data-i18n="login_hint">请输入邮箱与密码</div>
+      <button class="login-submit" type="submit" data-i18n="boot_login_btn">登 录</button>
+    </form>
+    <div class="login-foot"><a href="#" id="toEnroll" data-i18n="login_to_enroll">还没有账号？去登记</a></div>
+  </div>
+</div>
+
 <nav>
   <div class="nav-inner">
     <a class="brand" href="index.html"><img src="img/crest.webp" alt="crest"><div><span class="zh">龙族</span><span class="en">DRAGON RAJA</span></div><span class="tag" data-i18n="nav_tag">混血种档案</span></a>
@@ -189,6 +233,7 @@
       <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
       <a href="characters.html" data-i18n="nav_chars">人物</a>
       <a href="#ritual" data-i18n="nav_ritual">血统鉴定</a>
+      <span id="accountArea" class="account-area"></span>
       <button id="langSwitch" class="lang-switch" type="button">EN</button>
     </div>
   </div>
@@ -266,6 +311,8 @@
 <script src="i18n.js"></script>
 <script src="app.js"></script>
 <script src="eva.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
 <script>
 (function(){
   const boot=document.getElementById('boot');
@@ -280,6 +327,13 @@
   const admLetter=document.getElementById('admLetter');
   const admReady=document.getElementById('admReady');
   const enrollHint=document.getElementById('enrollHint');
+  const loginBtn=document.getElementById('bootLoginBtn');
+  const loginModal=document.getElementById('loginModal');
+  const loginClose=document.getElementById('loginClose');
+  const loginForm=document.getElementById('loginForm');
+  const loginHint=document.getElementById('loginHint');
+  const toEnroll=document.getElementById('toEnroll');
+  const accountArea=document.getElementById('accountArea');
   let done=false, lastLetterData=null;
 
   function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}
@@ -357,22 +411,70 @@
     }catch(e){}
   }
 
+  function openLogin(){if(!loginModal)return;loginModal.classList.add('show');loginModal.setAttribute('aria-hidden','false');}
+  function closeLogin(){if(!loginModal)return;loginModal.classList.remove('show');loginModal.setAttribute('aria-hidden','true');}
+
+  function enableEnter(){ if(enter){enter.disabled=false;enter.classList.add('ready');} }
+
+  function injectMemberEmail(name,email){
+    try{
+      const KEY='dr-eva';
+      const st=JSON.parse(localStorage.getItem(KEY)||'{}');
+      st.extraEmails=st.extraEmails||[];
+      if(!st.extraEmails.some(function(m){return m.id==='m-member';})){
+        st.extraEmails.push({
+          id:'m-member', from:'卡塞尔学院 · 学院终端', tag:'学员',
+          zh_sub:'欢迎回到卡塞尔学院',
+          zh_body:'亲爱的 '+name+'：欢迎回到卡塞尔学院学员系统。你的学员档案已与录取登记绑定，可随时在「EVA 终端 → 学院邮箱」查收任务与通知，言灵测试进度已为你保留。',
+          en_sub:'Welcome back to Cassell',
+          en_body:'Dear '+name+': welcome back to the Cassell student system. Your profile is linked to your admission. Open EVA Terminal → Academy Inbox for missions and notices; your spirit-test progress is saved.'
+        });
+        localStorage.setItem(KEY,JSON.stringify(st));
+      }
+    }catch(e){}
+  }
+
+  function updateAccount(user){
+    if(!accountArea)return;
+    if(!user){accountArea.innerHTML='';return;}
+    const name=(user.user_metadata&&user.user_metadata.name)||user.name||'学员';
+    const isEn=window.LANG==='en';
+    accountArea.innerHTML='<span class="acc-name">'+ (isEn?'Welcome, ':'欢迎，') + name + '</span><button class="acc-out" id="accOut" type="button">'+ (isEn?'Log out':'退出') +'</button>';
+    const out=document.getElementById('accOut');
+    if(out)out.addEventListener('click',function(){
+      if(window.DR&&DR.auth)DR.auth.signOut().then(function(){updateAccount(null);if(enter){enter.disabled=true;enter.classList.remove('ready');}});
+    });
+  }
+
   if(enrollBtn)enrollBtn.addEventListener('click',function(){openModal();});
   if(closeModalBtn)closeModalBtn.addEventListener('click',closeModal);
   if(modal)modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
 
-  if(enrollForm)enrollForm.addEventListener('submit',function(e){
+  if(enrollForm)enrollForm.addEventListener('submit',async function(e){
     e.preventDefault();
     const name=(document.getElementById('enName').value||'').trim();
     const age=(document.getElementById('enAge').value||'').trim();
     const email=(document.getElementById('enEmail').value||'').trim();
+    const pass=(document.getElementById('enPass').value||'');
     if(!name||!age||!email||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
       if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Please fill name, age and a valid email':'请完整填写姓名、年龄与有效邮箱';enrollHint.classList.add('err');}
       return;
     }
+    if(pass.length<6){
+      if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Password must be at least 6 characters':'请设置密码（至少 6 位）';enrollHint.classList.add('err');}
+      return;
+    }
     if(enrollHint){enrollHint.classList.remove('err');enrollHint.textContent=window.t('boot_form_hint');}
+    let user=null;
+    try{
+      if(window.DR&&DR.auth){ const r=await DR.auth.signUp({name:name,age:age,email:email,password:pass}); user=r&&r.user; }
+    }catch(err){
+      if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Email already registered, please login':'该邮箱已注册，请直接登录';enrollHint.classList.add('err');}
+      return;
+    }
     saveAdmission(name,age,email);
     sendAdmissionEmail(name,age,email);
+    if(user)injectMemberEmail(name,email);
     admLetter.innerHTML=buildLetter(name,age,email);
     enrollView.classList.add('hidden');
     letterView.classList.remove('hidden');
@@ -381,6 +483,40 @@
   if(admReady)admReady.addEventListener('click',function(){
     closeModal();
     if(enter){enter.disabled=false;enter.classList.add('ready');enter.focus();}
+  });
+
+  if(loginBtn)loginBtn.addEventListener('click',function(){openLogin();});
+  if(loginClose)loginClose.addEventListener('click',closeLogin);
+  if(loginModal)loginModal.addEventListener('click',function(e){if(e.target===loginModal)closeLogin();});
+  if(toEnroll)toEnroll.addEventListener('click',function(e){e.preventDefault();closeLogin();openModal();});
+
+  if(loginForm)loginForm.addEventListener('submit',async function(e){
+    e.preventDefault();
+    const email=(document.getElementById('lgEmail').value||'').trim();
+    const pass=(document.getElementById('lgPass').value||'');
+    if(!email||!pass){
+      if(loginHint){loginHint.textContent=window.LANG==='en'?'Please enter email and password':'请填写邮箱与密码';loginHint.classList.add('err');}
+      return;
+    }
+    if(loginHint){loginHint.classList.remove('err');loginHint.textContent=window.t('login_hint');}
+    try{
+      if(!(window.DR&&DR.auth))throw new Error('noauth');
+      const r=await DR.auth.signIn({email:email,password:pass});
+      const user=r&&r.user;
+      try{ const meta=(user&&user.user_metadata)||{}; localStorage.setItem('dr_enroll',JSON.stringify({name:meta.name||email,age:meta.age||'',email:email,ts:Date.now()})); }catch(e){}
+      if(user)injectMemberEmail((user.user_metadata&&user.user_metadata.name)||email,email);
+      updateAccount(user);
+      closeLogin();
+      enableEnter();
+      syncBM();
+    }catch(err){
+      const msg=((err&&err.message)||'').toLowerCase();
+      let txt=window.LANG==='en'?'Login failed, please retry':'登录失败，请重试';
+      if(msg.indexOf('wrong')>=0||msg.indexOf('invalid')>=0)txt=window.LANG==='en'?'Wrong email or password':'邮箱或密码错误';
+      else if(msg.indexOf('notfound')>=0)txt=window.LANG==='en'?'No such account, please register':'该邮箱未注册，请先登记';
+      else if(msg.indexOf('email not confirmed')>=0)txt=window.LANG==='en'?'Please confirm your email first':'请先到邮箱点击确认链接';
+      if(loginHint){loginHint.textContent=txt;loginHint.classList.add('err');}
+    }
   });
 
   if(enter)enter.addEventListener('click',function(){
@@ -392,17 +528,23 @@
 
   if(bm)bm.addEventListener('click',()=>{if(!window.AP)return;if(window.AP.isPlaying())window.AP.pause();else window.AP.play();syncBM();});
 
-  // 已登记过则直接启用启程
-  try{
-    const saved=JSON.parse(localStorage.getItem('dr_enroll')||'null');
-    if(saved&&saved.name&&enter){enter.disabled=false;}
-  }catch(e){}
+  // 会话恢复：已登录 / 已登记则直接启用启程
+  (function restore(){
+    function finish(){ try{ const saved=JSON.parse(localStorage.getItem('dr_enroll')||'null'); if(saved&&saved.name&&enter)enableEnter(); }catch(e){} }
+    if(window.DR&&DR.auth){
+      DR.auth.getSession().then(function(s){
+        if(s&&s.user){ updateAccount(s.user); enableEnter(); injectMemberEmail((s.user.user_metadata&&s.user.user_metadata.name)||s.user.email,s.user.email); }
+        else { finish(); }
+      }).catch(finish);
+    } else { finish(); }
+  })();
 
   if(window.onLangChange)window.onLangChange(function(){
     syncBM();
     if(lastLetterData&&letterView&&!letterView.classList.contains('hidden')){
       admLetter.innerHTML=buildLetter(lastLetterData.name,lastLetterData.age,lastLetterData.email);
     }
+    if(window.DR&&DR.auth){DR.auth.getSession().then(function(s){ if(s&&s.user)updateAccount(s.user); });}
   });
   syncBM();
 })();
