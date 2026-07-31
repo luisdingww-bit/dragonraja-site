@@ -29,7 +29,7 @@ Vanilla static multi-page site, zero build step: HTML / CSS / vanilla JS, dual-`
 
 ## Live
 
-GitHub Pages: **https://luisdingww-bit.github.io/dragonraja-site/**
+GitHub Pages: **[https://luisdingww-bit.github.io/dragonraja-site/](https://luisdingww-bit.github.io/dragonraja-site/)**
 
 ---
 
