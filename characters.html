@@ -22,7 +22,7 @@
       <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
       <a href="characters.html" class="active" data-i18n="nav_chars">人物</a>
       <a href="index.html#ritual" data-i18n="nav_ritual">血统鉴定</a>
-      <a href="index.html#elegy" data-i18n="nav_elegy">绘梨衣</a>
+      <a href="characters.html#eri" data-i18n="nav_elegy">绘梨衣</a>
       <button id="langSwitch" class="lang-switch" type="button">EN</button>
     </div>
   </div>
@@ -137,7 +137,8 @@ var EVENTS=[
 var roster=document.getElementById('ch-roster');
 var stage=document.getElementById('ch-stage');
 function L(o){ return (window.LANG==='en'&&o.en!==undefined)?o.en:o.zh; }
-var cur='mingfei';
+var _hc=(location.hash||'').slice(1);
+var cur = CH[_hc] ? _hc : 'mingfei';
 
 function renderRoster(){
   roster.innerHTML='';
@@ -209,6 +210,11 @@ function renderEvMedia(){
 
 renderRoster(); renderStage(); renderEvTabs(); renderEvPickers(); renderEvMedia(); renderEvText();
 if(window.onLangChange) window.onLangChange(function(){ renderRoster(); renderStage(); renderEvTabs(); renderEvPickers(); renderEvMedia(); renderEvText(); });
+window.addEventListener('hashchange', function(){
+  var h=(location.hash||'').slice(1);
+  if(CH[h] && h!==cur){ cur=h; renderRoster(); renderStage();
+    var box=document.getElementById('ch-stage'); if(box) box.scrollIntoView({behavior:'smooth',block:'start'}); }
+});
 </script>
 </body>
 </html>

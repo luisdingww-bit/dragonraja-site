@@ -170,3 +170,14 @@
   .ch-rels{grid-template-columns:1fr;}
   .sin-card{padding:18px 12px;}
 }
+
+/* ===== 章节混剪视频（index 开场 / story 卷首） ===== */
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.6;filter:contrast(1.06) brightness(.58) saturate(1.08);}
+.hero{position:relative;overflow:hidden;}
+.hero>*{position:relative;z-index:1;}
+.story-video-wrap{position:relative;max-width:920px;margin:18px auto 6px;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line-strong);box-shadow:0 22px 60px rgba(0,0,0,.55);background:#05070d;}
+.story-video-wrap .story-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:contrast(1.05) brightness(.85);}
+.story-video-cap{position:absolute;left:0;right:0;bottom:0;padding:16px 18px;font:700 13px/1.4 var(--serif);letter-spacing:.28em;color:var(--gold-bright);text-align:center;background:linear-gradient(transparent,rgba(5,7,13,.82));text-shadow:0 2px 10px rgba(0,0,0,.8);}
+@media(max-width:760px){
+  .story-video-wrap{margin:12px auto 4px;}
+}
