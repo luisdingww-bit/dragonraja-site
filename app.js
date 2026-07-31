@@ -24,8 +24,8 @@
 
   /* ---- 双轨音乐播放器（双 <audio> + 音量交叉淡入，可靠即时播放） ---- */
   const TRACKS=[
-    {name:"最好的旅行",name_en:"Best Travel",src:"travel.mp3"},
-    {name:"龙族 · 主题",name_en:"Dragon Raja · Theme",src:"bgm.mp3"}
+    {name:"最好的旅行",name_en:"Best Travel",src:"journey.mp3"},
+    {name:"龙族 · 主题",name_en:"Dragon Raja · Theme",src:"theme.mp3"}
   ];
   const host=document.createElement('div');host.id='ap';
   host.innerHTML=`<button id="apPrev" title="上一首">◂</button>
@@ -110,7 +110,9 @@
   host.querySelector('#apPrev').addEventListener('click',()=>{if(!started){playTrack(0);return;}playTrack((idx-1+TRACKS.length)%TRACKS.length);});
 
   window.AP={
-    play:()=>{if(!started){playTrack(0);}else if(!playing){resume();}},
+    play:()=>{if(!started){playTrack(0);}else if(active.paused){resume();}},
+    pause:()=>pause(),
+    resume:()=>resume(),
     toggle:()=>{if(!started){playTrack(0);return;}playing?pause():resume();},
     playTrack,
     isPlaying:()=>playing
