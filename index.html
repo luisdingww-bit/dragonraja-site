@@ -345,6 +345,17 @@
     window.DR_ACC.config.openLogin=function(){ if(openModal)openModal(); if(showLoginTab)showLoginTab(); };
     window.DR_ACC.config.onLogin=function(){ if(typeof enableEnter==='function')enableEnter(); };
     window.DR_ACC.init();
+    // ★ 会话恢复后自动跳过 boot：已登录/已登记的老用户回来时，boot 仅闪现 1.2s 后自动消退
+    if(window.DR_ACC.current()){
+      enableEnter();
+      setTimeout(closeBoot, 1200);
+    } else {
+      // 本地兜底：检查 dr_enroll（纯游客登记态）
+      try{
+        var saved=JSON.parse(localStorage.getItem('dr_enroll')||'null');
+        if(saved&&saved.name){ enableEnter(); setTimeout(closeBoot, 1200); }
+      }catch(e){}
+    }
   })();
 
   function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}
@@ -585,10 +596,7 @@
   // 录取通知可折叠
   if(letterToggle&&letterWrap)letterToggle.addEventListener('click',function(){ const c=letterWrap.classList.toggle('collapsed'); letterToggle.setAttribute('aria-expanded', c?'false':'true'); });
 
-  // 会话恢复：DR_ACC.init() 已恢复账号并（经 onLogin）启用「启程」；这里补处理纯游客登记态
-  (function restore(){
-    try{ const saved=JSON.parse(localStorage.getItem('dr_enroll')||'null'); if(saved&&saved.name&&enter)enableEnter(); }catch(e){}
-  })();
+  // 会话恢复已由 wireAccount() 处理（DR_ACC.current() 或 dr_enroll → 自动跳过 boot）
 
   if(window.onLangChange)window.onLangChange(function(){
     syncBM();

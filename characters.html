@@ -23,6 +23,7 @@
       <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
       <a href="characters.html" class="active" data-i18n="nav_chars">人物</a>
       <a href="index.html#ritual" data-i18n="nav_ritual">血统鉴定</a>
+      <span id="accountArea" class="account-area"></span>
       <button id="langSwitch" class="lang-switch" type="button">EN</button>
     </div>
   </div>
@@ -87,6 +88,15 @@
 </footer>
 
 <script src="i18n.js"></script>
+<script src="auth.js"></script>
+<script src="account.js"></script>
+<script>
+  (function(){
+    if(!window.DR_ACC) return;
+    window.DR_ACC.config.openLogin=function(){ window.DR_ACC.ensureLoginModal(); };
+    window.DR_ACC.init({ injectLoginModal:true });
+  })();
+</script>
 <script src="app.js"></script>
 <script src="eva.js"></script>
 <script>
