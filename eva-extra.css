@@ -172,12 +172,27 @@
 }
 
 /* ===== 章节混剪视频（index 开场 / story 卷首） ===== */
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.6;filter:contrast(1.06) brightness(.58) saturate(1.08);}
-.hero{position:relative;overflow:hidden;}
-.hero>*{position:relative;z-index:1;}
-.story-video-wrap{position:relative;max-width:920px;margin:18px auto 6px;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line-strong);box-shadow:0 22px 60px rgba(0,0,0,.55);background:#05070d;}
-.story-video-wrap .story-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:contrast(1.05) brightness(.85);}
-.story-video-cap{position:absolute;left:0;right:0;bottom:0;padding:16px 18px;font:700 13px/1.4 var(--serif);letter-spacing:.28em;color:var(--gold-bright);text-align:center;background:linear-gradient(transparent,rgba(5,7,13,.82));text-shadow:0 2px 10px rgba(0,0,0,.8);}
+/* 首页 Hero：风暴龙图为底，章节视频仅作虚化柔光氛围层（避免闪字抢视觉） */
+.hero{position:relative;overflow:hidden;background:#04070e url(img/opening.jpg) center/cover no-repeat;}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.5;
+  filter:blur(9px) brightness(.30) saturate(1.12) contrast(1.04);
+  transform:scale(1.14);transform-origin:center;
+  animation:heroDrift 26s ease-in-out infinite alternate;}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 50% 16%,rgba(8,14,26,.18),rgba(3,7,14,.74) 68%),
+    linear-gradient(180deg,rgba(3,7,14,.5) 0%,rgba(3,7,14,.18) 38%,rgba(3,7,14,.88) 100%);}
+.hero>*{position:relative;z-index:2;}
+@keyframes heroDrift{0%{transform:scale(1.12)}100%{transform:scale(1.22)}}
+
+/* 情节页卷首：框内正式引子视频（暗角 + 缓慢推镜 + 精致标题条） */
+.story-video-wrap{position:relative;max-width:860px;margin:10px auto 4px;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line-strong);box-shadow:0 24px 70px rgba(0,0,0,.6);background:#05070d;}
+.story-video-wrap .story-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:contrast(1.04) brightness(.78) saturate(1.05);animation:heroZoom 20s ease-in-out infinite alternate;}
+.story-video-wrap::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(125% 100% at 50% 50%,rgba(0,0,0,0) 54%,rgba(3,7,14,.55) 100%);}
+.story-video-kick{position:absolute;left:0;right:0;top:13px;text-align:center;font:600 11px/1 var(--serif);letter-spacing:.5em;color:rgba(244,207,104,.9);text-shadow:0 1px 6px rgba(0,0,0,.85);z-index:2;}
+.story-video-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 18px 16px;font:700 12.5px/1.5 var(--serif);letter-spacing:.3em;color:var(--gold-bright);text-align:center;background:linear-gradient(transparent,rgba(5,7,13,.86));text-shadow:0 2px 10px rgba(0,0,0,.85);z-index:2;}
+@keyframes heroZoom{0%{transform:scale(1.02)}100%{transform:scale(1.12)}}
 @media(max-width:760px){
-  .story-video-wrap{margin:12px auto 4px;}
+  .story-video-wrap{margin:8px auto 2px;}
 }
