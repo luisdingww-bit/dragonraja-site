@@ -46,6 +46,7 @@
     <div class="ch-events-title" data-i18n="ch_ev_title">交 织 事 件 · 多 视 角</div>
     <div class="ch-event-tabs" id="ch-event-tabs"></div>
     <div class="ch-event-view">
+      <div class="ch-ev-media" id="ch-ev-media"></div>
       <div class="ch-ev-pickers" id="ch-ev-pickers"></div>
       <div class="ch-ev-text" id="ch-ev-text"></div>
     </div>
@@ -88,7 +89,12 @@ var CH={
     sp_zh:'言灵·时间零（序列号07）',sp_en:'Spirit · Time Zero (Seq.07)',
     arc_zh:'初代狮心会唯一幸存者，千年屠龙者。他追猎四大龙王，把最后的希望寄托在路明非身上。每一次钟声，都是他为屠龙者而鸣。',
     arc_en:"Sole survivor of the first Lionheart, a millennial dragon-slayer. He hunts the Four Kings and pins his last hope on Mingfei. Every bell he tolls is for the slayers.",
-    links:['mingfei','zihang','caesar','kings']}
+    links:['mingfei','zihang','caesar','kings']},
+  tianshu:{zh:'楚天枢',en:'Chu Tianshu',hide:true,role_zh:'楚子航之父 · 迈巴赫的方向盘后',role_en:"Zihang's father · behind the Maybach wheel",
+    sp_zh:'普通人（无言灵）',sp_en:'Ordinary (no spirit)',
+    arc_zh:'他在高架桥上把儿子锁进车里，自己走向雨中的死神。世界后来把他从所有人的记忆里抹去，只有楚子航还记得那双握方向盘的手。',
+    arc_en:"On the viaduct he locked his son in the car and walked toward the death-god in the rain. The world later erased him from all memory; only Zihang remembers the hands on the wheel.",
+    links:[]}
 };
 var REL={
   'mingfei-eri':{zh:'东京塔下，她把红白护腕留给他，说「Sakura，我们还能再来吗」。他答「一定会的」——可雨里的人，再没回来。',en:'Beneath Tokyo Tower she left him the red-white wristband: "Sakura, can we come again?" He said "yes" — yet the one in the rain never returned.'},
@@ -119,6 +125,13 @@ var EVENTS=[
     ps:[{char:'mingfei',zh:'七宗罪在我手中震颤。赫尔佐格借白王之力咆哮，可他不懂——真正的王，甘愿为一个人停下。',en:'The Seven Sins trembled in my grip. Herzog roared with the White King\'s power, yet he never understood — a true King stops for one person.'},
        {char:'eri',zh:'哥哥说会带我回家。可世界树的影子太长，我先把路让给了他。Sakura，下次见面，换你请我吃冰淇淋。',en:'Brother said he\'d take me home. But the World Tree\'s shadow was long; I gave him the road first. Sakura, next time, you buy me ice cream.'},
        {char:'angers',zh:'千年了。白王的血终于安静。我合上档案，听见钟声——为明非，也为所有没能回来的孩子。',en:'A thousand years. The White King\'s blood is quiet at last. I close the file, hear the bells — for Mingfei, and for every child who didn\'t return.'}]}
+  ,{id:'odin',zh:'迈巴赫高架桥·奥丁降临',en:'Odin on the Maybach Viaduct',
+    img:'img/zihang-odin.jpg',
+    ps:[
+      {char:'zihang',zh:'迈巴赫的大灯切开雨幕。爸爸把我锁在车里，说「你数到一百，我就回来」。可他走向的那个东西，戴着面具、骑着八足的马——是死神。他没回头。',en:'The Maybach\'s headlights cut the rain. Father locked me in and said count to a hundred, I\'ll be back. But the thing he walked toward wore a mask and rode an eight-legged horse — Death. He never looked back.'},
+      {char:'tianshu',zh:'我在后视镜里看了他最后一眼。高架桥上没有退路，只有那个戴单眼面具的神。我把车门锁死，告诉自己：这一次，换父亲挡在前面。',en:'I saw him one last time in the mirror. No way off the viaduct, only the one-eyed masked god. I locked the doors and told myself: this time, the father stands in front.'},
+      {char:'angers',zh:'高架桥的监控里没有事故，只有一段被抹去的夜。后来我才拼出真相——奥丁取走了一个父亲，也取走了楚子航往后所有的「普通早晨」。',en:'The viaduct\'s cameras show no crash, only an erased night. Later I pieced the truth — Odin took a father, and with him every ordinary morning Zihang would ever have.'}
+    ]}
 ];
 
 var roster=document.getElementById('ch-roster');
@@ -130,6 +143,7 @@ function renderRoster(){
   roster.innerHTML='';
   Object.keys(CH).forEach(function(id){
     var c=CH[id];
+    if(c.hide) return;
     var d=document.createElement('div'); d.className='ch-ava'+(id===cur?' sel':'');
     d.innerHTML='<div class="ch-ava-n">'+c.zh+'</div><div class="ch-ava-e">'+c.en+'</div>';
     d.onclick=function(){ cur=id; renderRoster(); renderStage(); };
@@ -162,13 +176,14 @@ function renderStage(){
 var evTabs=document.getElementById('ch-event-tabs');
 var evPickers=document.getElementById('ch-ev-pickers');
 var evText=document.getElementById('ch-ev-text');
+var evMedia=document.getElementById('ch-ev-media');
 var curEv=EVENTS[0].id, curPersp=EVENTS[0].ps[0].char;
 function renderEvTabs(){
   evTabs.innerHTML='';
   EVENTS.forEach(function(ev){
     var b=document.createElement('button'); b.className='ch-ev-tab'+(ev.id===curEv?' active':'');
     b.textContent=L(ev);
-    b.onclick=function(){ curEv=ev.id; curPersp=ev.ps[0].char; renderEvTabs(); renderEvPickers(); };
+    b.onclick=function(){ curEv=ev.id; curPersp=ev.ps[0].char; renderEvTabs(); renderEvPickers(); renderEvMedia(); renderEvText(); };
     evTabs.appendChild(b);
   });
 }
@@ -187,9 +202,13 @@ function renderEvText(){
   var p=ev.ps.filter(function(x){return x.char===curPersp;})[0];
   evText.innerHTML='<div class="ch-ev-char">'+CH[p.char].zh+' · '+CH[p.char].en+'</div><div class="ch-ev-line">'+L(p)+'</div>';
 }
+function renderEvMedia(){
+  var ev=EVENTS.filter(function(e){return e.id===curEv;})[0];
+  evMedia.innerHTML = ev.img ? '<div class="ch-ev-media-wrap"><img src="'+ev.img+'" alt="'+L(ev)+'"><div class="ch-ev-cap">'+L(ev)+'</div></div>' : '';
+}
 
-renderRoster(); renderStage(); renderEvTabs(); renderEvPickers(); renderEvText();
-if(window.onLangChange) window.onLangChange(function(){ renderRoster(); renderStage(); renderEvTabs(); renderEvPickers(); renderEvText(); });
+renderRoster(); renderStage(); renderEvTabs(); renderEvPickers(); renderEvMedia(); renderEvText();
+if(window.onLangChange) window.onLangChange(function(){ renderRoster(); renderStage(); renderEvTabs(); renderEvPickers(); renderEvMedia(); renderEvText(); });
 </script>
 </body>
 </html>
