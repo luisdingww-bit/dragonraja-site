@@ -104,12 +104,13 @@
 .adm-submit,.adm-ready{background:#3e2f22;color:#fbf6e8;border:none;padding:13px 28px;font-family:var(--serif);font-size:14px;letter-spacing:.2em;cursor:pointer;border-radius:2px;transition:.3s;margin-top:8px;}
 .adm-submit:hover,.adm-ready:hover{background:#5a4431;}
 .adm-letter{text-align:left;font-family:var(--serif);color:#3e2f22;font-size:clamp(13px,1.7vw,15px);line-height:2.1;letter-spacing:.04em;padding:18px 20px;background:rgba(255,255,255,.45);border:1px solid #d9c9a8;box-shadow:0 0 24px rgba(191,163,111,.12) inset;}
-.adm-letter p{margin:.55em 0;}
-.adm-letter .salut{color:#6b4f2f;font-weight:700;font-size:1.05em;}
+.adm-letter p{margin:.55em 0;text-indent:2em;}
+.adm-letter .salut{text-indent:0;color:#6b4f2f;font-weight:700;font-size:1.05em;}
 .adm-letter .emph{color:#8c2432;font-weight:700;}
-.adm-sign{margin-top:18px;text-align:right;font-family:var(--serif);color:#5a4431;font-size:13px;line-height:1.9;font-style:italic;}
-.adm-sign-name{font-size:15px;font-weight:700;letter-spacing:.05em;}
-.adm-sign-role{font-size:11px;letter-spacing:.08em;color:#7a6046;font-style:normal;}
+.adm-sign{margin-top:22px;text-align:left;font-family:var(--serif);color:#5a4431;font-size:13px;line-height:2;}
+.adm-sign .sign-row{display:flex;align-items:baseline;gap:10px;margin:.3em 0;}
+.adm-sign .sign-label{font-size:13px;letter-spacing:.08em;color:#7a6046;font-style:normal;white-space:nowrap;}
+.adm-sign .sign-name{font-size:15px;font-weight:700;letter-spacing:.05em;font-style:italic;}
 
 .hero{height:92vh;min-height:580px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;z-index:1;padding:0 22px;overflow:hidden;}
 .hero::before{content:"";position:absolute;inset:-20%;z-index:0;background:radial-gradient(circle at 50% 120%,rgba(120,150,200,.1),transparent 45%),radial-gradient(circle at 20% 30%,rgba(216,181,117,.06),transparent 40%);animation:heroFog 18s ease-in-out infinite alternate;pointer-events:none;}
@@ -209,10 +210,8 @@
     <div class="adm-view hidden" id="letterView">
       <div class="adm-letter" id="admLetter"></div>
       <div class="adm-sign">
-        <div class="adm-sign-name">Hilbert Ron Anjou</div>
-        <div class="adm-sign-role" data-i18n="adm_sign_pres">校长签名</div>
-        <div class="adm-sign-name">EVA</div>
-        <div class="adm-sign-role" data-i18n="adm_sign_sec">首席秘书签名</div>
+        <div class="sign-row"><span class="sign-label" data-i18n="adm_sign_pres">校长签名：</span><span class="sign-name">Hilbert Ron Anjou</span></div>
+        <div class="sign-row"><span class="sign-label" data-i18n="adm_sign_sec">首席秘书签名：</span><span class="sign-name">EVA</span></div>
       </div>
       <button class="adm-ready" id="admReady" data-i18n="boot_ready">准备启程</button>
     </div>
@@ -340,36 +339,52 @@
   function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}
   function closeBoot(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}
 
+  // 录取通知书正文（弹窗 + 邮件共享文案，严格按用户提供的纸质通知书图片）
+  function letterContent(isEn,name,year){
+    if(isEn){
+      return {
+        salut:'To Candidate '+name+',',
+        paras:[
+          'On behalf of the Admission Office of Cassell College (CASSELL COLLEGE), we are honored to inform you that you have been admitted as a new student of the '+year+' class.',
+          'As we often say, there is always another choice. Perhaps we can become one of your choices. First, please allow us to introduce ourselves: we are a noble academy located in the northern part of Illinois, USA, with a century-old history dedicated to the study of certain mysterious ancient creatures.',
+          'Are we a paleontology institute? You may wonder. No, we are not a paleontology institute. Our majors include mathematics, nuclear physics, precision mechanics, biological genealogy… and certain special majors that are highly secretive and demanding — yet, we assure you, extremely fascinating.',
+          'In addition, we train our students to operate various vehicles — please do not worry, we are not an American version of a vocational school — cars, yachts, even jet aircraft. Shooting, hand-to-hand combat, and sword mastery are also required courses. We also offer etiquette and dance classes to teach you how to handle all occasions with ease, yet we are not a spy academy either.',
+          'Our selection criteria are so strict and our curriculum so comprehensive because the enemy we face is extraordinarily powerful. These are the ancient beings we are devoted to studying. Long before mankind, they were the rulers of the Earth. They are violent and proud, noble and lonely, and they are not extinct; they still live among us.',
+          'They have had many names, but one is known above all others — Dragon.',
+          'You may be surprised, even disbelieving, but we have indeed opened a door for you: a door to the dark side of the world. Cassell College, or rather the Secret Party, extends this invitation. We are the keepers of secrets and the watchers of the world.',
+          'Only a handful of people receive such an invitation, and you, '+name+', are precisely the one in ten thousand.',
+          'This is a warm invitation, and also a difficult trial. Those who pass through this door shall begin a new life.',
+          'Enclosed are your ticket to the academy and your exclusive black card. Please use the activation code on the black card to enter your own Dragon Raja fantasy world.',
+          'Should you have any questions, please contact the college secretary, EVA.'
+        ]
+      };
+    }
+    return {
+      salut:'尊敬的候选者：',
+      paras:[
+        '这封信来自卡塞尔学院（CASSELL COLLEGE）招生委员会，我们很荣幸地通知您，您已被录取为本校 '+year+' 年的新学员。',
+        '我们常说，永远有另一个选择，或许我们可以成为您的选择之一。首先请容我们自我介绍：我们是一家位于美国伊利诺伊州北部的贵族学院，拥有百年历史，致力于研究某种神秘的古代生物。',
+        '您们是一间古生物研究所么？您或许会问。不，我们并非什么古生物研究所。本校覆盖的专业包括数学、核物理学、精密机械学、生物谱系学……和某些特殊专业，这些专业非常神秘，很难通过，但我们可以向您保证它们非常有趣。',
+        '此外，我们还培训学生驾驶各种交通工具——请勿担心，我们并非美国版的蓝翔技校——汽车、游艇甚至喷气式飞机，射击、徒手搏斗和刀剑掌握也是必修科目。我们还有专门的礼仪课和舞蹈课，教会您在各种场合应对自如，但我们也不是一间间谍学院。',
+        '我们挑选学生的标准如此苛刻，教授的知识如此全面，是因为我们要面对的敌人无比强大。那就是我们致力于研究的那种古代生物，早在人类之前，它们曾是地球的统治者，它们暴力而天骄，尊贵而孤独，而且它们并未灭绝，仍旧活在我们身边。',
+        '它们有过各种各样的名字，但其中有一个最为人所知——龙。',
+        '您或许会惊讶，或许会不信，但我们确实为您打开了一扇门，这扇门通往世界的暗面。卡塞尔学院，或者说秘党，在向您发出邀请。我们是秘密的掌握者，也是世界的守望者。',
+        '只有极少数人能够收到这样的邀请，而您，'+name+'，恰恰是万中选一的人。',
+        '这是一次盛情的邀请，也是一次艰难的考验。通过这扇门的人，将迎来新的人生。',
+        '随信附赠通往学院的车票和专属黑卡，请使用黑卡上的激活码，进入专属于您的龙族幻想世界吧。',
+        '如有疑问请和学院秘书 EVA 联系。'
+      ]
+    };
+  }
+
   function buildLetter(name,age,email){
     const isEn=window.LANG==='en';
     const year=new Date().getFullYear();
     lastLetterData={name,age,email};
-    if(isEn){
-      return '<p class="salut">To Candidate '+name+',</p>'+
-      '<p>On behalf of the Admission Office of Cassell College, we are honored to inform you that you have been admitted as a new student of the '+year+' class.</p>'+
-      '<p>As we often say, there is always another choice. We hope Cassell College may become one of yours. Founded in the northern part of Illinois, USA, our academy has a century-old history dedicated to the study of certain mysterious ancient creatures.</p>'+
-      '<p>You may wonder whether we are a paleontology institute. We are not. Our majors include mathematics, nuclear physics, precision mechanics, biological genealogy… and certain special majors that are highly secretive and demanding — yet, we assure you, extremely fascinating.</p>'+
-      '<p>In addition, we train our students to operate various vehicles — cars, yachts, even jet aircraft. Shooting, hand-to-hand combat, and sword mastery are also required courses. We also offer etiquette and dance classes. Rest assured, we are neither an American version of a vocational school, nor a spy academy.</p>'+
-      '<p>Our selection criteria are so strict and our curriculum so comprehensive because the enemy we face is extraordinarily powerful — the ancient beings that ruled the Earth long before mankind. They are violent and proud, noble and lonely, and they are not extinct; they still live among us.</p>'+
-      '<p>They have had many names, but one is known above all others — <span class="emph">Dragon</span>.</p>'+
-      '<p>You may be surprised, even disbelieving, but we have indeed opened a door for you: a door to the dark side of the world. Cassell College, or rather the Secret Party, extends this invitation. We are the keepers of secrets and the watchers of the world.</p>'+
-      '<p>Only a handful of people receive such an invitation, and you, <span class="emph">'+name+'</span>, are one in ten thousand.</p>'+
-      '<p class="emph">This is a warm invitation, and also a difficult trial. Those who pass through this door shall begin a new life.</p>'+
-      '<p>Enclosed are your ticket to the academy and your exclusive black card. Use the activation code on the black card to enter your own Dragon Raja fantasy world.</p>'+
-      '<p>Should you have any questions, please contact the college secretary, EVA.</p>';
-    }
-    return '<p class="salut">尊敬的候选者 '+name+'：</p>'+
-    '<p>这封信来自卡塞尔学院（CASSELL COLLEGE）招生委员会。我们很荣幸地通知您，您已被录取为本校 '+year+' 年的新学员。</p>'+
-    '<p>我们常说，永远有另一个选择，或许我们可以成为您的选择之一。首先请容我们自我介绍：我们是一家位于美国伊利诺伊州北部的贵族学院，拥有百年历史，致力于研究某种神秘的古代生物。</p>'+
-    '<p>您们是一所古生物研究所么？您或许会问。不，我们并非什么古生物研究所。本校覆盖的专业包括数学、核物理学、精密机械学、生物谱系学……和某些特殊专业，这些专业非常神秘，很难通过，但我们可以向您保证它们非常有趣。</p>'+
-    '<p>此外，我们还培训学生驾驶各种交通工具——请勿担心，我们并非美国版的蓝翔技校——汽车、游艇甚至喷气式飞机，射击、徒手搏斗和刀剑掌握也是必修科目。我们还有专门的礼仪课和舞蹈课，教会您在各种场合应对自如，但我们也不是一间间谍学院。</p>'+
-    '<p>我们挑选学生的标准如此苛刻，教授的知识如此全面，是因为我们要面对的敌人无比强大。那就是我们致力于研究的那种古代生物，早在人类之前，它们曾是地球的统治者，它们暴力而天骄，尊贵而孤独，而且它们并未灭绝，仍旧活在我们身边。</p>'+
-    '<p>它们有过各种各样的名字，但其中有一个最为人所知——<span class="emph">龙</span>。</p>'+
-    '<p>您或许会惊讶，或许会不信，但我们确实为您打开了一扇门，这扇门通往世界的暗面。卡塞尔学院，或者说秘党，在向您发出邀请。我们是秘密的掌握者，也是世界的守望者。</p>'+
-    '<p>只有极少数人能够收到这样的邀请，而您，<span class="emph">'+name+'</span>，恰恰是万中选一的人。</p>'+
-    '<p class="emph">这是一次盛情的邀请，也是一次艰难的考验。通过这扇门的人，将迎来新的人生。</p>'+
-    '<p>随信附赠通往学院的车票和专属黑卡，请使用黑卡上的激活码，进入专属于您的龙族幻想世界吧。</p>'+
-    '<p>如有疑问请和学院秘书 EVA 联系。</p>';
+    const c=letterContent(isEn,name,year);
+    let html='<p class="salut">'+escHtml(c.salut)+'</p>';
+    c.paras.forEach(function(p){ html+='<p>'+escHtml(p)+'</p>'; });
+    return html;
   }
 
   function saveAdmission(name,age,email){
@@ -411,44 +426,29 @@
   function escHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   function buildEmailHtml(name,age,email,isEn){
-    var gold='#d8b575', ink='#e8e2d2', dim='#9aa6b2', bg='#0a1018', panel='#0c1626';
-    var crest=(location.origin&&location.origin.indexOf('http')===0?location.origin:'https://luisdingww-bit.github.io/dragonraja-site')+'/img/cassell-seal-round.png';
-    var title=isEn?'ADMISSION NOTICE':'录 取 通 知';
-    var salut=isEn?'To the future dragon-slayer:':'致 未来的屠龙者：';
-    var p1=isEn?'By the ruling of the Cassell College Bloodline Identification Committee, ancient dragon blood flows in your veins. This is to formally notify you —':'经卡塞尔学院血统鉴定委员会裁定，你体内流淌着古老的龙血。现正式通知——';
-    var emph=isEn?'You are admitted as a hybrid student of this term.':'你已被录取为本届混血种学员。';
-    var p2=isEn?'The bell will soon toll for you. Step through this gate, and there is no turning back.':'钟声即将为你敲响。踏入此门，便再无回头。';
-    var college='CASSELL COLLEGE · 卡塞尔学院';
-    var nameL=isEn?'Candidate':'学员姓名', ageL=isEn?'Registered Age':'登记年龄', fileL=isEn?'Archive No.':'档案编号';
-    var signPres=isEn?'President':'校长签名', signSec=isEn?'Chief Secretary':'首席秘书签名';
-    var disp=isEn?'Dispatched by EVA Terminal':'由 EVA 智能终端派送';
-    var d=new Date(); var ds=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
-    var archNo='DR-'+ds.replace(/-/g,'')+'-'+Math.floor(Math.random()*9000+1000);
+    const year=new Date().getFullYear();
+    const c=letterContent(isEn,name,year);
+    const bg='#fbf6e8', panelFrom='#fbf6e8', panelTo='#f3e9d0', ink='#2b2118', gold='#8c6f3f', label='#7a6046';
+    const crest=(typeof location!=='undefined'&&location.origin&&location.origin.indexOf('http')===0?location.origin:'https://luisdingww-bit.github.io/dragonraja-site')+'/img/cassell-seal-round.png';
+    const title=isEn?'LETTER OF ADMISSION':'录 取 通 知';
+    const presLabel=isEn?'President:':'校长签名：';
+    const secLabel=isEn?'Chief Secretary:':'首席秘书签名：';
+    const paras=c.paras.map(function(p){ return '<p style="margin:.75em 0;text-indent:2em;color:'+ink+';font-size:15px;line-height:1.95;">'+escHtml(p)+'</p>'; }).join('');
     return ''
     +'<div style="margin:0;padding:0;background:'+bg+';">'
     +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:'+bg+';padding:28px 0;"><tr><td align="center">'
-    +'<div style="max-width:560px;width:100%;background:'+panel+';border:1px solid '+gold+';border-radius:4px;box-shadow:0 18px 60px rgba(0,0,0,.5);overflow:hidden;font-family:Georgia,\'Times New Roman\',\'Songti SC\',serif;">'
-    +'<div style="padding:30px 34px 8px;text-align:center;">'
-    +'<img src="'+crest+'" width="68" height="68" style="border-radius:50%;border:2px solid '+gold+';box-shadow:0 0 18px rgba(216,181,117,.3);" alt="Cassell College">'
-    +'<div style="letter-spacing:.32em;color:'+gold+';font-size:12px;margin-top:12px;">'+college+'</div>'
-    +'<div style="letter-spacing:.4em;color:'+gold+';font-size:22px;margin-top:10px;padding-left:.4em;">'+title+'</div>'
+    +'<div style="max-width:600px;width:100%;background:linear-gradient(180deg,'+panelFrom+' 0%,'+panelTo+' 100%);border:8px double #bfa36f;color:'+ink+';padding:34px 30px 28px;text-align:center;font-family:Georgia,\'Times New Roman\',\'Songti SC\',serif;box-shadow:0 18px 60px rgba(0,0,0,.45);">'
+    +'<img src="'+crest+'" width="76" height="76" style="border-radius:50%;border:2px solid #bfa36f;box-shadow:0 0 20px rgba(191,163,111,.35);margin-bottom:10px;" alt="Cassell College">'
+    +'<div style="letter-spacing:.28em;color:'+ink+';font-size:clamp(18px,3.6vw,26px);font-weight:700;margin-bottom:4px;">CASSELL COLLEGE</div>'
+    +'<div style="letter-spacing:.4em;color:'+gold+';font-size:clamp(16px,3vw,22px);margin-bottom:18px;padding-left:.4em;">'+title+'</div>'
+    +'<div style="text-align:left;padding:18px 20px;background:rgba(255,255,255,.45);border:1px solid #d9c9a8;box-shadow:0 0 24px rgba(191,163,111,.12) inset;">'
+    +'<p style="margin:.55em 0;color:'+label+';font-weight:700;font-size:1.05em;">'+escHtml(c.salut)+'</p>'
+    +paras
     +'</div>'
-    +'<div style="padding:10px 38px 30px;color:'+ink+';font-size:15px;line-height:2;text-align:left;">'
-    +'<p style="margin:14px 0;">'+salut+'</p>'
-    +'<p style="margin:14px 0;color:'+dim+';">'+p1+'</p>'
-    +'<p style="margin:14px 0;color:'+gold+';font-size:16px;letter-spacing:.04em;">'+emph+'</p>'
-    +'<p style="margin:14px 0;color:'+dim+';">'+p2+'</p>'
-    +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:22px 0 6px;border-top:1px dashed rgba(216,181,117,.35);border-bottom:1px dashed rgba(216,181,117,.35);">'
-    +'<tr><td style="padding:12px 0;color:'+dim+';font-size:13px;">'+nameL+'</td><td style="padding:12px 0;color:'+ink+';font-size:14px;text-align:right;">'+escHtml(name)+'</td></tr>'
-    +'<tr><td style="padding:12px 0;color:'+dim+';font-size:13px;">'+ageL+'</td><td style="padding:12px 0;color:'+ink+';font-size:14px;text-align:right;">'+escHtml(age)+'</td></tr>'
-    +'<tr><td style="padding:12px 0;color:'+dim+';font-size:13px;">'+fileL+'</td><td style="padding:12px 0;color:'+ink+';font-size:14px;text-align:right;">'+archNo+'</td></tr>'
+    +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:22px;color:#5a4431;font-size:13px;line-height:2;text-align:left;">'
+    +'<tr><td style="color:'+label+';white-space:nowrap;vertical-align:baseline;">'+presLabel+'</td><td style="font-size:15px;font-weight:700;letter-spacing:.05em;font-style:italic;vertical-align:baseline;">Hilbert Ron Anjou</td></tr>'
+    +'<tr><td style="color:'+label+';white-space:nowrap;vertical-align:baseline;">'+secLabel+'</td><td style="font-size:15px;font-weight:700;letter-spacing:.05em;font-style:italic;vertical-align:baseline;">EVA</td></tr>'
     +'</table>'
-    +'<div style="margin-top:22px;color:'+gold+';font-size:13px;letter-spacing:.1em;">'+disp+'</div>'
-    +'<div style="margin-top:18px;display:flex;justify-content:space-between;color:'+dim+';font-size:13px;">'
-    +'<div><div style="color:'+ink+';font-size:15px;font-style:italic;">Hilbert Ron Anjou</div><div>'+signPres+'</div></div>'
-    +'<div style="text-align:right;"><div style="color:'+ink+';font-size:15px;font-style:italic;">EVA</div><div>'+signSec+'</div></div>'
-    +'</div>'
-    +'</div>'
     +'</div>'
     +'</td></tr></table>'
     +'</div>';
