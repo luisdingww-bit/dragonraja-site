@@ -41,8 +41,27 @@
   a1.volume=0;a2.volume=0;
   let active=a1,idx=0,started=false,playing=false;
 
+  /* 跨页面持久化：记住曲目 / 播放位置 / 是否播放中，整页跳转后自动续播 */
+  const STKEY='dr_player_v1';
+  let _pendingSeek=null,_lastSave=0;
+  function saveState(){
+    try{ localStorage.setItem(STKEY, JSON.stringify({idx:idx, time:active&&active.currentTime?active.currentTime:0, playing:playing})); }catch(e){}
+  }
+  function loadState(){
+    try{ return JSON.parse(localStorage.getItem(STKEY)||'null'); }catch(e){ return null; }
+  }
+  function applySeek(el,t){
+    if(el&&isFinite(el.duration)&&el.duration>0){ try{el.currentTime=Math.min(t,el.duration);}catch(e){} }
+    else _pendingSeek={el:el,t:t};
+  }
+
   function setName(){apName.textContent=tr(TRACKS[idx],'name');}
-  function setPlayingUI(on){host.classList.toggle('playing',on);apPlay.textContent=on?'❚❚':'▶';}
+  function setPlayingUI(on){
+    host.classList.toggle('playing',on);
+    apPlay.textContent=on?'❚❚':'▶';
+    const bm=document.querySelector('.boot-music');
+    if(bm){bm.classList.toggle('on',on);bm.title=on?'暂停音乐':'播放音乐';}
+  }
   function elFor(i){return i===0?a1:a2;}
   function fade(el,from,to,ms,cb){
     const steps=30,st=ms/steps;let v=from;
@@ -52,6 +71,18 @@
       else el.volume=v;
     },st);
   }
+  function startPlayback(el,fromTime){
+    idx=(el===a1)?0:1;setName();
+    applySeek(el,fromTime||0);
+    el.volume=0;
+    const p=el.play();if(p&&p.catch)p.catch(()=>{
+      const g=()=>{resume();};  /* 自动播放被拦截：等下次手势再续 */
+      document.addEventListener('click',g,{once:true});
+      document.addEventListener('keydown',g,{once:true});
+    });
+    active=el;playing=true;started=true;setPlayingUI(true);
+    fade(el,0,1,900);saveState();
+  }
   function playTrack(i){
     idx=((i%TRACKS.length)+TRACKS.length)%TRACKS.length;
     setName();
@@ -60,17 +91,19 @@
     const p=next.play();if(p&&p.catch)p.catch(()=>{});
     if(next===prev){fade(next,next.volume,1,1400);}
     else{fade(next,0,1,1400);if(prev)fade(prev,prev.volume,0,1400,()=>{try{prev.pause();}catch(e){}});}
-    active=next;playing=true;started=true;setPlayingUI(true);
+    active=next;playing=true;started=true;setPlayingUI(true);saveState();
   }
   [a1,a2].forEach(el=>{
     el.addEventListener('ended',()=>{if(active===el)playTrack((idx+1)%TRACKS.length);});
+    el.addEventListener('loadedmetadata',()=>{ if(_pendingSeek&&_pendingSeek.el===el){ try{el.currentTime=Math.min(_pendingSeek.t,el.duration);}catch(e){} _pendingSeek=null; } });
+    el.addEventListener('timeupdate',()=>{ if(playing){ const n=Date.now(); if(n-_lastSave>800){_lastSave=n;saveState();} } });
     el.addEventListener('waiting',()=>host.classList.add('buffering'));
     el.addEventListener('stalled',()=>host.classList.add('buffering'));
     el.addEventListener('playing',()=>host.classList.remove('buffering'));
     el.addEventListener('canplay',()=>host.classList.remove('buffering'));
   });
-  function pause(){try{active.pause();}catch(e){}playing=false;setPlayingUI(false);}
-  function resume(){const p=active.play();if(p&&p.catch)p.catch(()=>{});playing=true;setPlayingUI(true);}
+  function pause(){try{active.pause();}catch(e){}playing=false;setPlayingUI(false);saveState();}
+  function resume(){active.volume=1;const p=active.play();if(p&&p.catch)p.catch(()=>{});playing=true;setPlayingUI(true);saveState();}
 
   apPlay.addEventListener('click',()=>{if(!started){playTrack(0);return;}playing?pause():resume();});
   host.querySelector('#apNext').addEventListener('click',()=>{if(!started){playTrack(1);return;}playTrack((idx+1)%TRACKS.length);});
@@ -82,6 +115,17 @@
     playTrack,
     isPlaying:()=>playing
   };
+
+  /* 进入新页面：若之前在播放则自动续播；若已暂停则恢复位置待播（不再中断） */
+  (function restore(){
+    const s=loadState(); if(!s) return;
+    idx=(s.idx===0)?0:1; active=elFor(idx); setName();
+    applySeek(active, s.time||0);
+    if(s.playing){ startPlayback(active, s.time||0); }
+    else { started=true; setPlayingUI(false); }
+  })();
+  window.addEventListener('beforeunload',saveState);
+  window.addEventListener('pagehide',saveState);
 
   if(window.onLangChange) window.onLangChange(()=>{ if(started) setName(); });
 })();
