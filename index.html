@@ -7,15 +7,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="eva-extra.css">
+<link rel="stylesheet" href="style.css?v=20260731">
+<link rel="stylesheet" href="eva-extra.css?v=20260731">
 <style>
-/* index 专属：电影感开场 + hero + 世界观 */
+/* index 专属：电影感开场 + hero + 世界观 + 卷目预览 */
 #boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
 #boot.hide{opacity:0;visibility:hidden;}
 .stage{position:absolute;inset:0;overflow:hidden;animation:kenburns 28s ease-in-out infinite alternate;}
 @keyframes kenburns{from{transform:scale(1);}to{transform:scale(1.06);}}
-.bg-img{position:absolute;inset:0;background:url(img/opening.jpg) center/cover no-repeat;animation:imgDrift 40s ease-in-out infinite alternate;filter:brightness(.48) contrast(1.12) saturate(1.05);}
+.bg-img{position:absolute;inset:0;background:url(img/opening.jpg) center/cover no-repeat;
+  animation:imgDrift 40s ease-in-out infinite alternate;
+  filter:brightness(.48) contrast(1.12) saturate(1.05);}
 @keyframes imgDrift{from{transform:scale(1.04) translate(0,0);}to{transform:scale(1.12) translate(-1.5%,-1%);}}
 .bar{position:absolute;left:0;right:0;height:8.5vh;background:#000;z-index:8;}
 .bar.top{top:0;}.bar.bot{bottom:0;}
@@ -130,83 +132,17 @@
 .world .crest-line{text-align:center;color:var(--gold);letter-spacing:.4em;font-family:var(--serif);margin:32px 0 6px;}
 .world .art-frame{max-width:560px;margin:0 auto 36px;}
 
+.elegy{max-width:700px;margin:0 auto;text-align:center;}
+.elegy .badge{display:inline-block;font-size:10px;letter-spacing:.35em;color:var(--gold-soft);border:1px solid var(--line-strong);border-radius:999px;padding:4px 14px;font-family:var(--serif);}
+.elegy .sub-title{margin-top:16px;color:var(--ink-dim);font-size:12.5px;letter-spacing:.3em;font-family:var(--serif);}
+.elegy .quote-block{margin:38px auto 0;padding:42px 34px;position:relative;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 50px rgba(8,18,30,.55) inset;}
+.elegy .quote-block::before,.elegy .quote-block::after{content:"";position:absolute;left:50%;width:70px;height:1px;background:var(--gold);transform:translateX(-50%);opacity:.55;}
+.elegy .quote-block::before{top:0;}.elegy .quote-block::after{bottom:0;}
+.elegy .quote-text{font-family:var(--serif);color:var(--ink-bright);font-size:16.5px;line-height:2.15;text-align:left;white-space:pre-line;letter-spacing:.04em;}
 .elegy .quote-text .line-emph{color:var(--gold);font-weight:600;}
 .elegy .quote-text .line-sakura{color:var(--blood);font-weight:600;font-style:italic;}
 .elegy .signoff{margin-top:32px;color:var(--gold-soft);font-family:var(--serif);font-size:13.5px;letter-spacing:.15em;font-style:italic;}
-@keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
 @media(max-width:600px){.hero h1{letter-spacing:.12em;}.elegy .quote-block{padding:28px 20px;}.elegy .quote-text{font-size:15px;}}
-
-/* ===== 合并页面专属：锚点导航 + 各段样式 ===== */
-section[id]{scroll-margin-top:74px;}
-
-/* 情节长卷 */
-.story-video-wrap{position:relative;max-width:860px;margin:0 auto 30px;border:1px solid var(--line);overflow:hidden;background:#000;}
-.story-video{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;}
-.story-video-kick{position:absolute;top:14px;left:16px;color:var(--gold);font-family:var(--serif);font-size:12px;letter-spacing:.35em;text-shadow:0 0 10px #000;}
-.story-video-cap{position:absolute;bottom:14px;left:16px;color:var(--ink-bright);font-family:var(--serif);font-size:14px;letter-spacing:.2em;text-shadow:0 0 10px #000;}
-.vol-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:10px;}
-.vol-tab{background:transparent;border:1px solid var(--line);color:var(--ink-dim);font-family:var(--serif);font-size:13px;letter-spacing:.18em;padding:10px 20px;cursor:pointer;border-radius:2px;transition:.25s;}
-.vol-tab:hover{color:var(--gold-bright);border-color:var(--line-strong);}
-.vol-tab.active{color:var(--gold-bright);border-color:var(--gold);box-shadow:0 0 16px rgba(216,181,117,.18);background:rgba(216,181,117,.06);}
-.vol-panel{display:none;animation:fadeIn .5s ease;}
-.vol-panel.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.vol-head{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;margin:10px 0 26px;}
-.vol-head .art-frame{flex:0 0 320px;max-width:320px;}
-.vol-head .vol-info{flex:1;min-width:260px;}
-.vol-head h3{font-family:var(--serif);color:var(--ink-bright);font-size:24px;letter-spacing:.16em;}
-.vol-head .en{color:var(--gold-soft);font-family:var(--serif);font-size:11px;letter-spacing:.3em;margin-top:6px;display:block;}
-.vol-head .syn{color:var(--ink);font-size:14.5px;line-height:1.95;margin-top:16px;text-align:justify;}
-.char-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;}
-.chip{font-family:var(--serif);font-size:12px;letter-spacing:.1em;color:var(--gold-soft);border:1px solid var(--line-strong);border-radius:999px;padding:5px 14px;background:rgba(8,14,24,.4);}
-.scene-list{display:flex;flex-direction:column;gap:12px;margin-top:8px;}
-.scene2{border:1px solid var(--line);background:var(--panel);overflow:hidden;transition:.3s;}
-.scene2:hover{border-color:var(--line-strong);}
-.scene2 .s-head{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;}
-.scene2 .s-no{color:var(--gold-soft);font-family:var(--serif);font-size:13px;letter-spacing:.15em;flex-shrink:0;}
-.scene2 .s-title{color:var(--ink-bright);font-family:var(--serif);font-size:16px;letter-spacing:.06em;flex:1;}
-.scene2 .s-toggle{color:var(--gold);font-size:13px;transition:transform .3s;}
-.scene2.open .s-toggle{transform:rotate(45deg);}
-.scene2 .s-body{max-height:0;overflow:hidden;transition:max-height .4s ease;padding:0 20px;}
-.scene2.open .s-body{max-height:600px;padding:0 20px 20px;}
-.scene2 .s-body p{color:var(--ink);font-size:14px;line-height:1.95;padding-top:6px;border-top:1px dashed var(--line);}
-.scene2 .s-quote{color:var(--gold);font-family:var(--serif);font-size:13px;font-style:italic;margin-top:12px;letter-spacing:.06em;}
-.rand-bar{text-align:center;margin:30px 0 6px;}
-.rand-line{font-family:var(--serif);color:var(--gold-bright);font-size:16px;letter-spacing:.1em;min-height:26px;margin-top:18px;line-height:1.8;}
-
-/* 言灵图鉴 */
-.toolbar{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;margin:6px 0 30px;}
-.filter-tabs{display:flex;gap:8px;}
-.ftab{background:transparent;border:1px solid var(--line);color:var(--ink-dim);font-family:var(--serif);font-size:12.5px;letter-spacing:.16em;padding:9px 18px;cursor:pointer;border-radius:2px;transition:.25s;}
-.ftab:hover{color:var(--gold-bright);border-color:var(--line-strong);}
-.ftab.active{color:var(--gold-bright);border-color:var(--gold);background:rgba(216,181,117,.07);}
-.search-box{position:relative;}
-.search-box input{background:rgba(8,14,24,.6);border:1px solid var(--line-strong);color:var(--ink);font-family:var(--serif);font-size:13px;padding:9px 16px 9px 36px;border-radius:2px;width:200px;letter-spacing:.08em;outline:none;transition:.25s;}
-.search-box input:focus{border-color:var(--gold);box-shadow:0 0 14px rgba(216,181,117,.18);}
-.search-box input::placeholder{color:var(--ink-dim);}
-.search-box::before{content:"⌕";position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gold-soft);font-size:15px;}
-.count-line{text-align:center;color:var(--ink-dim);font-family:var(--serif);font-size:12px;letter-spacing:.2em;margin-bottom:24px;}
-.codex-info{text-align:center;color:var(--ink-dim);font-size:12px;letter-spacing:.16em;margin:-6px auto 26px;font-family:var(--serif);font-style:italic;max-width:600px;}
-.empty{text-align:center;color:var(--ink-dim);font-family:var(--serif);padding:40px 0;letter-spacing:.1em;}
-
-/* 四大龙王 */
-.king-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:10px 0 36px;}
-.king-nav a{text-decoration:none;font-family:var(--serif);font-size:13px;letter-spacing:.18em;color:var(--ink-dim);border:1px solid var(--line);border-radius:2px;padding:10px 20px;transition:.25s;}
-.king-nav a:hover{color:var(--gold-bright);border-color:var(--gold);box-shadow:0 0 14px rgba(216,181,117,.16);}
-.king-block{display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;padding:40px 0;border-top:1px solid var(--line);scroll-margin-top:80px;}
-.king-block:first-of-type{border-top:none;}
-.king-block .art-frame{flex:0 0 380px;max-width:380px;}
-.king-block .k-info{flex:1;min-width:280px;}
-.king-block .k-head{display:flex;align-items:center;gap:16px;margin-bottom:6px;}
-.king-block .k-icon{font-size:40px;color:var(--gold);}
-.king-block h3{font-family:var(--serif);color:var(--ink-bright);font-size:26px;letter-spacing:.18em;}
-.king-block .k-en{color:var(--gold-soft);font-family:var(--serif);font-size:12px;letter-spacing:.3em;display:block;margin-top:4px;}
-.king-block .k-row{margin-top:20px;}
-.king-block .k-label{color:var(--gold);font-family:var(--serif);font-size:12px;letter-spacing:.25em;margin-bottom:8px;display:inline-block;border-bottom:1px solid var(--gold-soft);padding-bottom:3px;}
-.king-block .k-row p{color:var(--ink);font-size:14.5px;line-height:1.95;text-align:justify;}
-.king-block .k-row p .em{color:var(--gold-bright);font-weight:600;}
-.king-block .k-row p .blood{color:var(--blood);font-weight:600;}
-@media(max-width:600px){.king-block{flex-direction:column;}.king-block .art-frame{flex:0 0 auto;max-width:100%;}}
 </style>
 <link rel="icon" type="image/png" href="img/cassell-seal-round.png">
 </head>
@@ -224,7 +160,7 @@ section[id]{scroll-margin-top:74px;}
     <div class="boot-crest"><img src="img/crest.webp" alt="Crest"></div>
     <div class="boot-kicker" data-i18n="boot_kicker">卡塞尔学院 · 招生委员会</div>
     <div class="boot-notice-title"><span class="nt-ln"></span><span data-i18n="boot_notice_title">录 取 通 知</span><span class="nt-ln r"></span></div>
-    <div class="boot-letter-wrap" id="letterWrapper">
+    <div class="boot-letter-wrap" id="letterWrap">
       <button class="boot-letter-toggle" id="letterToggle" type="button" aria-expanded="true">
         <span class="lt-label" data-i18n="boot_letter_toggle">录取通知书</span>
         <span class="lt-arrow">▾</span>
@@ -271,7 +207,7 @@ section[id]{scroll-margin-top:74px;}
         <div class="bf-hint" id="loginHint" data-i18n="login_hint">请输入邮箱与密码</div>
         <button class="adm-submit" type="submit" data-i18n="boot_login_btn">登 录</button>
       </form>
-      <div class="login-foot"><a href="#ritual" id="toEnroll" data-i18n="login_to_enroll">还没有账号？去登记</a></div>
+      <div class="login-foot"><a href="#" id="toEnroll" data-i18n="login_to_enroll">还没有账号？去登记</a></div>
     </div>
     <div class="adm-view hidden" id="letterView">
       <div class="adm-letter" id="admLetter"></div>
@@ -286,15 +222,15 @@ section[id]{scroll-margin-top:74px;}
 
 <nav>
   <div class="nav-inner">
-    <a class="brand" href="#world"><img src="img/crest.webp" alt="crest"><div><span class="zh">龙族</span><span class="en">DRAGON RAJA</span></div><span class="tag" data-i18n="nav_tag">混血种档案</span></a>
+    <a class="brand" href="index.html"><img src="img/crest.webp" alt="crest"><div><span class="zh">龙族</span><span class="en">DRAGON RAJA</span></div><span class="tag" data-i18n="nav_tag">混血种档案</span></a>
     <div class="nav-links">
+      <a href="eva.html" data-i18n="nav_eva">EVA 终端</a>
+      <a href="story.html" data-i18n="nav_story">情节长卷</a>
+      <a href="codex.html" data-i18n="nav_codex">言灵图鉴</a>
+      <a href="kings.html" data-i18n="nav_kings">四大龙王</a>
+      <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
+      <a href="characters.html" data-i18n="nav_chars">人物</a>
       <a href="#ritual" data-i18n="nav_ritual">血统鉴定</a>
-      <a href="#codex" data-i18n="nav_codex">言灵图鉴</a>
-      <a href="#story" data-i18n="nav_story">情节长卷</a>
-      <a href="#kings" data-i18n="nav_kings">四大龙王</a>
-      <a href="#sins" data-i18n="nav_sins">七宗罪</a>
-      <a href="#characters" data-i18n="nav_chars">人物</a>
-      <a href="#eva" data-i18n="nav_eva">EVA 终端</a>
       <span id="accountArea" class="account-area"></span>
       <button id="langSwitch" class="lang-switch" type="button">EN</button>
     </div>
@@ -333,161 +269,36 @@ section[id]{scroll-margin-top:74px;}
   </div>
 </section>
 
-<section id="codex" class="container">
-  <div class="sec-title"><span class="num">N ° 03</span><div class="kick">S P I R I T &nbsp; C O D E X</div><h2 data-i18n="sec_spirit_h2">三 十 六 言 灵</h2><div class="sub" data-i18n="sec_spirit_sub">按序列号排列 · 可筛选与搜索</div></div>
+<section id="codex-preview" class="container">
+  <div class="sec-title"><span class="num">N ° 03</span><div class="kick">S P I R I T &nbsp; C O D E X</div><h2 data-i18n="s04_h2">言 灵 图 鉴</h2><div class="sub" data-i18n="s04_sub">血脉深处的咒语 · 此处仅列六条</div></div>
   <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
-  <div class="codex-info" data-i18n="codex_info">本图鉴含原著登场言灵与同人扩展条目，序列号仅供模拟参考。</div>
-  <div class="toolbar">
-    <div class="filter-tabs">
-      <button class="ftab active" data-f="all" data-i18n="ftab_all">全部</button>
-      <button class="ftab" data-f="high" data-i18n="ftab_high">高危</button>
-      <button class="ftab" data-f="normal" data-i18n="ftab_normal">常规</button>
-    </div>
-    <div class="search-box"><input id="search" type="text" data-i18n-ph="search_ph" placeholder="搜索言灵 / 序列号…"></div>
-  </div>
-  <div class="count-line" id="count"></div>
-  <div class="codex" id="grid"></div>
+  <div class="codex" id="codexGrid"></div>
+  <div class="link-center"><a class="more-link" href="codex.html" data-i18n="more_codex">进入完整图鉴（共 36 条）<span class="arr">→</span></a></div>
 </section>
 
-<section id="story" class="container">
-  <div class="sec-title"><span class="num">N ° 04</span><div class="kick">V O L U M E S</div><h2 data-i18n="s05_h2">龙 族 1 — 5 · 精 彩 情 节</h2><div class="sub" data-i18n="sec_vol_sub">点击分卷标签切换 · 点场景展开详叙</div></div>
+<section id="story-preview" class="container">
+  <div class="sec-title"><span class="num">N ° 04</span><div class="kick">V O L U M E S</div><h2 data-i18n="s05_h2">龙 族 1 — 5 · 精 彩 情 节</h2><div class="sub" data-i18n="s05_sub">五卷血与火的编年</div></div>
   <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
-  <div class="story-video-wrap">
-    <video class="story-video" autoplay muted loop playsinline preload="auto" poster="img/opening.jpg">
-      <source src="img/chapters-720.mp4" type="video/mp4">
-      <source src="img/chapters-480.mp4" type="video/mp4">
-    </video>
-    <div class="story-video-kick" data-i18n="story_video_kick">全 卷 引 子</div>
-    <div class="story-video-cap" data-i18n="story_video_cap">龙 族 章 节 混 剪</div>
+  <div class="preview-grid">
+    <a class="preview-card" href="story.html#v1"><div class="pc-no">Ⅰ</div><h3 data-i18n="v1_t">火之晨曦</h3><p data-i18n="v1_d">芝加哥的红发女孩、言灵·镰鼬觉醒、青铜城之战、康斯坦丁之死。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="story.html#v2"><div class="pc-no">Ⅱ</div><h3 data-i18n="v2_t">悼亡者之瞳</h3><p data-i18n="v2_d">夏弥与楚子航、耶梦加得、夏弥之死、冰海王女零。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="story.html#v3"><div class="pc-no">Ⅲ</div><h3 data-i18n="v3_t">黑月之潮</h3><p data-i18n="v3_d">绘梨衣登场、东京塔、4/4 献祭召唤路鸣泽、Sakura。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="story.html#v4"><div class="pc-no">Ⅳ</div><h3 data-i18n="v4_t">奥丁之渊</h3><p data-i18n="v4_d">楚子航的梦境、奥丁之枪、父亲的背影、走入暴风雨。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
+    <a class="preview-card" href="story.html#v5"><div class="pc-no">Ⅴ</div><h3 data-i18n="v5_t">悼亡者的归来</h3><p data-i18n="v5_d">重返日本、赫尔佐格终局、世界树、诺诺与命运。</p><div class="go" data-i18n="go_read">阅读 →</div></a>
   </div>
-  <div class="vol-tabs" id="volTabs"></div>
-  <div id="volPanels"></div>
-  <div class="rand-bar">
-    <button class="act" id="randQuote" data-i18n="rand_btn">随机一句经典台词</button>
-    <div class="rand-line" id="randLine" data-i18n="rand_hint">— 点一下，听见血脉里的那句话 —</div>
-  </div>
+  <div class="link-center"><a class="more-link" href="story.html" data-i18n="more_story">进入情节长卷（互动版）<span class="arr">→</span></a></div>
 </section>
 
-<section id="kings" class="container">
-  <div class="sec-title"><span class="num">N ° 05</span><div class="kick">P R I M O R D I A L</div><h2 data-i18n="sec_kings_h2">四 大 龙 王 · 双 生 与 加 冕</h2><div class="sub" data-i18n="sec_kings_sub">每一位龙王，都是一场双子相食的悲剧</div></div>
+<section id="kings-preview" class="container">
+  <div class="sec-title"><span class="num">N ° 05</span><div class="kick">T H E &nbsp; F O U R &nbsp; K I N G S</div><h2 data-i18n="s06_h2">四 大 龙 王</h2><div class="sub" data-i18n="s06_sub">大地与山川的统治者 · 点击查看双生关系</div></div>
   <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
-  <div class="king-nav">
-    <a href="#fire" data-i18n="navk_fire">🜂 青铜与火</a>
-    <a href="#sky" data-i18n="navk_white">🜄 白王·天空</a>
-    <a href="#earth" data-i18n="navk_earth">🜃 大地与山</a>
-    <a href="#sea" data-i18n="navk_sea">🜁 海洋与水</a>
+  <div class="kings">
+    <a class="king-card" href="kings.html#fire"><div class="icon">🜂</div><h3 data-i18n="kf_t">青铜与火</h3><div class="en">NIDHOGG</div><p data-i18n="kf_d">执掌“青铜御座”与赤红烈焰，镇守青铜城深处。</p></a>
+    <a class="king-card" href="kings.html#sky"><div class="icon">🜄</div><h3 data-i18n="kw_t">白王·天空</h3><div class="en">WHITE KING</div><p data-i18n="kw_d">掌控风与精神，被黑王斩杀，留下千年权位之争。</p></a>
+    <a class="king-card" href="kings.html#earth"><div class="icon">🜃</div><h3 data-i18n="ke_t">大地与山</h3><div class="en">EARTH & MOUNTAIN</div><p data-i18n="ke_d">操纵大地与重力，沉眠于极北冰原之下。</p></a>
+    <a class="king-card" href="kings.html#sea"><div class="icon">🜁</div><h3 data-i18n="ks_t">海洋与水</h3><div class="en">SEA & WATER</div><p data-i18n="ks_d">执掌“归墟”，能掀起灭世海啸与无尽水压。</p></a>
   </div>
-  <div class="king-block" id="fire">
-    <div class="art-frame"><img src="img/dragon-02.webp" alt=""><div class="cap">⟪ 青铜与火之王 · Nidhogg ⟫</div></div>
-    <div class="k-info">
-      <div class="k-head"><span class="k-icon">🜂</span><div><h3 data-i18n="king_fire">青铜与火之王</h3><span class="k-en">NIDHOGG · BRONZE & FIRE</span></div></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_domain">领域与能力</span><p data-i18n-html="kp_fire1">初代种之一，镇守青铜城深处。执掌赤红烈焰与<span class="em">“青铜御座”</span>（言灵·序列号13）——能硬化肉身、令力量暴涨，是青铜与火之王最基础也最霸道的能力。它所过之处，金属熔毁、城池成灰。</p></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_twin">双生关系</span><p data-i18n-html="kp_fire2">青铜与火之王与其弟<span class="blood">康斯坦丁</span>为双子。按龙族古老的加冕之法，双子龙王须一吞噬另一，方能成为真正完整的王。康斯坦丁未能完成这场吞噬便在卷一被卡塞尔学院执行部击杀——临终前，它仍唤路明非为“哥哥”。</p></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_story">小说情节</span><p data-i18n-html="kp_fire3">卷一《火之晨曦》青铜城之战。路明非第一次以屠龙者的身份站在战场上，第一次看着一个用“哥哥”称呼自己的小龙死在面前。康斯坦丁之死，是路明非第一次为屠龙流泪——也是他第一次明白，所谓屠龙，代价从来不只是龙的生命。</p></div>
-    </div>
-  </div>
-  <div class="king-block" id="sky">
-    <div class="art-frame"><img src="img/dragon-03.webp" alt=""><div class="cap">⟪ 白王 · 天空与风 ⟫</div></div>
-    <div class="k-info">
-      <div class="k-head"><span class="k-icon">🜄</span><div><h3 data-i18n="king_white">白王 · 天空与风</h3><span class="k-en">WHITE KING · SKY & WIND</span></div></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_domain">领域与能力</span><p data-i18n-html="kp_white1">四大初代种中位格最高的一位，掌控风与精神之力。其权座之下，风暴可吞没城邦，精神可操控万人。白王之血被认为是复活与加冕的关键，千年来无数人觊觎。</p></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_twin">宿命与双生</span><p data-i18n-html="kp_white2">白王曾被<span class="blood">黑王</span>亲手斩杀——这是龙族史上最惨烈的一场王位之争。白王虽死，其血脉与权位之争却延续千年。它与黑王的对立，是整个龙族世界最深的裂痕。</p></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_story">小说情节</span><p data-i18n-html="kp_white3">卷三《黑月之潮》与卷五《悼亡者的归来》的核心线索。赫尔佐格抽干上杉绘梨衣的龙血，正是企图复活白王、完成一场僭越神明的加冕。世界树之下，这场千年权位之争终将了结。</p></div>
-    </div>
-  </div>
-  <div class="king-block" id="earth">
-    <div class="art-frame"><img src="img/dragon-05.webp" alt=""><div class="cap">⟪ 大地与山之王 · 耶梦加得 ⟫</div></div>
-    <div class="k-info">
-      <div class="k-head"><span class="k-icon">🜃</span><div><h3 data-i18n="king_earth">大地与山之王</h3><span class="k-en">JÖRMUNGAND · EARTH & MOUNTAIN</span></div></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_domain">领域与能力</span><p data-i18n-html="kp_earth1">操纵大地与重力，沉眠于极北冰原之下。一怒则山崩地裂，重力倍增之处，万物皆被压成齑粉。其传承之瞳名为<span class="em">“悼亡者之瞳”</span>。</p></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_twin">双生关系</span><p data-i18n-html="kp_earth2"><span class="blood">夏弥</span>与她的兄长为大地与山之王的双子。加冕仪式要求一吞噬另一。夏弥在人类世界里学到了爱，她不愿吞噬自己的兄长——于是选择了另一种结局：为楚子航挡下致命一击，化作人形消散在风里。</p></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_story">小说情节</span><p data-i18n-html="kp_earth3">卷二《悼亡者之瞳》。夏弥假装失忆住进楚子航隔壁，笨拙地学着做人类。她的死是全系列最令人心碎的场景之一——“因为我爱过你……所以我是世界上最厉害的龙。”楚子航抱着她，第一次在战场上落泪。</p></div>
-    </div>
-  </div>
-  <div class="king-block" id="sea">
-    <div class="art-frame"><img src="img/dragon-04.webp" alt=""><div class="cap">⟪ 海洋与水之王 · 利维坦 ⟫</div></div>
-    <div class="k-info">
-      <div class="k-head"><span class="k-icon">🜁</span><div><h3 data-i18n="king_sea">海洋与水之王</h3><span class="k-en">LEVIATHAN · SEA & WATER</span></div></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_domain">领域与能力</span><p data-i18n-html="kp_sea1">执掌<span class="em">“归墟”</span>（言灵·序列号113），能制造无边海啸与无尽水压，是海洋领域的终极言灵。它沉睡于万米深海，苏醒之时，整片大洋都将为之沸腾。</p></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_twin">双生关系</span><p data-i18n-html="kp_sea2">与其他三位初代种一样，海洋与水之王亦由双子相食而加冕。两子沉眠于深海渊底，待苏醒之日，必有一场吞噬之战——胜者成王，败者化为王座之下最深的祭品。</p></div>
-      <div class="k-row"><span class="k-label" data-i18n="k_story">小说情节</span><p data-i18n-html="kp_sea3">其力量以“归墟”之形现于人间。卷三《黑月之潮》中，日本近海的黑暗潮汐、源氏重工地下室的血色水域，皆是这股远古海洋之力的余响。赫尔佐格的阴谋，亦与深海中沉眠的王座息息相关。</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="sins" class="container">
-  <div class="sec-title"><span class="num">N ° 06</span><div class="kick">S E V E N &nbsp; S I N S</div><h2 data-i18n="sins_sub">七 柄 魔 剑 · 各 应 一 罪</h2><div class="sub" data-i18n="sins_hint">路鸣泽以龙王之骨锻造，专司斩杀四大龙王</div></div>
-  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
-  <div class="sins-origin">
-    <div class="so-title" data-i18n="sins_origin_t">锻造起源</div>
-    <div class="so-body" data-i18n-html="sins_origin"></div>
-  </div>
-  <div class="sins-grid" id="sins-grid"></div>
-  <div class="sins-detail" id="sins-detail"></div>
-</section>
-
-<section id="characters" class="container">
-  <div class="sec-title"><span class="num">N ° 07</span><div class="kick">C H A R A C T E R S</div><h2 data-i18n="ch_sub">点 击 人 物 · 看 他 们 如 何 纠 缠</h2><div class="sub" data-i18n="ch_hint">路明非 · 楚子航 · 凯撒 · 绘梨衣 · 零 · 昂热</div></div>
-  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
-  <div class="ch-wrap">
-    <div class="ch-roster" id="ch-roster"></div>
-    <div class="ch-stage" id="ch-stage"></div>
-  </div>
-  <div class="ch-events">
-    <div class="ch-events-title" data-i18n="ch_ev_title">交 织 事 件 · 多 视 角</div>
-    <div class="ch-event-tabs" id="ch-event-tabs"></div>
-    <div class="ch-event-view">
-      <div class="ch-ev-media" id="ch-ev-media"></div>
-      <div class="ch-ev-pickers" id="ch-ev-pickers"></div>
-      <div class="ch-ev-text" id="ch-ev-text"></div>
-    </div>
-  </div>
-  <section class="ch-elegy-sec">
-    <div class="sec-title"><span class="num" data-i18n="ch_el_kick">挽 歌</span><div class="kick">E L E G Y</div><h2 data-i18n="ch_el_h2">绘 梨 衣</h2><div class="sub" data-i18n="ch_el_sub">白王容器 · 权天使 · 东京塔下的告别</div></div>
-    <div class="elegy">
-      <div class="badge" data-i18n="elegy_badge">同 人 创 作</div>
-      <div class="sub-title" data-i18n="elegy_subtitle">致 上杉 绘梨衣</div>
-      <div class="quote-block"><div class="quote-text" data-i18n-html="elegy_text">东京的雨一直没停。
-绘梨衣靠在路明非肩头，浅色外套被雨水打湿了大半。她没有伞，也没有力气再撑起那把黑伞。她只是偏过头，用那双琥珀色的眼睛望着他：
-<span class="line-sakura">“Sakura，你说……我们还能再来这里吗？”</span>
-路明非没有说话。他把伞倾向她那一边，自己的半边肩膀暴露在雨里。
-这一刻，<span class="line-emph">路鸣泽在他脑海里轻笑</span>：“哥哥，你又要开始你的英雄梦了吗？”
-但他没有召唤路鸣泽。他只是轻声回答：
-<span class="line-emph">“会的，一定会的。”</span>
-绘梨衣的眼睛亮了一下，像东京塔顶那盏不灭的灯。</div></div>
-      <div class="signoff" data-i18n="elegy_signoff">—— 谨以此页，致每一个被这世界伤害过的孩子。</div>
-    </div>
-  </section>
-  <section class="ch-net-sec">
-    <div class="sec-title"><span class="num" data-i18n="ch_net_kick">交织之网</span><div class="kick">T H E &nbsp; W E B</div><h2 data-i18n="ch_net_sub">人 物 交 织 网</h2><div class="sub" data-i18n="ch_net_hint">点击任意节点，展开他与所有人的羁绊</div></div>
-    <div class="ch-net-wrap"><svg id="ch-net" viewBox="0 0 680 460" preserveAspectRatio="xMidYMid meet" role="img" aria-label="人物交织网"></svg></div>
-    <div class="ch-net-legend" id="ch-net-legend"></div>
-    <div class="ch-net-cap" id="ch-net-cap"></div>
-  </section>
-</section>
-
-<section id="eva" class="container">
-  <div class="sec-title"><span class="num">N ° 08</span><div class="kick">E V A</div><h2 data-i18n="eva_sub">通 知 · 任 务 · 学 院 邮 箱</h2><div class="sub" data-i18n="eva_hint">我是学院的终端意志，负责传递通知、发放任务、管理学院邮件</div></div>
-  <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
-  <div id="accProfileBox"></div>
-  <div class="eva-tabs">
-    <button class="eva-tab active" data-tab="notice" data-i18n="eva_tab_notice">通知板</button>
-    <button class="eva-tab" data-tab="task" data-i18n="eva_tab_task">任务中心</button>
-    <button class="eva-tab" data-tab="mail" data-i18n="eva_tab_mail">学院邮箱</button>
-  </div>
-  <div class="eva-panel-box" id="tab-notice">
-    <div class="eva-counter"><span id="notice-count"></span></div>
-    <div id="notice-list" class="eva-list"></div>
-  </div>
-  <div class="eva-panel-box hidden" id="tab-task">
-    <div id="task-chain" class="task-chain"></div>
-    <div id="task-detail" class="task-detail"></div>
-  </div>
-  <div class="eva-panel-box hidden" id="tab-mail">
-    <div class="eva-counter"><span id="mail-count"></span></div>
-    <div id="mail-list" class="eva-list mail-list"></div>
-    <div id="mail-read" class="mail-read hidden"></div>
-  </div>
+  <div class="link-center"><a class="more-link" href="kings.html" data-i18n="more_kings">查看四大龙王详情（双生关系）<span class="arr">→</span></a></div>
 </section>
 
 <footer>
@@ -495,19 +306,370 @@ section[id]{scroll-margin-top:74px;}
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
 
-<script src="i18n.js"></script>
-<script src="app.js"></script>
-<script src="eva.js"></script>
+<script src="i18n.js?v=20260731"></script>
+<script src="app.js?v=20260731"></script>
+<script src="eva.js?v=20260731"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="auth.js"></script>
-<script src="account.js"></script>
-<script src="codex.js"></script>
-<script src="boot.js"></script>
-<script src="ritual.js"></script>
-<script src="story.js"></script>
-<script src="sins.js"></script>
-<script src="chars.js"></script>
-<script src="eva-dash.js"></script>
+<script src="auth.js?v=20260731"></script>
+<script src="account.js?v=20260731"></script>
+<script>
+(function(){
+  const boot=document.getElementById('boot');
+  const enter=document.getElementById('bootEnter');
+  const enrollBtn=document.getElementById('bootEnrollBtn');
+  const bm=document.getElementById('bootMusic');
+  const modal=document.getElementById('admissionModal');
+  const closeModalBtn=document.getElementById('admClose');
+  const enrollForm=document.getElementById('enrollForm');
+  const enrollView=document.getElementById('enrollView');
+  const letterView=document.getElementById('letterView');
+  const admLetter=document.getElementById('admLetter');
+  const admReady=document.getElementById('admReady');
+  const enrollHint=document.getElementById('enrollHint');
+  const tabEnroll=document.getElementById('tabEnroll');
+  const tabLogin=document.getElementById('tabLogin');
+  const loginView=document.getElementById('loginView');
+  const admTabs=document.getElementById('admTabs');
+  const loginForm=document.getElementById('loginForm');
+  const loginHint=document.getElementById('loginHint');
+  const toEnroll=document.getElementById('toEnroll');
+  const accountArea=document.getElementById('accountArea');
+  const letterToggle=document.getElementById('letterToggle');
+  const letterWrap=document.getElementById('letterWrap');
+  let done=false, lastLetterData=null;
+
+  // ===== 账号系统（DR_ACC）接线：导航显示姓名/血统徽章/退出；登录后启用「启程」 =====
+  (function wireAccount(){
+    if(!window.DR_ACC) return;
+    window.DR_ACC.config.openLogin=function(){ if(openModal)openModal(); if(showLoginTab)showLoginTab(); };
+    window.DR_ACC.config.onLogin=function(){ if(typeof enableEnter==='function')enableEnter(); };
+    window.DR_ACC.init();
+    // 会话恢复后仅启用「启程」按钮，不自动进入——用户必须点击「启程」才进入
+    if(window.DR_ACC.current()){
+      enableEnter();
+    } else {
+      try{
+        var saved=JSON.parse(localStorage.getItem('dr_enroll')||'null');
+        if(saved&&saved.name){ enableEnter(); }
+      }catch(e){}
+    }
+  })();
+
+  function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}
+  function closeBoot(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}
+
+  // 录取通知书正文（弹窗 + 邮件共享文案，严格按用户提供的纸质通知书图片）
+  function letterContent(isEn,name,year){
+    const now=new Date();
+    const dateStr=isEn
+      ? now.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+      : now.getFullYear()+' 年 '+(now.getMonth()+1)+' 月 '+now.getDate()+' 日';
+    if(isEn){
+      return {
+        date:dateStr,
+        salut:'Dear '+name+',',
+        paras:[
+          'On behalf of the Admission Office of Cassell College (CASSELL COLLEGE), we have the honor of informing you that you have been admitted as a new student of the Class of '+year+'.',
+          'As we often say, there is always another choice. Perhaps we may become one of yours. First, allow us to introduce ourselves: we are a noble academy located in the northern part of Illinois, USA, with a century-long history devoted to the study of certain mysterious ancient creatures.',
+          'Are we a paleontology institute? you may ask. No, we are not. Our curriculum spans mathematics, nuclear physics, precision mechanics, biological genealogy… and certain special majors that are highly secretive and demanding — yet, we assure you, utterly fascinating.',
+          'In addition, we train our students to operate every kind of vehicle — rest assured, we are not an American vocational school — cars, yachts, even jet aircraft. Shooting, hand-to-hand combat, and sword mastery are also required. We further offer etiquette and dance classes to prepare you for any occasion with ease, though we are not a spy academy either.',
+          'Our selection criteria are so strict and our curriculum so comprehensive because the enemy we face is extraordinarily powerful. These are the ancient beings we are devoted to studying. Long before mankind, they ruled the Earth. They are violent and proud, noble and lonely, and they are not extinct; they still live among us.',
+          'They have had many names, but one is known above all others — Dragon.',
+          'You may be surprised, even disbelieving, but we have indeed opened a door for you: a door to the dark side of the world. Cassell College, or rather the Secret Party, extends this invitation. We are the keepers of secrets and the watchers of the world.',
+          'Only a handful of people receive such an invitation, and you, '+name+', are precisely the one in ten thousand.',
+          'This is a warm invitation, and also a difficult trial. Those who pass through this door shall begin a new life.',
+          'Enclosed are your ticket to the academy and your exclusive black card. Please use the activation code on the black card to enter your own Dragon Raja fantasy world.',
+          'Should you have any questions, please contact the college secretary, EVA.'
+        ]
+      };
+    }
+    return {
+      date:dateStr,
+      salut:'尊敬的 '+name+'：',
+      paras:[
+        '这封信来自卡塞尔学院（CASSELL COLLEGE）招生委员会，我们很荣幸地通知您，您已被录取为本校 '+year+' 年的新学员。',
+        '我们常说，永远有另一个选择，或许我们可以成为您的选择之一。首先请容我们自我介绍：我们是一家位于美国伊利诺伊州北部的贵族学院，拥有百年历史，致力于研究某种神秘的古代生物。',
+        '您们是一间古生物研究所么？您或许会问。不，我们并非什么古生物研究所。本校覆盖的专业包括数学、核物理学、精密机械学、生物谱系学……和某些特殊专业，这些专业非常神秘，很难通过，但我们可以向您保证它们非常有趣。',
+        '此外，我们还培训学生驾驶各种交通工具——请勿担心，我们并非美国版的蓝翔技校——汽车、游艇甚至喷气式飞机，射击、徒手搏斗和刀剑掌握也是必修科目。我们还有专门的礼仪课和舞蹈课，教会您在各种场合应对自如，但我们也不是一间间谍学院。',
+        '我们挑选学生的标准如此苛刻，教授的知识如此全面，是因为我们要面对的敌人无比强大。那就是我们致力于研究的那种古代生物，早在人类之前，它们曾是地球的统治者，它们暴力而天骄，尊贵而孤独，而且它们并未灭绝，仍旧活在我们身边。',
+        '它们有过各种各样的名字，但其中有一个最为人所知——龙。',
+        '您或许会惊讶，或许会不信，但我们确实为您打开了一扇门，这扇门通往世界的暗面。卡塞尔学院，或者说秘党，在向您发出邀请。我们是秘密的掌握者，也是世界的守望者。',
+        '只有极少数人能够收到这样的邀请，而您，'+name+'，恰恰是万中选一的人。',
+        '这是一次盛情的邀请，也是一次艰难的考验。通过这扇门的人，将迎来新的人生。',
+        '随信附赠通往学院的车票和专属黑卡，请使用黑卡上的激活码，进入专属于您的龙族幻想世界吧。',
+        '如有疑问请和学院秘书 EVA 联系。'
+      ]
+    };
+  }
+
+  function buildLetter(name,age,email){
+    const isEn=window.LANG==='en';
+    const year=new Date().getFullYear();
+    lastLetterData={name,age,email};
+    const c=letterContent(isEn,name,year);
+    let html='<p class="adm-date">'+escHtml(c.date)+'</p>';
+    html+='<p class="salut">'+escHtml(c.salut)+'</p>';
+    c.paras.forEach(function(p){ html+='<p>'+escHtml(p)+'</p>'; });
+    return html;
+  }
+
+  function saveAdmission(name,age,email){
+    try{
+      const KEY='dr-eva';
+      const st=JSON.parse(localStorage.getItem(KEY)||'{}');
+      st.extraEmails=st.extraEmails||[];
+      if(!st.extraEmails.some(function(m){return m.id==='m-admission';})){
+        st.extraEmails.push({
+          id:'m-admission', from:'卡塞尔学院 · 招生委员会', tag:'录取',
+          zh_sub:'录取通知书 · 欢迎入校',
+          zh_body:'亲爱的 '+name+'：经卡塞尔学院 EVA 智能终端核验，你已正式注册为本届混血种学员（登记年龄 '+age+'，联系邮箱 '+email+'）。你的录取通知书已由卡塞尔学院派送至学院邮箱。',
+          en_sub:'Admission Notice · Welcome',
+          en_body:'Dear '+name+': verified by Cassell College EVA Terminal, you are now registered as a hybrid student (age '+age+', email '+email+'). Your admission notice has been dispatched by Cassell College to your academy inbox.'
+        });
+        localStorage.setItem(KEY,JSON.stringify(st));
+      }
+      localStorage.setItem('dr_enroll',JSON.stringify({name:name,age:age,email:email,ts:Date.now()}));
+    }catch(e){}
+  }
+
+  // ===== 录取邮件：通过 EmailJS 发送「真正的卡塞尔学院录取通知书」（HTML 排版，非表单回执） =====
+  // 免费额度 200 封/月，足够粉丝站。需在 EmailJS 后台建 Service + Template 后填入下方三项。
+  // 模板 Body 只需写一行： {{{letter_html}}}  （To Email 填 {{to_email}}，主题可固定「卡塞尔学院 · 新生录取通知书」）
+  const EMAILJS = {
+    SERVICE_ID: 'thisislouis',
+    TEMPLATE_ID: 'template_4rdi994',
+    PUBLIC_KEY: 'mOzpZGE6NTHWKlCCC',
+    OWNER_EMAIL: '1543922663@qq.com'
+  };
+  (function initEmailJS(){
+    try{
+      if(window.emailjs && EMAILJS.PUBLIC_KEY && EMAILJS.PUBLIC_KEY.indexOf('YOUR_')!==0){
+        emailjs.init({ publicKey: EMAILJS.PUBLIC_KEY });
+      }
+    }catch(e){}
+  })();
+
+  function escHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function buildEmailHtml(name,age,email,isEn){
+    const year=new Date().getFullYear();
+    const c=letterContent(isEn,name,year);
+    const bg='#fbf6e8', panelFrom='#fbf6e8', panelTo='#f3e9d0', ink='#2b2118', gold='#8c6f3f', label='#7a6046';
+    const crest=(typeof location!=='undefined'&&location.origin&&location.origin.indexOf('http')===0?location.origin:'https://luisdingww-bit.github.io/dragonraja-site')+'/img/cassell-seal-round.png';
+    const title=isEn?'LETTER OF ADMISSION':'录 取 通 知';
+    const presLabel=isEn?'President':'校长签名';
+    const secLabel=isEn?'Chief Secretary':'首席秘书签名';
+    const paras=c.paras.map(function(p){ return '<p style="margin:0 0 1.35em;text-indent:2.4em;color:'+ink+';font-size:15px;line-height:2.05;">'+escHtml(p)+'</p>'; }).join('');
+    return ''
+    +'<div style="margin:0;padding:0;background:'+bg+';">'
+    +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:'+bg+';padding:28px 0;"><tr><td align="center">'
+    +'<div style="max-width:600px;width:100%;background:linear-gradient(180deg,'+panelFrom+' 0%,'+panelTo+' 100%);border:8px double #bfa36f;color:'+ink+';padding:34px 30px 28px;text-align:center;font-family:Georgia,\'Times New Roman\',\'Songti SC\',serif;box-shadow:0 18px 60px rgba(0,0,0,.45);">'
+    +'<img src="'+crest+'" width="76" height="76" style="border-radius:50%;border:2px solid #bfa36f;box-shadow:0 0 20px rgba(191,163,111,.35);margin-bottom:10px;" alt="Cassell College">'
+    +'<div style="letter-spacing:.28em;color:'+ink+';font-size:clamp(18px,3.6vw,26px);font-weight:700;margin-bottom:4px;">CASSELL COLLEGE</div>'
+    +'<div style="letter-spacing:.4em;color:'+gold+';font-size:clamp(16px,3vw,22px);margin-bottom:22px;padding-left:.4em;">'+title+'</div>'
+    +'<div style="text-align:left;padding:0 8px;">'
+    +'<p style="margin:0 0 1.6em;text-indent:0;color:'+label+';font-size:14px;letter-spacing:.06em;">'+escHtml(c.date)+'</p>'
+    +'<p style="margin:0 0 1.25em;text-indent:0;color:'+ink+';font-weight:700;font-size:1.05em;letter-spacing:.06em;">'+escHtml(c.salut)+'</p>'
+    +paras
+    +'</div>'
+    +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:18px;color:#5a4431;font-size:13px;line-height:2;text-align:left;">'
+    +'<tr><td style="color:'+label+';white-space:nowrap;vertical-align:baseline;width:110px;">'+presLabel+'</td><td style="font-size:15px;font-weight:700;letter-spacing:.05em;font-style:italic;vertical-align:baseline;">Hilbert Ron Anjou</td></tr>'
+    +'<tr><td style="color:'+label+';white-space:nowrap;vertical-align:baseline;">'+secLabel+'</td><td style="font-size:15px;font-weight:700;letter-spacing:.05em;font-style:italic;vertical-align:baseline;">EVA</td></tr>'
+    +'</table>'
+    +'</div>'
+    +'</td></tr></table>'
+    +'</div>';
+  }
+
+  function sendAdmissionEmail(name,age,email){
+    try{
+      if(!window.emailjs || !EMAILJS.SERVICE_ID || EMAILJS.SERVICE_ID.indexOf('YOUR_')===0){
+        console.warn('[EmailJS] 未配置，录取通知书邮件未发送。请在 dist/index.html 顶部 EMAILJS 填入 Service/Template/Public Key。');
+        return;
+      }
+      var isEn=window.LANG==='en';
+      var html=buildEmailHtml(name,age,email,isEn);
+      var payload={ to_email: EMAILJS.OWNER_EMAIL, name:name, age:age, email:email, letter_html: html, subject:'卡塞尔学院 · 新生录取通知书' };
+      emailjs.send(EMAILJS.SERVICE_ID, EMAILJS.TEMPLATE_ID, payload, { publicKey: EMAILJS.PUBLIC_KEY }).catch(function(e){ console.warn('[EmailJS] 站长邮件发送失败', e); });
+      // 同时派送给填写者本人一份完整的录取通知书
+      payload={ to_email: email, name:name, age:age, email:email, letter_html: html, subject:'卡塞尔学院 · 新生录取通知书' };
+      emailjs.send(EMAILJS.SERVICE_ID, EMAILJS.TEMPLATE_ID, payload, { publicKey: EMAILJS.PUBLIC_KEY }).catch(function(e){ console.warn('[EmailJS] 学员邮件发送失败', e); });
+    }catch(e){}
+  }
+
+  function showEnrollTab(){ if(enrollView)enrollView.classList.remove('hidden'); if(loginView)loginView.classList.add('hidden'); if(letterView)letterView.classList.add('hidden'); if(tabEnroll)tabEnroll.classList.add('active'); if(tabLogin)tabLogin.classList.remove('active'); if(admTabs)admTabs.classList.remove('hidden'); }
+  function showLoginTab(){ if(enrollView)enrollView.classList.add('hidden'); if(loginView)loginView.classList.remove('hidden'); if(letterView)letterView.classList.add('hidden'); if(tabLogin)tabLogin.classList.add('active'); if(tabEnroll)tabEnroll.classList.remove('active'); if(admTabs)admTabs.classList.remove('hidden'); }
+  function openModal(){ if(!modal)return; showEnrollTab(); modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); }
+  function closeModal(){ if(!modal)return; modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); showEnrollTab(); }
+
+  function enableEnter(){ if(enter){enter.disabled=false;enter.classList.add('ready');} }
+
+  // 账号区渲染统一交给 DR_ACC（显示姓名 + 血统徽章 + 退出 / 登录）
+  function updateAccount(user){
+    if(window.DR_ACC)DR_ACC.setUser(user);
+  }
+
+  if(enrollBtn)enrollBtn.addEventListener('click',function(){openModal();});
+  if(closeModalBtn)closeModalBtn.addEventListener('click',closeModal);
+  if(modal)modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+
+  if(enrollForm)enrollForm.addEventListener('submit',async function(e){
+    e.preventDefault();
+    const name=(document.getElementById('enName').value||'').trim();
+    const age=(document.getElementById('enAge').value||'').trim();
+    const email=(document.getElementById('enEmail').value||'').trim();
+    const pass=(document.getElementById('enPass').value||'');
+    if(!name||!age||!email||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+      if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Please fill name, age and a valid email':'请完整填写姓名、年龄与有效邮箱';enrollHint.classList.add('err');}
+      return;
+    }
+    if(pass.length<6){
+      if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Password must be at least 6 characters':'请设置密码（至少 6 位）';enrollHint.classList.add('err');}
+      return;
+    }
+    if(enrollHint){enrollHint.classList.remove('err');enrollHint.textContent=window.t('boot_form_hint');}
+    let user=null;
+    try{
+      if(window.DR&&DR.auth){ const r=await DR.auth.signUp({name:name,age:age,email:email,password:pass}); user=r&&r.user; }
+    }catch(err){
+      if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Email already registered, please login':'该邮箱已注册，请直接登录';enrollHint.classList.add('err');}
+      return;
+    }
+    saveAdmission(name,age,email);
+    sendAdmissionEmail(name,age,email);
+    if(user&&window.DR_ACC)DR_ACC.setUser(user);
+    admLetter.innerHTML=buildLetter(name,age,email);
+    enrollView.classList.add('hidden');
+    if(admTabs)admTabs.classList.add('hidden');
+    letterView.classList.remove('hidden');
+  });
+
+  if(admReady)admReady.addEventListener('click',function(){
+    closeModal();
+    if(enter){enter.disabled=false;enter.classList.add('ready');enter.focus();}
+  });
+
+  if(tabEnroll)tabEnroll.addEventListener('click',showEnrollTab);
+  if(tabLogin)tabLogin.addEventListener('click',showLoginTab);
+  if(toEnroll)toEnroll.addEventListener('click',function(e){e.preventDefault();showEnrollTab();});
+
+  if(loginForm)loginForm.addEventListener('submit',async function(e){
+    e.preventDefault();
+    const email=(document.getElementById('lgEmail').value||'').trim();
+    const pass=(document.getElementById('lgPass').value||'');
+    if(!email||!pass){
+      if(loginHint){loginHint.textContent=window.LANG==='en'?'Please enter email and password':'请填写邮箱与密码';loginHint.classList.add('err');}
+      return;
+    }
+    if(loginHint){loginHint.classList.remove('err');loginHint.textContent=window.t('login_hint');}
+    try{
+      if(!(window.DR&&DR.auth))throw new Error('noauth');
+      const r=await DR.auth.signIn({email:email,password:pass});
+      const user=r&&r.user;
+      try{ const meta=(user&&user.user_metadata)||{}; localStorage.setItem('dr_enroll',JSON.stringify({name:meta.name||email,age:meta.age||'',email:email,ts:Date.now()})); }catch(e){}
+      updateAccount(user);
+      closeModal();
+      enableEnter();
+      syncBM();
+    }catch(err){
+      const msg=((err&&err.message)||'').toLowerCase();
+      let txt=window.LANG==='en'?'Login failed, please retry':'登录失败，请重试';
+      if(msg.indexOf('wrong')>=0||msg.indexOf('invalid')>=0)txt=window.LANG==='en'?'Wrong email or password':'邮箱或密码错误';
+      else if(msg.indexOf('notfound')>=0)txt=window.LANG==='en'?'No such account, please register':'该邮箱未注册，请先登记';
+      else if(msg.indexOf('email not confirmed')>=0)txt=window.LANG==='en'?'Please confirm your email first':'请先到邮箱点击确认链接';
+      if(loginHint){loginHint.textContent=txt;loginHint.classList.add('err');}
+    }
+  });
+
+  if(enter)enter.addEventListener('click',function(){
+    if(enter.disabled)return;
+    closeBoot();
+    if(window.AP)AP.play();
+    syncBM();
+  });
+
+  if(bm)bm.addEventListener('click',()=>{if(!window.AP)return;if(window.AP.isPlaying())window.AP.pause();else window.AP.play();syncBM();});
+
+  // 录取通知可折叠
+  if(letterToggle&&letterWrap)letterToggle.addEventListener('click',function(){ const c=letterWrap.classList.toggle('collapsed'); letterToggle.setAttribute('aria-expanded', c?'false':'true'); });
+
+  // 会话恢复已由 wireAccount() 处理（DR_ACC.current() 或 dr_enroll → 自动跳过 boot）
+
+  if(window.onLangChange)window.onLangChange(function(){
+    syncBM();
+    if(lastLetterData&&letterView&&!letterView.classList.contains('hidden')){
+      admLetter.innerHTML=buildLetter(lastLetterData.name,lastLetterData.age,lastLetterData.email);
+    }
+  });
+  syncBM();
+})();
+
+const bloodData=[
+  {id:"S",level:"S级混血种",level_en:"S-Class Hybrid",weight:6},
+  {id:"SA",level:"超A级混血种",level_en:"Super-A Class Hybrid",weight:12},
+  {id:"A",level:"A级混血种",level_en:"A-Class Hybrid",weight:18},
+  {id:"B",level:"B级混血种",level_en:"B-Class Hybrid",weight:22},
+  {id:"C",level:"C级混血种",level_en:"C-Class Hybrid",weight:22},
+  {id:"D",level:"D级混血种",level_en:"D-Class Hybrid",weight:14},
+  {id:"E",level:"E级微弱混血",level_en:"E-Class Faint Hybrid",weight:8},
+  {id:"N",level:"普通人类，无龙血",level_en:"Ordinary Human, No Dragon Blood",weight:18}
+];
+const spirits=[
+  {seq:114,name:"言灵·烛龙",name_en:"Spirit · Zhulong",desc:"序列号114，灭世级言灵，释放焚尽一切的赤红烈焰，足以摧毁城市。",desc_en:"Seq. 114. An apocalyptic-class spirit that unleashes city-consuming crimson flame.",high:true},
+  {seq:113,name:"言灵·归墟",name_en:"Spirit · Guixu",desc:"序列号113，操控水流，制造无边海啸与水压，海洋领域的终极言灵。",desc_en:"Seq. 113. Commands water, raising boundless tsunamis and pressure — the ultimate ocean spirit.",high:true},
+  {seq:91,name:"言灵·莱茵",name_en:"Spirit · Rhine",desc:"序列号91，制造极速声波共振，大范围爆破，短时间内产生毁灭性冲击波。",desc_en:"Seq. 91. Creates high-speed sonic resonance for wide-area blasts and shockwaves.",high:true},
+  {seq:71,name:"言灵·君焰",name_en:"Spirit · Junyan",desc:"序列号71，楚子航的言灵，凝聚高热于刀刃，斩出焚城烈焰之剑。",desc_en:"Seq. 71. Chu Zihang's spirit — condenses heat onto the blade, slashing a city-burning flame sword.",high:false},
+  {seq:59,name:"言灵·镰鼬",name_en:"Spirit · Kamaitachi",desc:"序列号59，路明非早期言灵，无形风刃切割范围内一切。",desc_en:"Seq. 59. Lu Mingfei's early spirit — invisible wind blades cut everything in range.",high:false},
+  {seq:22,name:"言灵·蛇",name_en:"Spirit · Serpent",desc:"序列号22，释放带有神经毒素的雾气，麻痹敌人感官。",desc_en:"Seq. 22. Releases neurotoxic mist that paralyzes the enemy's senses.",high:false}
+];
+function sp(n){return spirits.find(s=>s.name===n);}
+const spiritByBlood={
+  "S级混血种":[sp("言灵·烛龙"),sp("言灵·归墟"),sp("言灵·莱茵")],
+  "超A级混血种":[sp("言灵·莱茵"),sp("言灵·烛龙")],
+  "A级混血种":[sp("言灵·君焰")],
+  "B级混血种":[sp("言灵·君焰"),sp("言灵·镰鼬")],
+  "C级混血种":[sp("言灵·镰鼬"),sp("言灵·蛇")],
+  "D级混血种":[sp("言灵·蛇")],
+  "E级微弱混血":[sp("言灵·蛇")],
+  "普通人类，无龙血":[]
+};
+let nowBlood="",nowSpirit=null;
+const bloodBtn=document.getElementById("checkBloodBtn"),spiritBtn=document.getElementById("callSpiritBtn"),resultBox=document.getElementById("resultBox"),bloodText=document.getElementById("bloodText"),spiritText=document.getElementById("spiritText"),spiritDesc=document.getElementById("spiritDesc"),scan=document.getElementById("scan"),scanBar=scan.querySelector('i'),scanTip=document.getElementById("scanTip");
+function weightRandom(list){let t=list.reduce((s,i)=>s+i.weight,0);let r=Math.random()*t;for(let i of list){r-=i.weight;if(r<=0)return i;}return list[list.length-1];}
+function seqLabel(){return window.LANG==='en'?'Seq.':'序列号';}
+function shortName(s){return window.LANG==='en'?s.name_en.replace('Spirit · ',''):s.name.replace('言灵·','');}
+function renderCodexGrid(){const g=document.getElementById('codexGrid');g.innerHTML='';spirits.forEach(s=>{const c=document.createElement('div');c.className='codex-card'+(s.high?' high':'');c.innerHTML=`<div class="seq">${seqLabel()} ${s.seq}</div><h3>${shortName(s)}</h3><p>${tr(s,'desc')}</p>`;if(s.high)c.setAttribute('data-high',t('high_badge'));g.appendChild(c);});}
+function runBloodTest(){
+  bloodBtn.disabled=true;resultBox.style.display="none";spiritBtn.disabled=true;spiritText.innerText="";spiritDesc.innerText="";nowSpirit=null;scan.style.display="block";scanBar.style.width="0";scanTip.style.display="block";scanTip.textContent=window.MSG[window.LANG].scanning;
+  let p=0;
+  const tm=setInterval(()=>{
+    p+=Math.random()*16+6;
+    if(p>=100){
+      p=100;clearInterval(tm);scanBar.style.width="100%";
+      setTimeout(()=>{
+        scan.style.display="none";scanTip.style.display="none";
+        const res=weightRandom(bloodData);nowBlood=res.level;bloodText.innerText=tr(res,'level');resultBox.style.display="block";
+        if(nowBlood==="普通人类，无龙血"){spiritBtn.disabled=true;spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;}
+        else{spiritBtn.disabled=false;spiritText.innerText=window.MSG[window.LANG].notYet;spiritDesc.innerText=window.MSG[window.LANG].promptSummon;}
+        bloodBtn.disabled=false;
+        // 登录后把血统等级记入账号档案（与 EVA 终端联动）
+        if(window.DR_ACC&&DR_ACC.current()){ DR_ACC.saveBloodlineLevel(nowBlood, window.LANG==='en'?res.level_en:nowBlood); }
+      },350);
+    } else { scanBar.style.width=p+"%"; }
+  },140);
+}
+bloodBtn.onclick=function(){
+  if(!window.DR_ACC||!DR_ACC.current()){
+    DR_ACC.toast(window.LANG==='en'?"Log in as a cadet first — your result will be saved to your file":"请先以学员身份登录，鉴定结果才会记入你的档案");
+    if(window.DR_ACC)DR_ACC.requireLogin(runBloodTest);
+    return;
+  }
+  runBloodTest();
+};
+spiritBtn.onclick=function(){const pool=spiritByBlood[nowBlood];if(!pool||!pool.length){spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;return;}const s=pool[Math.floor(Math.random()*pool.length)];nowSpirit=s;spiritText.innerText=tr(s,'name');spiritDesc.innerText=tr(s,'desc');if(window.DR_ACC&&DR_ACC.current()){DR_ACC.saveBloodlineSpirit(s, window.LANG==='en'?s.name_en:null, s.seq);}};
+if(window.onLangChange)window.onLangChange(function(){renderCodexGrid();if(resultBox.style.display==="block"){const bObj=bloodData.find(b=>b.level===nowBlood);bloodText.innerText=bObj?tr(bObj,'level'):"";if(nowBlood==="普通人类，无龙血"){spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;}else if(nowSpirit){spiritText.innerText=tr(nowSpirit,'name');spiritDesc.innerText=tr(nowSpirit,'desc');}else{spiritText.innerText=window.MSG[window.LANG].notYet;spiritDesc.innerText=window.MSG[window.LANG].promptSummon;}}});
+renderCodexGrid();
+</script>
 </body>
 </html>
