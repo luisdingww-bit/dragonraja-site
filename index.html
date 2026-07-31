@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="eva-extra.css">
+<link rel="icon" type="image/png" href="img/cassell-seal.png">
+
 <style>
 /* index 专属：电影感开场 + hero + 世界观 + 卷目预览 */
 #boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
@@ -81,6 +83,9 @@
 @media(max-width:600px){.hero h1{letter-spacing:.12em;}.elegy .quote-block{padding:28px 20px;}.elegy .quote-text{font-size:15px;}}
 </style>
 </head>
+<div id="preloader" aria-hidden="true"><div class="pl-wrap"><img class="pl-seal" src="img/cassell-seal.png" alt="Cassell College"></div></div>
+<script>window.addEventListener("load",function(){var p=document.getElementById("preloader");if(p)p.classList.add("hide");});<\/script>
+
 <body>
 <div id="boot">
   <div class="stage">
@@ -185,6 +190,8 @@
 </section>
 
 <footer>
+<div class="site-seal" aria-hidden="true"><img src="img/cassell-seal.png" alt="Cassell College 印记"><span class="site-seal-txt" data-i18n="seal_txt">卡塞尔学院印记 · CASSELL COLLEGE</span></div>
+
   <p class="disc" data-i18n-html="footer_disc">本页面为《龙族》读者自发制作的<b>非官方同人向个人志</b>，所有世界观、设定、人物与“言灵”名称均版权归属原作者江南及原著出版方，本页无任何商用、二次售卖行为。鉴定结果纯属随机模拟，与现实无关。</p>
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
