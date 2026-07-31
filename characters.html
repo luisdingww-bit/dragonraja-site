@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人物交织 ｜ DRAGON RAJA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="eva-extra.css">
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><img src="img/crest.webp" alt="crest"><div><span class="zh">龙族</span><span class="en">DRAGON RAJA</span></div><span class="tag" data-i18n="nav_tag">混血种档案</span></a>
+    <div class="nav-links">
+      <a href="eva.html" data-i18n="nav_eva">EVA 终端</a>
+      <a href="story.html" data-i18n="nav_story">情节长卷</a>
+      <a href="codex.html" data-i18n="nav_codex">言灵图鉴</a>
+      <a href="kings.html" data-i18n="nav_kings">四大龙王</a>
+      <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
+      <a href="characters.html" class="active" data-i18n="nav_chars">人物</a>
+      <a href="index.html#ritual" data-i18n="nav_ritual">血统鉴定</a>
+      <a href="index.html#elegy" data-i18n="nav_elegy">绘梨衣</a>
+      <button id="langSwitch" class="lang-switch" type="button">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="crumb"><a href="index.html" data-i18n="nav_tag">混血种档案</a> · <span data-i18n="nav_chars">人物</span></div>
+  <h1 data-i18n="ch_h1">人 物 交 织</h1>
+  <div class="en">I N T E R T W I N E D &nbsp; F A T E S</div>
+</header>
+
+<section class="container" style="padding-top:24px;">
+  <div class="sec-title"><span class="num" data-i18n="ch_kick">命运的网络</span><div class="kick">C H A R A C T E R S</div><h2 data-i18n="ch_sub">点 击 人 物 · 看 他 们 如 何 纠 缠</h2><div class="sub" data-i18n="ch_hint">路明非 · 楚子航 · 凯撒 · 绘梨衣 · 昂热</div></div>
+
+  <div class="ch-wrap">
+    <div class="ch-roster" id="ch-roster"></div>
+    <div class="ch-stage" id="ch-stage"></div>
+  </div>
+
+  <div class="ch-events">
+    <div class="ch-events-title" data-i18n="ch_ev_title">交 织 事 件 · 多 视 角</div>
+    <div class="ch-event-tabs" id="ch-event-tabs"></div>
+    <div class="ch-event-view">
+      <div class="ch-ev-pickers" id="ch-ev-pickers"></div>
+      <div class="ch-ev-text" id="ch-ev-text"></div>
+    </div>
+  </div>
+
+  <div class="link-center"><a class="more-link" href="index.html" data-i18n="eva_back">返回首页 <span class="arr">→</span></a></div>
+</section>
+
+<footer>
+  <p class="disc" data-i18n-html="footer_disc"></p>
+  <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
+</footer>
+
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+<script src="eva.js"></script>
+<script>
+var CH={
+  mingfei:{zh:'路明非',en:'Lu Mingfei',role_zh:'S 级混血种 · 衰小孩→屠龙者',role_en:'S-class hybrid · loser → dragon-slayer',
+    sp_zh:'未稳定（镰鼬等）',sp_en:'Unstable (Kamaitachi, etc.)',
+    arc_zh:'自称最普通的少年，却在青铜城第一次为一条叫他「哥哥」的小龙落泪；在东京塔把红白护腕系在绘梨衣腕上；为救所有人，一次次向路鸣泽租借四分之一条命。',
+    arc_en:"A self-called ordinary boy who wept in Bronze City for a little dragon that called him 'brother'; who tied the red-white wristband on Eri beneath Tokyo Tower; who, to save everyone, leased a quarter of his life from Lu Mingze again and again.",
+    links:['zihang','caesar','eri','angers','mingze']},
+  zihang:{zh:'楚子航',en:'Chu Zihang',role_zh:'狮心会会长 · A 级',role_en:'Lionheart president · A-class',
+    sp_zh:'言灵·君焰（序列号89）',sp_en:'Spirit · King\'s Inferno (Seq.89)',
+    arc_zh:'为找回失踪的父亲追猎奥丁。他在地铁站识破夏弥的双生身份，却选择不攻击——因为学会了「比屠龙更难的是温柔」。他是路明非的兄弟，凯撒的对手与挚友。',
+    arc_en:"He hunts Odin to find his lost father. In the subway he saw Xia Mi's twin truth yet chose not to strike — he learned 'gentler than slaying is harder'. Brother to Mingfei, rival and dearest friend to Caesar.",
+    links:['mingfei','caesar','angers','xiami']},
+  caesar:{zh:'凯撒',en:'Caesar',role_zh:'学生会主席 · 加图索家族',role_en:'Student Union president · Gattuso',
+    sp_zh:'言灵·吸血镰（序列号71）',sp_en:'Spirit · Bloodsucking Scythe (Seq.71)',
+    arc_zh:'骄傲的贵族之子，初把路明非当笑柄，后在东京与他、楚子航结为生死兄弟。他爱诺诺，也把「屠龙者的荣光」扛在肩上。',
+    arc_en:"Proud noble heir who first mocked Mingfei, then in Tokyo forged a bond of life and death with him and Zihang. He loves Nono and carries 'the glory of dragon-slayers' on his shoulders.",
+    links:['mingfei','zihang','angers','nono']},
+  eri:{zh:'绘梨衣',en:'Eri',role_zh:'白王容器 · 权天使',role_en:'White King vessel · Power Angel',
+    sp_zh:'言灵·审判（序列号111）',sp_en:'Spirit · Judgment (Seq.111)',
+    arc_zh:'上杉绘梨衣，源稚生与源稚女的妹妹，白王力量的容器。她不会说话，却把整本《东京爱情故事》画给 Sakura。4 月 4 日的献祭里，她把世界留给路明非。',
+    arc_en:"Uesugi Eri, sister of Yubetsu and Minamoto, vessel of the White King's power. Unable to speak, she drew a whole 'Tokyo Love Story' for her Sakura. In the 4/4 sacrifice she left the world to Mingfei.",
+    links:['mingfei','yubetsu']},
+  angers:{zh:'昂热',en:'Angers',role_zh:'卡塞尔学院校长',role_en:'Headmaster of Cassell',
+    sp_zh:'言灵·时间零（序列号07）',sp_en:'Spirit · Time Zero (Seq.07)',
+    arc_zh:'初代狮心会唯一幸存者，千年屠龙者。他追猎四大龙王，把最后的希望寄托在路明非身上。每一次钟声，都是他为屠龙者而鸣。',
+    arc_en:"Sole survivor of the first Lionheart, a millennial dragon-slayer. He hunts the Four Kings and pins his last hope on Mingfei. Every bell he tolls is for the slayers.",
+    links:['mingfei','zihang','caesar','kings']}
+};
+var REL={
+  'mingfei-eri':{zh:'东京塔下，她把红白护腕留给他，说「Sakura，我们还能再来吗」。他答「一定会的」——可雨里的人，再没回来。',en:'Beneath Tokyo Tower she left him the red-white wristband: "Sakura, can we come again?" He said "yes" — yet the one in the rain never returned.'},
+  'mingfei-zihang':{zh:'青铜城的血让他们成了兄弟。楚子航说：「路明非，你是我见过最强大的混血种。」——因为他肯为陌生人落泪。',en:'Blood in Bronze City made them brothers. Zihang: "Mingfei, you are the strongest hybrid I\'ve known" — because he weeps for strangers.'},
+  'mingfei-caesar':{zh:'从橄榄球场的对手，到东京生死与共的兄弟。凯撒举杯：「为了屠龙者。」路明非第一次觉得自己配得上这个名字。',en:'From rugby rivals to brothers-in-arms in Tokyo. Caesar raised his glass: "To the dragon-slayers." Mingfei first felt worthy of the name.'},
+  'mingfei-angers':{zh:'昂热在录取通知上写：「钟声为你敲响。」他护着这个总在哭的少年，像护着屠龙时代的最后一束光。',en:'Angers wrote on the admission: "The bells toll for you." He shields the boy who always weeps, like the last light of the slaying age.'},
+  'mingfei-mingze':{zh:'路鸣泽是他心里的魔鬼，也是唯一的家人。「哥哥，我帮你把所有人都赢回来。」——租金是四分之一条命。',en:'Mingze is the devil in his heart and his only family. "Brother, I\'ll win everyone back for you" — the rent is a quarter of his life.'},
+  'zihang-caesar':{zh:'学生会与狮心会的 rivalry，在橄榄球场见了真章。输赢之外，两个骄傲的人彼此尊重。',en:'The Student Union vs Lionheart rivalry played out on the rugby field. Beyond winning, two proud men respected each other.'},
+  'zihang-angers':{zh:'昂热是楚子航的导师，也是他追猎奥丁路上的引灯。校长信他，所以把最危险的真相留给了他。',en:'Angers is Zihang\'s mentor and the lantern on his hunt for Odin. The headmaster trusted him with the deadliest truths.'},
+  'zihang-xiami':{zh:'夏弥是他隔壁「笨拙学人」的女孩，也是大地与山之王。她为他挡下致命一击，化作风：「因为我爱你，所以我是世界上最强的龙。」',en:'Xia Mi was the "clumsy human" next door, and the Earth & Mountain King. She took a fatal blow for him, turning to wind: "Because I loved you, I am the strongest dragon."'},
+  'caesar-nono':{zh:'诺诺是凯撒的红发巫女，也是把他从骄傲里拉回来的人。她说：「凯撒，你不必证明给任何人看。」',en:'Nono is Caesar\'s red-haired witch, the one who pulled him back from pride. "Caesar, you need prove nothing to anyone," she said.'},
+  'caesar-angers':{zh:'昂热赏识凯撒的领袖气度，却也警告他：「加图索的血脉，别成了屠龙的枷锁。」',en:'Angers admired Caesar\'s leadership yet warned: "The Gattuso blood must not become a cage for slaying."'},
+  'eri-yubetsu':{zh:'源稚生是绘梨衣的哥哥，也是把她锁进笼里的人。血缘与使命之间，他选择了后者——这是绘梨衣悲剧的起点。',en:'Minamoto was Eri\'s brother and the one who caged her. Between blood and duty he chose duty — the start of Eri\'s tragedy.'},
+  'angers-kings':{zh:'昂热追猎四大龙王逾千年。每杀一王，他就老去一分；可他说：「只要还有一个孩子要保护，钟声就不会停。」',en:'Angers has hunted the Four Kings for over a thousand years. Each King felled ages him; yet: "As long as one child needs protecting, the bells won\'t stop."'}
+};
+var EVENTS=[
+  {id:'tokyo',zh:'东京塔的告别',en:'Farewell at Tokyo Tower',
+    ps:[{char:'mingfei',zh:'我把伞倾向她，自己的肩膀淋在雨里。她说「还能再来吗」，我答「一定」。可我知道，这一次的英雄梦，要拿命去填。',en:'I tilted the umbrella to her, my own shoulder in the rain. "Can we come again?" she asked; I said "yes". But I knew this hero dream would be paid in life.'},
+       {char:'eri',zh:'Sakura 的伞好暖。我把护腕留给他，这样他就不会忘了我。东京塔的灯灭了，可我心里还亮着。',en:"Sakura's umbrella is warm. I left him my wristband so he won't forget me. Tokyo Tower's light went out, but mine stays lit."},
+       {char:'caesar',zh:'明非在雨里站成了一座雕像。我从没见他那么安静——这个衰小孩，原来扛着整个东京的雨。',en:'Mingfei stood in the rain like a statue. Never seen him so quiet — this loser was carrying all Tokyo\'s rain.'}]},
+  {id:'lionheart',zh:'狮心会 vs 学生会',en:'Lionheart vs Student Union',
+    ps:[{char:'caesar',zh:'橄榄球场上，楚子航的君焰烧穿了半边夜空。我笑了：这才配做我的对手。',en:'On the field, Zihang\'s Inferno lit half the night. I laughed — now that\'s a worthy rival.'},
+       {char:'zihang',zh:'凯撒的吸血镰划过我的脸颊。我们都不是为了赢，是为了确认：这世上还有配得上并肩的人。',en:"Caesar's scythe grazed my cheek. Neither of us played to win — only to confirm someone worthy stands beside us."}]},
+  {id:'bronze',zh:'青铜城之战',en:'Battle of Bronze City',
+    ps:[{char:'mingfei',zh:'康斯坦丁叫我「哥哥」，然后在我怀里化成灰。那一刻我懂了：屠龙，是要还命的。',en:'Constantine called me "brother", then turned to ash in my arms. That moment I knew: slaying dragons demands a life in return.'},
+       {char:'angers',zh:'第一世代的龙死于少年之手。历史总是这样开始——一个会哭的孩子，举起弑王的剑。',en:'A First-Generation dragon died by a boy\'s hand. History always begins so — a weeping child raising the king-slaying blade.'}]},
+  {id:'white',zh:'白王终局',en:'The White King\'s End',
+    ps:[{char:'mingfei',zh:'七宗罪在我手中震颤。赫尔佐格借白王之力咆哮，可他不懂——真正的王，甘愿为一个人停下。',en:'The Seven Sins trembled in my grip. Herzog roared with the White King\'s power, yet he never understood — a true King stops for one person.'},
+       {char:'eri',zh:'哥哥说会带我回家。可世界树的影子太长，我先把路让给了他。Sakura，下次见面，换你请我吃冰淇淋。',en:'Brother said he\'d take me home. But the World Tree\'s shadow was long; I gave him the road first. Sakura, next time, you buy me ice cream.'},
+       {char:'angers',zh:'千年了。白王的血终于安静。我合上档案，听见钟声——为明非，也为所有没能回来的孩子。',en:'A thousand years. The White King\'s blood is quiet at last. I close the file, hear the bells — for Mingfei, and for every child who didn\'t return.'}]}
+];
+
+var roster=document.getElementById('ch-roster');
+var stage=document.getElementById('ch-stage');
+function L(o){ return (window.LANG==='en'&&o.en!==undefined)?o.en:o.zh; }
+var cur='mingfei';
+
+function renderRoster(){
+  roster.innerHTML='';
+  Object.keys(CH).forEach(function(id){
+    var c=CH[id];
+    var d=document.createElement('div'); d.className='ch-ava'+(id===cur?' sel':'');
+    d.innerHTML='<div class="ch-ava-n">'+c.zh+'</div><div class="ch-ava-e">'+c.en+'</div>';
+    d.onclick=function(){ cur=id; renderRoster(); renderStage(); };
+    roster.appendChild(d);
+  });
+}
+function renderStage(){
+  var c=CH[cur];
+  var relHtml=c.links.map(function(lid){
+    var other=CH[lid]; if(!other) return '';
+    var key=[cur,lid].sort().join('-');
+    var r=REL[key]; if(!r) return '';
+    return '<div class="ch-rel" data-link="'+lid+'"><div class="ch-rel-head"><span class="ch-rel-to">'+other.zh+'</span><span class="ch-rel-en">'+other.en+'</span></div><div class="ch-rel-text">'+L(r)+'</div></div>';
+  }).join('');
+  stage.innerHTML='<div class="ch-dossier">'+
+    '<div class="ch-d-name">'+c.zh+'<span class="ch-d-en">'+c.en+'</span></div>'+
+    '<div class="ch-d-role">'+c[(window.LANG==='en'?'role_en':'role_zh')]+'</div>'+
+    '<div class="ch-d-row"><span class="ch-d-k" data-i18n="ch_spirit">言灵</span><span>'+c[(window.LANG==='en'?'sp_en':'sp_zh')]+'</span></div>'+
+    '<div class="ch-d-arc">'+c[(window.LANG==='en'?'arc_en':'arc_zh')]+'</div>'+
+    '<div class="ch-rel-title" data-i18n="ch_rel_title">与他人的羁绊</div>'+
+    '<div class="ch-rels">'+relHtml+'</div>'+
+    '</div>';
+  stage.querySelectorAll('[data-i18n]').forEach(function(el){ if(window.t) el.textContent=window.t(el.getAttribute('data-i18n')); });
+  stage.querySelectorAll('.ch-rel').forEach(function(r){
+    r.onclick=function(){ var l=r.getAttribute('data-link'); if(CH[l]){ cur=l; renderRoster(); renderStage(); } };
+  });
+}
+
+/* 事件多视角 */
+var evTabs=document.getElementById('ch-event-tabs');
+var evPickers=document.getElementById('ch-ev-pickers');
+var evText=document.getElementById('ch-ev-text');
+var curEv=EVENTS[0].id, curPersp=EVENTS[0].ps[0].char;
+function renderEvTabs(){
+  evTabs.innerHTML='';
+  EVENTS.forEach(function(ev){
+    var b=document.createElement('button'); b.className='ch-ev-tab'+(ev.id===curEv?' active':'');
+    b.textContent=L(ev);
+    b.onclick=function(){ curEv=ev.id; curPersp=ev.ps[0].char; renderEvTabs(); renderEvPickers(); };
+    evTabs.appendChild(b);
+  });
+}
+function renderEvPickers(){
+  var ev=EVENTS.filter(function(e){return e.id===curEv;})[0];
+  evPickers.innerHTML='';
+  ev.ps.forEach(function(p){
+    var b=document.createElement('button'); b.className='ch-ev-pick'+(p.char===curPersp?' active':'');
+    b.textContent=CH[p.char].zh;
+    b.onclick=function(){ curPersp=p.char; renderEvPickers(); renderEvText(); };
+    evPickers.appendChild(b);
+  });
+}
+function renderEvText(){
+  var ev=EVENTS.filter(function(e){return e.id===curEv;})[0];
+  var p=ev.ps.filter(function(x){return x.char===curPersp;})[0];
+  evText.innerHTML='<div class="ch-ev-char">'+CH[p.char].zh+' · '+CH[p.char].en+'</div><div class="ch-ev-line">'+L(p)+'</div>';
+}
+
+renderRoster(); renderStage(); renderEvTabs(); renderEvPickers(); renderEvText();
+if(window.onLangChange) window.onLangChange(function(){ renderRoster(); renderStage(); renderEvTabs(); renderEvPickers(); renderEvText(); });
+</script>
+</body>
+</html>

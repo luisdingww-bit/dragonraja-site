@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="eva-extra.css">
 <style>
 .vol-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:10px;}
 .vol-tab{background:transparent;border:1px solid var(--line);color:var(--ink-dim);font-family:var(--serif);font-size:13px;letter-spacing:.18em;padding:10px 20px;cursor:pointer;border-radius:2px;transition:.25s;}
@@ -46,9 +47,12 @@
   <div class="nav-inner">
     <a class="brand" href="index.html"><img src="img/crest.webp" alt="crest"><div><span class="zh">龙族</span><span class="en">DRAGON RAJA</span></div><span class="tag" data-i18n="nav_tag">混血种档案</span></a>
     <div class="nav-links">
+      <a href="eva.html" data-i18n="nav_eva">EVA 终端</a>
       <a href="story.html" class="active" data-i18n="nav_story">情节长卷</a>
       <a href="codex.html" data-i18n="nav_codex">言灵图鉴</a>
       <a href="kings.html" data-i18n="nav_kings">四大龙王</a>
+      <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
+      <a href="characters.html" data-i18n="nav_chars">人物</a>
       <a href="index.html#ritual" data-i18n="nav_ritual">血统鉴定</a>
       <a href="index.html#elegy" data-i18n="nav_elegy">绘梨衣</a>
       <button id="langSwitch" class="lang-switch" type="button">EN</button>
@@ -82,6 +86,7 @@
 
 <script src="i18n.js"></script>
 <script src="app.js"></script>
+<script src="eva.js"></script>
 <script>
 const VOLS=[
 {id:"v1",roman:"Ⅰ",name:"火之晨曦",name_en:"Dawn of Fire",en:"DAWN OF FIRE",img:"img/dragon-02.webp",cap:"⟪ 卷一 · 火之晨曦 ⟫",
