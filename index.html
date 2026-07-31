@@ -65,9 +65,6 @@
 .boot-enroll-btn{background:transparent;color:var(--gold);border:1px solid var(--gold);padding:14px 38px;font-family:var(--serif);font-size:14px;letter-spacing:.18em;cursor:pointer;border-radius:2px;transition:.35s;}
 .boot-enroll-btn:hover{background:rgba(216,181,117,.16);box-shadow:0 0 26px rgba(216,181,117,.28);}
 .boot-topbar{position:absolute;top:max(18px,env(safe-area-inset-top));right:max(18px,env(safe-area-inset-right));z-index:10;display:flex;align-items:center;gap:12px;}
-.boot-music-top{width:40px;height:40px;border-radius:50%;background:rgba(5,12,24,.6);border:1px solid var(--line-strong);color:var(--gold);font-size:14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.3s;}
-.boot-music-top:hover{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 16px rgba(216,181,117,.25);}
-.boot-music-top.on{color:var(--gold-bright);border-color:var(--gold);box-shadow:0 0 14px rgba(216,181,117,.3);}
 .boot-letter-wrap{margin:18px auto 0;max-width:480px;}
 .boot-letter-toggle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:none;border:none;cursor:pointer;color:var(--gold);font-family:var(--serif);font-size:12px;letter-spacing:.3em;padding:0 0 10px;text-shadow:0 0 8px rgba(0,0,0,.7);transition:.3s;}
 .boot-letter-toggle:hover{color:var(--gold-bright);}
@@ -154,7 +151,6 @@
     <div class="vignette"></div><div class="bar top"></div><div class="bar bot"></div>
   </div>
   <div class="boot-topbar">
-    <button class="boot-music-top" id="bootMusic" type="button" title="BGM" aria-label="BGM">♪</button>
     <button class="lang-switch boot-lang" type="button">EN</button>
   </div>
   <div class="boot-content">
@@ -175,6 +171,7 @@
     <div class="boot-actions">
       <button class="boot-enroll-btn" id="bootEnrollBtn" data-i18n="boot_account_btn">录取登记 / 登录</button>
       <button class="boot-enter" id="bootEnter" data-i18n="boot_enter" disabled>启 程</button>
+      <button class="boot-music" id="bootMusic" type="button" title="BGM" aria-label="BGM">♪</button>
     </div>
   </div>
 </div>
@@ -312,6 +309,7 @@
 <script src="app.js"></script>
 <script src="eva.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="auth.js"></script>
 <script>
 (function(){
@@ -393,22 +391,82 @@
     }catch(e){}
   }
 
-  // 通过 Formsubmit.co 把录取登记真实发到站长邮箱，并抄送填写者一份
+  // ===== 录取邮件：通过 EmailJS 发送「真正的卡塞尔学院录取通知书」（HTML 排版，非表单回执） =====
+  // 免费额度 200 封/月，足够粉丝站。需在 EmailJS 后台建 Service + Template 后填入下方三项。
+  // 模板 Body 只需写一行： {{{letter_html}}}  （To Email 填 {{to_email}}，主题可固定「卡塞尔学院 · 新生录取通知书」）
+  const EMAILJS = {
+    SERVICE_ID: 'YOUR_SERVICE_ID',
+    TEMPLATE_ID: 'YOUR_TEMPLATE_ID',
+    PUBLIC_KEY: 'YOUR_PUBLIC_KEY',
+    OWNER_EMAIL: '1543922663@qq.com'
+  };
+  (function initEmailJS(){
+    try{
+      if(window.emailjs && EMAILJS.PUBLIC_KEY && EMAILJS.PUBLIC_KEY.indexOf('YOUR_')!==0){
+        emailjs.init({ publicKey: EMAILJS.PUBLIC_KEY });
+      }
+    }catch(e){}
+  })();
+
+  function escHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function buildEmailHtml(name,age,email,isEn){
+    var gold='#d8b575', ink='#e8e2d2', dim='#9aa6b2', bg='#0a1018', panel='#0c1626';
+    var crest=(location.origin&&location.origin.indexOf('http')===0?location.origin:'https://luisdingww-bit.github.io/dragonraja-site')+'/img/cassell-seal-round.png';
+    var title=isEn?'ADMISSION NOTICE':'录 取 通 知';
+    var salut=isEn?'To the future dragon-slayer:':'致 未来的屠龙者：';
+    var p1=isEn?'By the ruling of the Cassell College Bloodline Identification Committee, ancient dragon blood flows in your veins. This is to formally notify you —':'经卡塞尔学院血统鉴定委员会裁定，你体内流淌着古老的龙血。现正式通知——';
+    var emph=isEn?'You are admitted as a hybrid student of this term.':'你已被录取为本届混血种学员。';
+    var p2=isEn?'The bell will soon toll for you. Step through this gate, and there is no turning back.':'钟声即将为你敲响。踏入此门，便再无回头。';
+    var college='CASSELL COLLEGE · 卡塞尔学院';
+    var nameL=isEn?'Candidate':'学员姓名', ageL=isEn?'Registered Age':'登记年龄', fileL=isEn?'Archive No.':'档案编号';
+    var signPres=isEn?'President':'校长签名', signSec=isEn?'Chief Secretary':'首席秘书签名';
+    var disp=isEn?'Dispatched by EVA Terminal':'由 EVA 智能终端派送';
+    var d=new Date(); var ds=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+    var archNo='DR-'+ds.replace(/-/g,'')+'-'+Math.floor(Math.random()*9000+1000);
+    return ''
+    +'<div style="margin:0;padding:0;background:'+bg+';">'
+    +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:'+bg+';padding:28px 0;"><tr><td align="center">'
+    +'<div style="max-width:560px;width:100%;background:'+panel+';border:1px solid '+gold+';border-radius:4px;box-shadow:0 18px 60px rgba(0,0,0,.5);overflow:hidden;font-family:Georgia,\'Times New Roman\',\'Songti SC\',serif;">'
+    +'<div style="padding:30px 34px 8px;text-align:center;">'
+    +'<img src="'+crest+'" width="68" height="68" style="border-radius:50%;border:2px solid '+gold+';box-shadow:0 0 18px rgba(216,181,117,.3);" alt="Cassell College">'
+    +'<div style="letter-spacing:.32em;color:'+gold+';font-size:12px;margin-top:12px;">'+college+'</div>'
+    +'<div style="letter-spacing:.4em;color:'+gold+';font-size:22px;margin-top:10px;padding-left:.4em;">'+title+'</div>'
+    +'</div>'
+    +'<div style="padding:10px 38px 30px;color:'+ink+';font-size:15px;line-height:2;text-align:left;">'
+    +'<p style="margin:14px 0;">'+salut+'</p>'
+    +'<p style="margin:14px 0;color:'+dim+';">'+p1+'</p>'
+    +'<p style="margin:14px 0;color:'+gold+';font-size:16px;letter-spacing:.04em;">'+emph+'</p>'
+    +'<p style="margin:14px 0;color:'+dim+';">'+p2+'</p>'
+    +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:22px 0 6px;border-top:1px dashed rgba(216,181,117,.35);border-bottom:1px dashed rgba(216,181,117,.35);">'
+    +'<tr><td style="padding:12px 0;color:'+dim+';font-size:13px;">'+nameL+'</td><td style="padding:12px 0;color:'+ink+';font-size:14px;text-align:right;">'+escHtml(name)+'</td></tr>'
+    +'<tr><td style="padding:12px 0;color:'+dim+';font-size:13px;">'+ageL+'</td><td style="padding:12px 0;color:'+ink+';font-size:14px;text-align:right;">'+escHtml(age)+'</td></tr>'
+    +'<tr><td style="padding:12px 0;color:'+dim+';font-size:13px;">'+fileL+'</td><td style="padding:12px 0;color:'+ink+';font-size:14px;text-align:right;">'+archNo+'</td></tr>'
+    +'</table>'
+    +'<div style="margin-top:22px;color:'+gold+';font-size:13px;letter-spacing:.1em;">'+disp+'</div>'
+    +'<div style="margin-top:18px;display:flex;justify-content:space-between;color:'+dim+';font-size:13px;">'
+    +'<div><div style="color:'+ink+';font-size:15px;font-style:italic;">Hilbert Ron Anjou</div><div>'+signPres+'</div></div>'
+    +'<div style="text-align:right;"><div style="color:'+ink+';font-size:15px;font-style:italic;">EVA</div><div>'+signSec+'</div></div>'
+    +'</div>'
+    +'</div>'
+    +'</div>'
+    +'</td></tr></table>'
+    +'</div>';
+  }
+
   function sendAdmissionEmail(name,age,email){
     try{
-      const fd=new FormData();
-      fd.append('姓名',name);
-      fd.append('年龄',age);
-      fd.append('邮箱',email);
-      fd.append('录取批次','卡塞尔学院 · 混血种档案 2026 届');
-      fd.append('_subject','卡塞尔学院 · 新生录取通知书');
-      fd.append('_cc',email);                 // 抄送填写者，使其也收到录取邮件
-      fd.append('_template','table');
-      fd.append('_captcha','false');
-      fd.append('_gotcha','');               // honeypot 防垃圾
-      fetch('https://formsubmit.co/1543922663@qq.com',{
-        method:'POST', body:fd, headers:{'Accept':'application/json'}
-      }).catch(function(){});
+      if(!window.emailjs || !EMAILJS.SERVICE_ID || EMAILJS.SERVICE_ID.indexOf('YOUR_')===0){
+        console.warn('[EmailJS] 未配置，录取通知书邮件未发送。请在 dist/index.html 顶部 EMAILJS 填入 Service/Template/Public Key。');
+        return;
+      }
+      var isEn=window.LANG==='en';
+      var html=buildEmailHtml(name,age,email,isEn);
+      var payload={ to_email: EMAILJS.OWNER_EMAIL, name:name, age:age, email:email, letter_html: html, subject:'卡塞尔学院 · 新生录取通知书' };
+      emailjs.send(EMAILJS.SERVICE_ID, EMAILJS.TEMPLATE_ID, payload, { publicKey: EMAILJS.PUBLIC_KEY }).catch(function(e){ console.warn('[EmailJS] 站长邮件发送失败', e); });
+      // 同时派送给填写者本人一份完整的录取通知书
+      payload={ to_email: email, name:name, age:age, email:email, letter_html: html, subject:'卡塞尔学院 · 新生录取通知书' };
+      emailjs.send(EMAILJS.SERVICE_ID, EMAILJS.TEMPLATE_ID, payload, { publicKey: EMAILJS.PUBLIC_KEY }).catch(function(e){ console.warn('[EmailJS] 学员邮件发送失败', e); });
     }catch(e){}
   }
 
