@@ -91,7 +91,8 @@
       }
       // 本地兜底
       var accounts = getAccounts();
-      if (accounts.some(function (a) { return a.email === email; })) {
+      email = email.toLowerCase();
+      if (accounts.some(function (a) { return String(a.email).toLowerCase() === email; })) {
         var ex = new Error("already registered");
         ex.code = "exists";
         throw ex;
@@ -118,7 +119,8 @@
         });
       }
       var accounts = getAccounts();
-      var a = accounts.find(function (x) { return x.email === email; });
+      email = email.toLowerCase();
+      var a = accounts.find(function (x) { return String(x.email).toLowerCase() === email; });
       if (!a) {
         var nf = new Error("not found");
         nf.code = "notfound";
@@ -126,9 +128,23 @@
       }
       return sha256(password).then(function (passHash) {
         if (passHash !== a.passHash) {
-          var wr = new Error("wrong password");
-          wr.code = "wrong";
-          throw wr;
+          // 容错：用户可能误输入首尾空格（例如输入法/自动补全），尝试去掉首尾空格后比对
+          return sha256(password.trim()).then(function (trimHash) {
+            if (trimHash !== a.passHash) {
+              var wr = new Error("wrong password");
+              wr.code = "wrong";
+              throw wr;
+            }
+            // 命中容错 → 把存储哈希迁移为去空格版本，下次直接通过
+            a.passHash = trimHash;
+            setAccounts(accounts);
+            var sess = { email: email, name: a.name, age: a.age };
+            localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
+            return {
+              user: { email: email, user_metadata: { name: a.name, age: a.age } },
+              session: { user: { email: email, user_metadata: { name: a.name, age: a.age } } }
+            };
+          });
         }
         var sess = { email: email, name: a.name, age: a.age };
         localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
@@ -155,6 +171,69 @@
       }
       try { return Promise.resolve(JSON.parse(localStorage.getItem(SESSION_KEY) || "null")); }
       catch (e) { return Promise.resolve(null); }
+    },
+
+    /* 找回密码
+     * - Supabase 模式：发送重置邮件（redirectTo 指向 recover.html 处理新密码）
+     * - 本地演示模式：用「邮箱 + 注册姓名 + 注册年龄」验证身份后直接重置
+     */
+    resetPassword: function (payload) {
+      var email = (payload.email || "").trim().toLowerCase();
+      if (mode === "supabase") {
+        var path = window.location.pathname || "/";
+        var base = window.location.origin + path.slice(0, path.lastIndexOf("/") + 1);
+        return sb.auth
+          .resetPasswordForEmail(email, { redirectTo: base + "recover.html" })
+          .then(function (res) {
+            if (res.error) throw res.error;
+            return { sent: true, email: email };
+          });
+      }
+      var accounts = getAccounts();
+      var a = accounts.find(function (x) { return String(x.email).toLowerCase() === email; });
+      if (!a) {
+        var nf = new Error("not found");
+        nf.code = "notfound";
+        throw nf;
+      }
+      var name = String(payload.name || "").trim();
+      var age = String(payload.age || "").trim();
+      if (String(a.name || "").toLowerCase() !== name.toLowerCase() || String(a.age || "") !== age) {
+        var mm = new Error("info mismatch");
+        mm.code = "mismatch";
+        throw mm;
+      }
+      var pass = String(payload.password || "");
+      if (pass.length < 6) {
+        var sh = new Error("password too short");
+        sh.code = "short";
+        throw sh;
+      }
+      return sha256(pass).then(function (h) {
+        a.passHash = h;
+        setAccounts(accounts);
+        try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+        return { reset: true, email: a.email };
+      });
+    },
+
+    /* 通过 Supabase 重置邮件链接到达 recover.html 后设置新密码 */
+    updatePassword: function (payload) {
+      if (mode !== "supabase" || !sb) {
+        var no = new Error("supabase not configured");
+        no.code = "nosupabase";
+        return Promise.reject(no);
+      }
+      var pass = String(payload.password || "");
+      if (pass.length < 6) {
+        var sh = new Error("password too short");
+        sh.code = "short";
+        return Promise.reject(sh);
+      }
+      return sb.auth.updateUser({ password: pass }).then(function (res) {
+        if (res.error) throw res.error;
+        return { done: true };
+      });
     }
   };
 

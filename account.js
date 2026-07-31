@@ -243,9 +243,25 @@
           '<input id="accLgEmail" type="email" placeholder="' + esc(t("ph_email")) + '" maxlength="80">' +
           '<input id="accLgPass" type="password" placeholder="' + esc(t("ph_password")) + '" maxlength="64">' +
           '<div class="acc-hint" id="accLgHint">' + esc(t("login_hint")) + "</div>" +
+          '<div class="acc-hint" style="min-height:auto;color:#8a7a63;">' + esc(t("login_hint_local")) + "</div>" +
           '<button class="acc-submit" type="submit">' + esc(t("boot_login_btn")) + "</button>" +
         "</form>" +
-        '<div class="acc-foot"><a href="index.html#ritual" id="accToEnroll">' + esc(t("login_to_enroll")) + "</a></div>" +
+        '<div class="acc-foot"><a href="index.html#ritual" id="accToEnroll">' + esc(t("login_to_enroll")) + '</a><span style="margin:0 8px;color:#9c8a6e;">·</span><a href="#" id="accToReset">' + esc(t("login_forgot")) + "</a></div>" +
+        '<div id="accResetView" style="display:none;">' +
+          '<form class="acc-form" id="accResetForm" autocomplete="off" novalidate>' +
+            '<div class="acc-title" style="font-size:15px;">' + esc(t("reset_title")) + "</div>" +
+            '<input id="accRsEmail" type="email" placeholder="' + esc(t("reset_email_ph")) + '" maxlength="80">' +
+            '<div id="accRsLocalFields">' +
+              '<input id="accRsName" type="text" placeholder="' + esc(t("reset_name_ph")) + '" maxlength="40">' +
+              '<input id="accRsAge" type="number" min="1" max="120" placeholder="' + esc(t("reset_age_ph")) + '">' +
+              '<input id="accRsPass" type="password" placeholder="' + esc(t("reset_newpass_ph")) + '" minlength="6" maxlength="64">' +
+              '<input id="accRsPass2" type="password" placeholder="' + esc(t("reset_confirm_ph")) + '" maxlength="64">' +
+            "</div>" +
+            '<div class="acc-hint" id="accRsHint">' + esc(t("reset_hint")) + "</div>" +
+            '<button class="acc-submit" type="submit">' + esc(t("reset_submit")) + "</button>" +
+          "</form>" +
+          '<div class="acc-foot"><a href="#" id="accResetBack">' + esc(t("reset_back")) + "</a></div>" +
+        "</div>" +
       "</div>";
     document.body.appendChild(modal);
 
@@ -266,10 +282,75 @@
       }).catch(function (err) {
         var msg = ((err && err.message) || "").toLowerCase();
         var txt = window.LANG === "en" ? "Login failed, please retry" : "登录失败，请重试";
-        if (msg.indexOf("wrong") >= 0 || msg.indexOf("invalid") >= 0) txt = window.LANG === "en" ? "Wrong email or password" : "邮箱或密码错误";
-        else if (msg.indexOf("notfound") >= 0) txt = window.LANG === "en" ? "No such account, please register" : "该邮箱未注册，请先登记";
+        if (msg.indexOf("wrong") >= 0 || msg.indexOf("invalid") >= 0) txt = window.LANG === "en" ? 'Wrong password — mind case and stray spaces; or use "Forgot password?"' : "密码错误——注意大小写与多余空格；也可点击「忘记密码」重置";
+        else if (msg.indexOf("notfound") >= 0) txt = window.LANG === "en" ? "No account with this email here (demo accounts live only in the browser where you registered). Please register or reset." : "该邮箱在本浏览器没有账号（演示模式账号仅保存在注册时的浏览器）。请重新登记或找回密码";
         else if (msg.indexOf("email not confirmed") >= 0) txt = window.LANG === "en" ? "Please confirm your email first" : "请先到邮箱点击确认链接";
         hint.textContent = txt; hint.classList.add("err");
+      });
+    });
+
+    // 找回密码
+    var accResetView = modal.querySelector("#accResetView");
+    var accLoginFormEl = modal.querySelector("#accLoginForm");
+    function showAccReset() {
+      if (accLoginFormEl) accLoginFormEl.style.display = "none";
+      if (accResetView) accResetView.style.display = "block";
+      var isSb = DR.authMode === "supabase";
+      var lf = document.getElementById("accRsLocalFields");
+      if (lf) lf.style.display = isSb ? "none" : "";
+      var h = document.getElementById("accRsHint");
+      if (h) { h.classList.remove("err"); h.textContent = t(isSb ? "reset_hint_sb" : "reset_hint"); }
+    }
+    function showAccLoginForm() {
+      if (accLoginFormEl) accLoginFormEl.style.display = "";
+      if (accResetView) accResetView.style.display = "none";
+    }
+    modal.querySelector("#accToReset").addEventListener("click", function (e) { e.preventDefault(); showAccReset(); });
+    modal.querySelector("#accResetBack").addEventListener("click", function (e) { e.preventDefault(); showAccLoginForm(); });
+    modal.querySelector("#accResetForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var h = document.getElementById("accRsHint");
+      var email = (document.getElementById("accRsEmail").value || "").trim();
+      if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        if (h) { h.textContent = window.LANG === "en" ? "Please enter a valid registered email" : "请输入有效的注册邮箱"; h.classList.add("err"); }
+        return;
+      }
+      var isSb = DR.authMode === "supabase";
+      var name = "", age = "", p1 = "", p2 = "";
+      if (!isSb) {
+        name = (document.getElementById("accRsName").value || "").trim();
+        age = (document.getElementById("accRsAge").value || "").trim();
+        p1 = document.getElementById("accRsPass").value || "";
+        p2 = document.getElementById("accRsPass2").value || "";
+        if (!name || !age) {
+          if (h) { h.textContent = window.LANG === "en" ? "Please fill in the registered name and age" : "请填写注册时的姓名与年龄"; h.classList.add("err"); }
+          return;
+        }
+        if (p1.length < 6) {
+          if (h) { h.textContent = t("reset_pass_short"); h.classList.add("err"); }
+          return;
+        }
+        if (p1 !== p2) {
+          if (h) { h.textContent = t("reset_confirm_err"); h.classList.add("err"); }
+          return;
+        }
+      }
+      if (h) { h.classList.remove("err"); h.textContent = t(isSb ? "reset_hint_sb" : "reset_hint"); }
+      DR.auth.resetPassword({ email: email, name: name, age: age, password: p1 }).then(function (res) {
+        if (res.reset) {
+          var lh = document.getElementById("accLgHint");
+          if (lh) { lh.classList.remove("err"); lh.textContent = t("reset_done"); }
+          var le = document.getElementById("accLgEmail"); if (le) le.value = email;
+          showAccLoginForm();
+        } else if (res.sent) {
+          if (h) { h.classList.remove("err"); h.textContent = t("reset_sent"); }
+        }
+      }).catch(function (err) {
+        var code = (err && err.code) || "";
+        var txt = window.LANG === "en" ? "Reset failed, please retry" : "重置失败，请重试";
+        if (code === "notfound") txt = t("reset_notfound");
+        else if (code === "mismatch") txt = t("reset_mismatch");
+        if (h) { h.textContent = txt; h.classList.add("err"); }
       });
     });
 
