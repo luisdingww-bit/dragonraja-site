@@ -74,17 +74,18 @@
 </footer>
 
 <script src="i18n.js"></script>
-<script src="app.js"></script>
-<script src="auth.js"></script>
-<script src="account.js"></script>
+<script src="app.js" defer></script>
+<script src="auth.js" defer></script>
+<script src="account.js" defer></script>
+<script src="eva.js" defer></script>
 <script>
-  (function(){
-    if(!window.DR_ACC) return;
-    window.DR_ACC.config.openLogin=function(){ window.DR_ACC.ensureLoginModal(); };
-    window.DR_ACC.init({ injectLoginModal:true });
-  })();
+  document.addEventListener('DOMContentLoaded', function(){
+    if(window.DR_ACC){
+      window.DR_ACC.config.openLogin=function(){ window.DR_ACC.ensureLoginModal(); };
+      window.DR_ACC.init({ injectLoginModal:true });
+    }
+  });
 </script>
-<script src="eva.js"></script>
 <script>
 (function(){
   var E=window.EVA; if(!E) return;

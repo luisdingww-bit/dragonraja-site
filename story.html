@@ -68,8 +68,8 @@
 </header>
 
 <div class="story-video-wrap">
-  <video class="story-video" autoplay muted loop playsinline poster="img/opening.jpg">
-    <source src="img/chapters-720.mp4" type="video/mp4" media="(min-width:768px)">
+  <video class="story-video" autoplay muted loop playsinline preload="auto" poster="img/opening.jpg">
+    <source src="img/chapters-720.mp4" type="video/mp4">
     <source src="img/chapters-480.mp4" type="video/mp4">
   </video>
   <div class="story-video-kick" data-i18n="story_video_kick">全 卷 引 子</div>
@@ -95,17 +95,18 @@
 </footer>
 
 <script src="i18n.js"></script>
-<script src="auth.js"></script>
-<script src="account.js"></script>
+<script src="auth.js" defer></script>
+<script src="account.js" defer></script>
+<script src="app.js" defer></script>
+<script src="eva.js" defer></script>
 <script>
-  (function(){
-    if(!window.DR_ACC) return;
-    window.DR_ACC.config.openLogin=function(){ window.DR_ACC.ensureLoginModal(); };
-    window.DR_ACC.init({ injectLoginModal:true });
-  })();
+  document.addEventListener('DOMContentLoaded', function(){
+    if(window.DR_ACC){
+      window.DR_ACC.config.openLogin=function(){ window.DR_ACC.ensureLoginModal(); };
+      window.DR_ACC.init({ injectLoginModal:true });
+    }
+  });
 </script>
-<script src="app.js"></script>
-<script src="eva.js"></script>
 <script>
 const VOLS=[
 {id:"v1",roman:"Ⅰ",name:"火之晨曦",name_en:"Dawn of Fire",en:"DAWN OF FIRE",img:"img/dragon-02.webp",cap:"⟪ 卷一 · 火之晨曦 ⟫",

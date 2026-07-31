@@ -36,7 +36,7 @@
   const apPlay=host.querySelector('#apPlay'),apName=host.querySelector('#apName');
 
   const a1=new Audio(),a2=new Audio();
-  a1.preload='auto';a2.preload='auto';
+  a1.preload='metadata';a2.preload='metadata';
   a1.src=TRACKS[0].src;a2.src=TRACKS[1].src;
   a1.volume=0;a2.volume=0;
   let active=a1,idx=0,started=false,playing=false;
