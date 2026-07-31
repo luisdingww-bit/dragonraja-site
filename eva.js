@@ -299,6 +299,22 @@
   }
 
   function greet(){
+    if(window.DR_ACC && DR_ACC.current()){
+      var u=DR_ACC.current(); var p=u.profile||{}; var isEn=window.LANG==='en';
+      var zh='欢迎回来，'+u.name+'。卡塞尔学院人工智能 EVA 已就绪。';
+      var en="Welcome back, "+u.name+". Cassell College AI 'EVA' online.";
+      if(p.bloodLevel){
+        zh+=' 你的血统等级：'+p.bloodLevel+'。';
+        en+=' Your bloodline: '+(p.bloodLevelEn||p.bloodLevel)+'.';
+        if(p.spirit){ zh+='言灵'+p.spirit+'已觉醒。'; en+=' Spirit '+(p.spiritEn||p.spirit)+' awakened.'; }
+      } else {
+        zh+=' 前往首页完成血统鉴定，记录你的言灵吧。';
+        en+=' Run the bloodline test on the homepage to record your spirit.';
+      }
+      zh+='\n输入「通知 / 任务 / 邮箱」，或直接问我关于龙族的一切。';
+      en+="\nSay 'notice / task / mail', or ask me anything about Dragon Raja.";
+      evaSay(zh,en); return;
+    }
     evaSay('卡塞尔学院人工智能 EVA 已就绪。\n我是学院的终端意志，负责传递通知、发放任务、管理学院邮件。\n输入「通知 / 任务 / 邮箱」，或直接问我关于龙族的一切。',
       "Cassell College AI 'EVA' online.\nI am the college's terminal will — delivering notices, issuing missions, managing the academy mail.\nSay 'notice / task / mail', or ask me anything about Dragon Raja.");
   }
@@ -313,8 +329,22 @@
     emailsRead:function(){ return S.emailsRead; },
     markEmail:function(id){ if(S.emailsRead.indexOf(id)<0){S.emailsRead.push(id);save(S);} },
     taskStatus:taskStatus,
-    allDone:function(){ return TASKS.every(function(tk){return S.tasks[tk.id]==='done';}); }
+    allDone:function(){ return TASKS.every(function(tk){return S.tasks[tk.id]==='done';}); },
+    addEmail:function(m){ S.extraEmails.unshift(m); save(S); },
+    completeTask:function(id){ if(!(id in S.tasks)) return; S.tasks[id]='done'; recompute(); save(S); }
   };
+
+  /* ============ 账号 → EVA 联动 ============ */
+  window.addEventListener('acc:bloodline', function(e){
+    var d=e.detail||{};
+    var zh = d.spirit
+      ? ('你的血统鉴定已完成——等级 '+d.level+'，言灵'+d.spirit+'觉醒。结果已记入你的学员档案。')
+      : ('你的血统鉴定已完成——等级 '+d.level+'。前往「召唤言灵」唤醒你的力量。');
+    var en = d.spirit
+      ? ('Your bloodline test is complete — level '+d.level+', spirit '+(d.spiritEn||d.spirit)+' awakened. Saved to your cadet file.')
+      : ('Your bloodline test is complete — level '+d.level+'. Summon your spirit to wake your power.');
+    evaSay(zh,en);
+  });
 
   /* ============ 语言切换时重渲染 ============ */
   if(window.onLangChange){ window.onLangChange(function(){ renderTranscript(); }); }

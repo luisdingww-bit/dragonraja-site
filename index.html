@@ -310,6 +310,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="auth.js"></script>
+<script src="account.js"></script>
 <script>
 (function(){
   const boot=document.getElementById('boot');
@@ -335,6 +336,14 @@
   const letterToggle=document.getElementById('letterToggle');
   const letterWrap=document.getElementById('letterWrap');
   let done=false, lastLetterData=null;
+
+  // ===== 账号系统（DR_ACC）接线：导航显示姓名/血统徽章/退出；登录后启用「启程」 =====
+  (function wireAccount(){
+    if(!window.DR_ACC) return;
+    window.DR_ACC.config.openLogin=function(){ if(openModal)openModal(); if(showLoginTab)showLoginTab(); };
+    window.DR_ACC.config.onLogin=function(){ if(typeof enableEnter==='function')enableEnter(); };
+    window.DR_ACC.init();
+  })();
 
   function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}
   function closeBoot(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}
@@ -477,34 +486,9 @@
 
   function enableEnter(){ if(enter){enter.disabled=false;enter.classList.add('ready');} }
 
-  function injectMemberEmail(name,email){
-    try{
-      const KEY='dr-eva';
-      const st=JSON.parse(localStorage.getItem(KEY)||'{}');
-      st.extraEmails=st.extraEmails||[];
-      if(!st.extraEmails.some(function(m){return m.id==='m-member';})){
-        st.extraEmails.push({
-          id:'m-member', from:'卡塞尔学院 · 学院终端', tag:'学员',
-          zh_sub:'欢迎回到卡塞尔学院',
-          zh_body:'亲爱的 '+name+'：欢迎回到卡塞尔学院学员系统。你的学员档案已与录取登记绑定，可随时在「EVA 终端 → 学院邮箱」查收任务与通知，言灵测试进度已为你保留。',
-          en_sub:'Welcome back to Cassell',
-          en_body:'Dear '+name+': welcome back to the Cassell student system. Your profile is linked to your admission. Open EVA Terminal → Academy Inbox for missions and notices; your spirit-test progress is saved.'
-        });
-        localStorage.setItem(KEY,JSON.stringify(st));
-      }
-    }catch(e){}
-  }
-
+  // 账号区渲染统一交给 DR_ACC（显示姓名 + 血统徽章 + 退出 / 登录）
   function updateAccount(user){
-    if(!accountArea)return;
-    if(!user){accountArea.innerHTML='';return;}
-    const name=(user.user_metadata&&user.user_metadata.name)||user.name||'学员';
-    const isEn=window.LANG==='en';
-    accountArea.innerHTML='<span class="acc-name">'+ (isEn?'Welcome, ':'欢迎，') + name + '</span><button class="acc-out" id="accOut" type="button">'+ (isEn?'Log out':'退出') +'</button>';
-    const out=document.getElementById('accOut');
-    if(out)out.addEventListener('click',function(){
-      if(window.DR&&DR.auth)DR.auth.signOut().then(function(){updateAccount(null);if(enter){enter.disabled=true;enter.classList.remove('ready');}});
-    });
+    if(window.DR_ACC)DR_ACC.setUser(user);
   }
 
   if(enrollBtn)enrollBtn.addEventListener('click',function(){openModal();});
@@ -535,7 +519,7 @@
     }
     saveAdmission(name,age,email);
     sendAdmissionEmail(name,age,email);
-    if(user)injectMemberEmail(name,email);
+    if(user&&window.DR_ACC)DR_ACC.setUser(user);
     admLetter.innerHTML=buildLetter(name,age,email);
     enrollView.classList.add('hidden');
     if(admTabs)admTabs.classList.add('hidden');
@@ -565,7 +549,6 @@
       const r=await DR.auth.signIn({email:email,password:pass});
       const user=r&&r.user;
       try{ const meta=(user&&user.user_metadata)||{}; localStorage.setItem('dr_enroll',JSON.stringify({name:meta.name||email,age:meta.age||'',email:email,ts:Date.now()})); }catch(e){}
-      if(user)injectMemberEmail((user.user_metadata&&user.user_metadata.name)||email,email);
       updateAccount(user);
       closeModal();
       enableEnter();
@@ -592,15 +575,9 @@
   // 录取通知可折叠
   if(letterToggle&&letterWrap)letterToggle.addEventListener('click',function(){ const c=letterWrap.classList.toggle('collapsed'); letterToggle.setAttribute('aria-expanded', c?'false':'true'); });
 
-  // 会话恢复：已登录 / 已登记则直接启用启程
+  // 会话恢复：DR_ACC.init() 已恢复账号并（经 onLogin）启用「启程」；这里补处理纯游客登记态
   (function restore(){
-    function finish(){ try{ const saved=JSON.parse(localStorage.getItem('dr_enroll')||'null'); if(saved&&saved.name&&enter)enableEnter(); }catch(e){} }
-    if(window.DR&&DR.auth){
-      DR.auth.getSession().then(function(s){
-        if(s&&s.user){ updateAccount(s.user); enableEnter(); injectMemberEmail((s.user.user_metadata&&s.user.user_metadata.name)||s.user.email,s.user.email); }
-        else { finish(); }
-      }).catch(finish);
-    } else { finish(); }
+    try{ const saved=JSON.parse(localStorage.getItem('dr_enroll')||'null'); if(saved&&saved.name&&enter)enableEnter(); }catch(e){}
   })();
 
   if(window.onLangChange)window.onLangChange(function(){
@@ -608,7 +585,6 @@
     if(lastLetterData&&letterView&&!letterView.classList.contains('hidden')){
       admLetter.innerHTML=buildLetter(lastLetterData.name,lastLetterData.age,lastLetterData.email);
     }
-    if(window.DR&&DR.auth){DR.auth.getSession().then(function(s){ if(s&&s.user)updateAccount(s.user); });}
   });
   syncBM();
 })();
@@ -648,8 +624,34 @@ function weightRandom(list){let t=list.reduce((s,i)=>s+i.weight,0);let r=Math.ra
 function seqLabel(){return window.LANG==='en'?'Seq.':'序列号';}
 function shortName(s){return window.LANG==='en'?s.name_en.replace('Spirit · ',''):s.name.replace('言灵·','');}
 function renderCodexGrid(){const g=document.getElementById('codexGrid');g.innerHTML='';spirits.forEach(s=>{const c=document.createElement('div');c.className='codex-card'+(s.high?' high':'');c.innerHTML=`<div class="seq">${seqLabel()} ${s.seq}</div><h3>${shortName(s)}</h3><p>${tr(s,'desc')}</p>`;if(s.high)c.setAttribute('data-high',t('high_badge'));g.appendChild(c);});}
-bloodBtn.onclick=function(){bloodBtn.disabled=true;resultBox.style.display="none";spiritBtn.disabled=true;spiritText.innerText="";spiritDesc.innerText="";nowSpirit=null;scan.style.display="block";scanBar.style.width="0";scanTip.style.display="block";scanTip.textContent=window.MSG[window.LANG].scanning;let p=0;const tm=setInterval(()=>{p+=Math.random()*16+6;if(p>=100){p=100;clearInterval(tm);scanBar.style.width="100%";setTimeout(()=>{scan.style.display="none";scanTip.style.display="none";const res=weightRandom(bloodData);nowBlood=res.level;bloodText.innerText=tr(res,'level');resultBox.style.display="block";if(nowBlood==="普通人类，无龙血"){spiritBtn.disabled=true;spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;}else{spiritBtn.disabled=false;spiritText.innerText=window.MSG[window.LANG].notYet;spiritDesc.innerText=window.MSG[window.LANG].promptSummon;}bloodBtn.disabled=false;},350);}else{scanBar.style.width=p+"%";}},140);};
-spiritBtn.onclick=function(){const pool=spiritByBlood[nowBlood];if(!pool||!pool.length){spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;return;}const s=pool[Math.floor(Math.random()*pool.length)];nowSpirit=s;spiritText.innerText=tr(s,'name');spiritDesc.innerText=tr(s,'desc');};
+function runBloodTest(){
+  bloodBtn.disabled=true;resultBox.style.display="none";spiritBtn.disabled=true;spiritText.innerText="";spiritDesc.innerText="";nowSpirit=null;scan.style.display="block";scanBar.style.width="0";scanTip.style.display="block";scanTip.textContent=window.MSG[window.LANG].scanning;
+  let p=0;
+  const tm=setInterval(()=>{
+    p+=Math.random()*16+6;
+    if(p>=100){
+      p=100;clearInterval(tm);scanBar.style.width="100%";
+      setTimeout(()=>{
+        scan.style.display="none";scanTip.style.display="none";
+        const res=weightRandom(bloodData);nowBlood=res.level;bloodText.innerText=tr(res,'level');resultBox.style.display="block";
+        if(nowBlood==="普通人类，无龙血"){spiritBtn.disabled=true;spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;}
+        else{spiritBtn.disabled=false;spiritText.innerText=window.MSG[window.LANG].notYet;spiritDesc.innerText=window.MSG[window.LANG].promptSummon;}
+        bloodBtn.disabled=false;
+        // 登录后把血统等级记入账号档案（与 EVA 终端联动）
+        if(window.DR_ACC&&DR_ACC.current()){ DR_ACC.saveBloodlineLevel(nowBlood, window.LANG==='en'?res.level_en:nowBlood); }
+      },350);
+    } else { scanBar.style.width=p+"%"; }
+  },140);
+}
+bloodBtn.onclick=function(){
+  if(!window.DR_ACC||!DR_ACC.current()){
+    DR_ACC.toast(window.LANG==='en'?"Log in as a cadet first — your result will be saved to your file":"请先以学员身份登录，鉴定结果才会记入你的档案");
+    if(window.DR_ACC)DR_ACC.requireLogin(runBloodTest);
+    return;
+  }
+  runBloodTest();
+};
+spiritBtn.onclick=function(){const pool=spiritByBlood[nowBlood];if(!pool||!pool.length){spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;return;}const s=pool[Math.floor(Math.random()*pool.length)];nowSpirit=s;spiritText.innerText=tr(s,'name');spiritDesc.innerText=tr(s,'desc');if(window.DR_ACC&&DR_ACC.current()){DR_ACC.saveBloodlineSpirit(s, window.LANG==='en'?s.name_en:null, s.seq);}};
 if(window.onLangChange)window.onLangChange(function(){renderCodexGrid();if(resultBox.style.display==="block"){const bObj=bloodData.find(b=>b.level===nowBlood);bloodText.innerText=bObj?tr(bObj,'level'):"";if(nowBlood==="普通人类，无龙血"){spiritText.innerText=window.MSG[window.LANG].noSpirit;spiritDesc.innerText=window.MSG[window.LANG].noDragon;}else if(nowSpirit){spiritText.innerText=tr(nowSpirit,'name');spiritDesc.innerText=tr(nowSpirit,'desc');}else{spiritText.innerText=window.MSG[window.LANG].notYet;spiritDesc.innerText=window.MSG[window.LANG].promptSummon;}}});
 renderCodexGrid();
 </script>

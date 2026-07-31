@@ -23,6 +23,7 @@
       <a href="sins.html" data-i18n="nav_sins">七宗罪</a>
       <a href="characters.html" data-i18n="nav_chars">人物</a>
       <a href="index.html#ritual" data-i18n="nav_ritual">血统鉴定</a>
+      <span id="accountArea" class="account-area"></span>
       <button id="langSwitch" class="lang-switch" type="button">EN</button>
     </div>
   </div>
@@ -36,6 +37,8 @@
 
 <section class="container" style="padding-top:24px;">
   <div class="sec-title"><span class="num" data-i18n="eva_kick">人工智能 · 终端意志</span><div class="kick">E V A</div><h2 data-i18n="eva_sub">通 知 · 任 务 · 学 院 邮 箱</h2><div class="sub" data-i18n="eva_hint">我是学院的终端意志，负责传递通知、发放任务、管理学院邮件</div></div>
+
+  <div id="accProfileBox"></div>
 
   <div class="eva-tabs">
     <button class="eva-tab active" data-tab="notice" data-i18n="eva_tab_notice">通知板</button>
@@ -72,6 +75,15 @@
 
 <script src="i18n.js"></script>
 <script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="account.js"></script>
+<script>
+  (function(){
+    if(!window.DR_ACC) return;
+    window.DR_ACC.config.openLogin=function(){ window.DR_ACC.ensureLoginModal(); };
+    window.DR_ACC.init({ injectLoginModal:true });
+  })();
+</script>
 <script src="eva.js"></script>
 <script>
 (function(){

@@ -158,7 +158,42 @@
     }
   };
 
+  /* 账号档案（localStorage，按邮箱索引）
+   * 让「账号 ↔ 血统鉴定 ↔ EVA 终端」形成真实闭环：
+   *  - 注册/登录即建立档案；
+   *  - 完成血统检测后结果写回档案；
+   *  - 任意页面重新登录都能恢复姓名与血统。 */
+  var PROFILE_KEY = "dr-profile";
+  function getProfiles() { try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || "{}"); } catch (e) { return {}; } }
+  function setProfiles(p) { try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (e) {} }
+  var profileApi = {
+    get: function (email) {
+      email = (email || "").trim().toLowerCase();
+      var p = getProfiles();
+      return p[email] || null;
+    },
+    set: function (p) {
+      if (!p || !p.email) return;
+      var e = (p.email || "").trim().toLowerCase();
+      var all = getProfiles();
+      all[e] = Object.assign({}, all[e] || {}, p);
+      setProfiles(all);
+    },
+    saveBloodline: function (email, bl) {
+      if (!email) return;
+      var p = profileApi.get(email) || { email: email };
+      if (bl.bloodLevel !== undefined) p.bloodLevel = bl.bloodLevel;
+      if (bl.bloodLevelEn !== undefined) p.bloodLevelEn = bl.bloodLevelEn;
+      if (bl.spirit !== undefined) p.spirit = bl.spirit;
+      if (bl.spiritEn !== undefined) p.spiritEn = bl.spiritEn;
+      if (bl.spiritSeq !== undefined) p.spiritSeq = bl.spiritSeq;
+      p.testedAt = bl.testedAt || Date.now();
+      profileApi.set(p);
+    }
+  };
+
   window.DR = window.DR || {};
   window.DR.auth = api;
   window.DR.authMode = mode;
+  window.DR.profile = profileApi;
 })();
