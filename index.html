@@ -9,8 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="eva-extra.css">
-<link rel="icon" type="image/png" href="img/cassell-seal.png">
-
 <style>
 /* index 专属：电影感开场 + hero + 世界观 + 卷目预览 */
 #boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
@@ -82,10 +80,8 @@
 .elegy .signoff{margin-top:32px;color:var(--gold-soft);font-family:var(--serif);font-size:13.5px;letter-spacing:.15em;font-style:italic;}
 @media(max-width:600px){.hero h1{letter-spacing:.12em;}.elegy .quote-block{padding:28px 20px;}.elegy .quote-text{font-size:15px;}}
 </style>
+<link rel="icon" type="image/png" href="img/cassell-seal.png">
 </head>
-<div id="preloader" aria-hidden="true"><div class="pl-wrap"><img class="pl-seal" src="img/cassell-seal.png" alt="Cassell College"></div></div>
-<script>(function(){function h(){var p=document.getElementById("preloader");if(p)p.classList.add("hide");}if(document.readyState!=="loading"){h();}else{window.addEventListener("DOMContentLoaded",h);}setTimeout(h,1800);});<\/script>
-
 <body>
 <div id="boot">
   <div class="stage">
@@ -190,8 +186,6 @@
 </section>
 
 <footer>
-<div class="site-seal" aria-hidden="true"><img src="img/cassell-seal.png" alt="Cassell College 印记"><span class="site-seal-txt" data-i18n="seal_txt">卡塞尔学院印记 · CASSELL COLLEGE</span></div>
-
   <p class="disc" data-i18n-html="footer_disc">本页面为《龙族》读者自发制作的<b>非官方同人向个人志</b>，所有世界观、设定、人物与“言灵”名称均版权归属原作者江南及原著出版方，本页无任何商用、二次售卖行为。鉴定结果纯属随机模拟，与现实无关。</p>
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
@@ -200,7 +194,7 @@
 <script src="app.js"></script>
 <script src="eva.js"></script>
 <script>
-(function(){const boot=document.getElementById('boot');const enter=document.getElementById('bootEnter'),bm=document.getElementById('bootMusic');let done=false;function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}function close(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}enter.addEventListener('click',()=>{close();if(window.AP)AP.play();syncBM();});if(bm)bm.addEventListener('click',()=>{if(!window.AP)return;if(window.AP.isPlaying())window.AP.pause();else window.AP.play();syncBM();});if(window.onLangChange)window.onLangChange(syncBM);syncBM();setTimeout(close,20000);})();
+(function(){const boot=document.getElementById('boot');const enter=document.getElementById('bootEnter'),bm=document.getElementById('bootMusic');let done=false;function syncBM(){if(!bm||!window.AP)return;const on=window.AP.isPlaying();bm.textContent=on?'❚❚':'♪';bm.classList.toggle('on',!!on);}function close(){if(done)return;done=true;boot.classList.add('hide');setTimeout(()=>boot.style.display='none',1050);}enter.addEventListener('click',()=>{close();if(window.AP)AP.play();syncBM();});if(bm)bm.addEventListener('click',()=>{if(!window.AP)return;if(window.AP.isPlaying())window.AP.pause();else window.AP.play();syncBM();});if(window.onLangChange)window.onLangChange(syncBM);syncBM();})();
 
 const bloodData=[
   {id:"S",level:"S级混血种",level_en:"S-Class Hybrid",weight:6},
