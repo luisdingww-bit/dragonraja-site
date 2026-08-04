@@ -214,7 +214,7 @@
 
 /* ===== 章节混剪视频（index 开场 / story 卷首） ===== */
 /* 首页 Hero：风暴龙图为底（无视频，回到原画面） */
-.hero{position:relative;overflow:hidden;background:#04070e url(img/opening.jpg?v=20260804-1541) center/cover no-repeat;}
+.hero{position:relative;overflow:hidden;background:#04070e url(img/opening.jpg?v=20260804-1553) center/cover no-repeat;}
 
 /* 情节页卷首：框内正式引子视频（暗角 + 缓慢推镜 + 精致标题条） */
 .story-video-wrap{position:relative;max-width:860px;margin:10px auto 4px;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line-strong);box-shadow:0 24px 70px rgba(0,0,0,.6);background:#05070d;}

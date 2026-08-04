@@ -124,6 +124,9 @@ button.act:disabled{opacity:.35;cursor:not-allowed;box-shadow:none;}
 #ap:not(.playing) .ap-eq i{opacity:.35;}
 #ap .ap-name{color:var(--ink);font:600 11px/1 var(--serif);letter-spacing:.1em;max-width:96px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
 #ap.buffering .ap-name{color:var(--gold-soft);}
+#ap .ap-vol-range{width:64px;height:3px;-webkit-appearance:none;appearance:none;background:rgba(216,181,117,.28);border-radius:999px;outline:none;cursor:pointer;}
+#ap .ap-vol-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:11px;height:11px;border-radius:50%;background:var(--gold-bright);border:1px solid rgba(5,12,24,.8);cursor:pointer;}
+#ap .ap-vol-range::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:var(--gold-bright);border:1px solid rgba(5,12,24,.8);cursor:pointer;}
 @keyframes eq{0%,100%{height:4px;}50%{height:12px;}}
 
 /* 音量指示器（音量键控制） */
@@ -138,4 +141,5 @@ footer .copy{margin-top:20px;color:#3c4654;font-size:11px;letter-spacing:.12em;f
   .nav-links{gap:11px;}.nav-links a{font-size:11px;}
   .container{padding:64px 18px;}.sec-title h2{font-size:24px;}
   #ap .ap-name{display:none;}
+  #ap .ap-vol-range{width:44px;}
 }

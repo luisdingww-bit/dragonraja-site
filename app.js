@@ -45,6 +45,13 @@
   const VOLKEY='dr_player_vol';
   let curVol=0.8;
   try{ const _v=parseFloat(localStorage.getItem(VOLKEY)); if(isFinite(_v)&&_v>=0&&_v<=1) curVol=_v; }catch(e){}
+  const apVolRange=document.createElement('input');
+  apVolRange.type='range';apVolRange.min='0';apVolRange.max='100';apVolRange.value=String(Math.round(curVol*100));
+  apVolRange.id='apVolRange';apVolRange.className='ap-vol-range';
+  apVolRange.setAttribute('aria-label','volume');
+  const apInfo=host.querySelector('.ap-info');
+  if(apInfo) host.insertBefore(apVolRange, apInfo);
+  apVolRange.addEventListener('input',function(){ setVol(parseInt(this.value,10)/100); });
   const volBox=document.createElement('div');
   volBox.id='apVol';volBox.className='ap-vol';
   document.body.appendChild(volBox);
@@ -57,6 +64,7 @@
   }
   function setVol(v){
     curVol=Math.max(0,Math.min(1,Math.round(v*10)/10));
+    if(apVolRange) apVolRange.value=String(Math.round(curVol*100));
     fades.forEach(function(iv){ clearInterval(iv); }); fades.length=0;
     try{ localStorage.setItem(VOLKEY,String(curVol)); }catch(e){}
     [a1,a2].forEach(function(el){ try{ el.volume=curVol; }catch(e){} });
