@@ -384,8 +384,8 @@
       page:{ href:'orgs.html', zh:'学院机构簿', en:'Institutions' } },
 
     { id:'achievements', kw:['成就','徽章','档案完成度','achievement','badge'], aliases:['收藏','勋章'],
-      zh:"混血种档案成就系统——完成血统鉴定、召唤言灵、通关全部 EVA 任务、读完 36 言灵、翻完五卷、追问 EVA、收藏语录，都能点亮对应徽章。",
-      en:"The achievement system — complete the bloodline test, summon a spirit, finish all EVA missions, read the codex, flip through all volumes, quiz EVA, and collect quotes to light up badges.",
+      zh:"混血种档案成就系统——完成血统鉴定、召唤言灵、读完 36 言灵、翻完五卷，即可点亮对应徽章。",
+      en:"The achievement system — complete the bloodline test, summon a spirit, read the codex, and flip through all volumes to light up badges.",
       page:{ href:'index.html#ritual', zh:'首页 · 档案完成度', en:'Home · File Progress' } },
 
     { id:'quiz', kw:['测试','测验','quiz','test','你是龙族中的谁','快问快答'], aliases:['人格测试','答题'],

@@ -41,6 +41,34 @@
   a1.volume=0;a2.volume=0;
   let active=a1,idx=0,started=false,playing=false;
 
+  /* ---- volume keys: AudioVolumeUp / Down / Mute, persisted ---- */
+  const VOLKEY='dr_player_vol';
+  let curVol=0.8;
+  try{ const _v=parseFloat(localStorage.getItem(VOLKEY)); if(isFinite(_v)&&_v>=0&&_v<=1) curVol=_v; }catch(e){}
+  const volBox=document.createElement('div');
+  volBox.id='apVol';volBox.className='ap-vol';
+  document.body.appendChild(volBox);
+  let volTimer=null;
+  function showVol(){
+    volBox.textContent='\u266A '+Math.round(curVol*100)+'%';
+    volBox.classList.add('show');
+    clearTimeout(volTimer);
+    volTimer=setTimeout(function(){ volBox.classList.remove('show'); },900);
+  }
+  function setVol(v){
+    curVol=Math.max(0,Math.min(1,Math.round(v*10)/10));
+    fades.forEach(function(iv){ clearInterval(iv); }); fades.length=0;
+    try{ localStorage.setItem(VOLKEY,String(curVol)); }catch(e){}
+    [a1,a2].forEach(function(el){ try{ el.volume=curVol; }catch(e){} });
+    showVol();
+  }
+  document.addEventListener('keydown',function(e){
+    const k=e.key||e.code||'';
+    if(k==='AudioVolumeUp'){ e.preventDefault(); setVol(curVol+0.1); }
+    else if(k==='AudioVolumeDown'){ e.preventDefault(); setVol(curVol-0.1); }
+    else if(k==='AudioVolumeMute'){ e.preventDefault(); setVol(curVol>0?0:0.8); }
+  });
+
   /* 跨页面持久化：记住曲目 / 播放位置 / 是否播放中，整页跳转后自动续播 */
   const STKEY='dr_player_v1';
   let _pendingSeek=null,_lastSave=0;
@@ -63,6 +91,7 @@
     if(bm){bm.classList.toggle('on',on);bm.title=on?'暂停音乐':'播放音乐';}
   }
   function elFor(i){return i===0?a1:a2;}
+  const fades=[];
   function fade(el,from,to,ms,cb){
     const steps=30,st=ms/steps;let v=from;
     const iv=setInterval(()=>{
@@ -70,6 +99,7 @@
       if((to-from>0&&v>=to)||(to-from<0&&v<=to)){v=to;clearInterval(iv);el.volume=to;cb&&cb();}
       else el.volume=v;
     },st);
+    fades.push(iv);
   }
   function startPlayback(el,fromTime){
     idx=(el===a1)?0:1;setName();
@@ -81,7 +111,7 @@
       document.addEventListener('keydown',g,{once:true});
     });
     active=el;playing=true;started=true;setPlayingUI(true);
-    fade(el,0,1,900);saveState();
+    fade(el,0,curVol,900);saveState();
   }
   function playTrack(i){
     idx=((i%TRACKS.length)+TRACKS.length)%TRACKS.length;
@@ -89,8 +119,8 @@
     const next=elFor(idx),prev=active;
     next.currentTime=0;
     const p=next.play();if(p&&p.catch)p.catch(()=>{});
-    if(next===prev){fade(next,next.volume,1,1400);}
-    else{fade(next,0,1,1400);if(prev)fade(prev,prev.volume,0,1400,()=>{try{prev.pause();}catch(e){}});}
+    if(next===prev){fade(next,next.volume,curVol,1400);}
+    else{fade(next,0,curVol,1400);if(prev)fade(prev,prev.volume,0,1400,()=>{try{prev.pause();}catch(e){}});}
     active=next;playing=true;started=true;setPlayingUI(true);saveState();
   }
   [a1,a2].forEach(el=>{
@@ -103,7 +133,7 @@
     el.addEventListener('canplay',()=>host.classList.remove('buffering'));
   });
   function pause(){try{active.pause();}catch(e){}playing=false;setPlayingUI(false);saveState();}
-  function resume(){active.volume=1;const p=active.play();if(p&&p.catch)p.catch(()=>{});playing=true;setPlayingUI(true);saveState();}
+  function resume(){active.volume=curVol;const p=active.play();if(p&&p.catch)p.catch(()=>{});playing=true;setPlayingUI(true);saveState();}
 
   apPlay.addEventListener('click',()=>{if(!started){playTrack(0);return;}playing?pause():resume();});
   host.querySelector('#apNext').addEventListener('click',()=>{if(!started){playTrack(1);return;}playTrack((idx+1)%TRACKS.length);});

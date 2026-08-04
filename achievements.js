@@ -1,5 +1,5 @@
 /* 混血种档案 · 收藏与成就系统（纯 localStorage）
- * 徽章：血统鉴定 / 言灵觉醒 / 屠龙者试炼 / 三十六言灵 / 五卷编年 / EVA 之友 / 语录收藏家
+ * 徽章：血统鉴定 / 言灵觉醒 / 三十六言灵 / 五卷编年（已精简）
  * 页面通过 data-ach-list / data-ach-bar / data-ach-pct 自动渲染。
  */
 (function(){
@@ -10,16 +10,10 @@
       zh_d:'完成一次血统鉴定仪式', en_d:'Complete the bloodline test ritual' },
     { id:'spirit',  icon:'🌊', zh:'言灵觉醒', en:'Spirit Awakened',
       zh_d:'召唤出属于你的言灵', en_d:'Summon your own spirit' },
-    { id:'tasks',   icon:'⚔️', zh:'屠龙者试炼', en:'Dragon-Slayer Trial',
-      zh_d:'通关全部 7 个 EVA 任务', en_d:'Complete all 7 EVA missions' },
     { id:'codex',   icon:'📜', zh:'三十六言灵', en:'Codex Read',
       zh_d:'读完言灵图鉴全部 36 条', en_d:'Read all 36 spirit entries' },
     { id:'volumes', icon:'📖', zh:'五卷编年', en:'All Five Volumes',
       zh_d:'翻完情节长卷全部五卷', en_d:'Flip through all five volumes' },
-    { id:'eva',     icon:'🤖', zh:'EVA 之友', en:"EVA's Friend",
-      zh_d:'向 EVA 追问过 8 个不同话题', en_d:'Ask EVA about 8 different topics' },
-    { id:'quotes',  icon:'💬', zh:'语录收藏家', en:'Quote Collector',
-      zh_d:'在语录图书馆收藏 5 条语录', en_d:'Favorite 5 quotes in the library' }
   ];
 
   function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
