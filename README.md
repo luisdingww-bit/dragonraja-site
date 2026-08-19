@@ -1,4 +1,39 @@
-# 龙族 · 混血种档案 ｜ Dragon Raja Fan Site
+<p align="center">
+  <a href="https://dragonraja-ding-ldcrew.surge.sh"><img alt="Live Demo" src="https://img.shields.io/badge/%E2%96%B6_Live_Demo-ff4757?style=for-the-badge"></a>
+  <img alt="Stars" src="https://img.shields.io/github/stars/luisdingww-bit/dragonraja-site?style=for-the-badge&color=ffd32a">
+  <img alt="Last Commit" src="https://img.shields.io/github/last-commit/luisdingww-bit/dragonraja-site?style=for-the-badge">
+</p>
+
+<h1 align="center">龙族同人个人站 · Dragon Raja</h1>
+
+<p align="center">中英双语龙族粉丝站</p>
+
+> [!NOTE]
+> 录取通知开场动画 + 36 图腾 codex + 四大天王图鉴，非商用同人致敬作品。
+
+## ✨ 亮点 / Features
+- 中英双语、录取通知沉浸式开场
+- 36 精神图腾图鉴（spirit codex）
+- 卷目 / 四大天王等资料模块
+- 静态站，零后端、秒加载
+
+## 🚀 在线体验 / Live Demo
+打开 **[Live Demo](https://dragonraja-ding-ldcrew.surge.sh)** 即可免安装、纯浏览器体验。
+
+## 🛠 技术栈 / Tech Stack
+`HTML` `CSS` `JavaScript` `Static Site`
+
+## 🔗 相关项目 / More by Louis Ding
+- [实时热搜抽卡小游戏](https://luisdingww-bit.github.io/hot-pull/) — 实时热搜抽卡小游戏
+- [像素拼豆 × 乐高 × 3D 打印](https://pixelbead.surge.sh) — 像素拼豆 × 乐高 × 3D 打印
+- [摄像头蜘蛛侠面具](https://luisdingww-bit.github.io/spider-verse-nebula/) — 摄像头蜘蛛侠面具
+- [个人作品集](https://louis-ding.surge.sh) — 个人作品集
+- [图生 3D 打印工坊](https://snapprint.surge.sh/) — 图生 3D 打印工坊
+
+## 📄 License
+以仓库内 `LICENSE` 文件为准（同人作品标注 CC BY-NC 4.0 者仅限非商用）。
+
+---
 
 > 每个人心里都有一条龙。 — A dragon sleeps within every heart.
 
