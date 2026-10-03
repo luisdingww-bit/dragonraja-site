@@ -21,7 +21,7 @@ window.TIMELINE_DATA = [
     title:"昂热与秘党", title_en:"Angers & the Secret Party",
     desc:"昂热——初代屠龙者中最后的幸存者，创立狮心会，与秘党一同在芝加哥山区建立卡塞尔学院。钟声自此为混血种而鸣。",
     desc_en:"Angers — last survivor of the first generation of dragon-slayers — founded the Lionheart Society and, with the Secret Party, built Cassell College in the mountains of Chicago. From then on, the bells tolled for hybrids.",
-    img:"img/cassell-seal-round.png", tags:["秘党","昂热","卡塞尔学院","狮心会"] },
+    img:"img/seal-round-320.webp", tags:["秘党","昂热","卡塞尔学院","狮心会"] },
   { id:'t04', era:'龙族Ⅰ', era_en:'Vol.1', year:'火之晨曦', year_en:'Dawn of Fire',
     title:"青铜城 · 第一次屠龙", title_en:"Bronze City · First Dragon",
     desc:"路明非收到录取通知书，进入卡塞尔。芝加哥的红发女孩、言灵·镰鼬的觉醒、青铜城深处的康斯坦丁——屠龙，是要还命的。",

@@ -90,7 +90,7 @@
     box.innerHTML =
       '<div class="apb-card">' +
         '<div class="apb-head">' +
-          '<span class="apb-crest"><img src="img/cassell-seal-round.png" alt="Cassell"></span>' +
+          '<span class="apb-crest"><img src="img/seal-round-320.webp" alt="Cassell"></span>' +
           '<div class="apb-id"><div class="apb-title">' + esc(t("eva_profile_title")) + "</div>" +
           '<div class="apb-name">' + esc(CURRENT.name) + "</div></div>" +
           '<button class="acc-out" type="button">' + esc(t("acc_logout")) + "</button>" +
@@ -237,7 +237,7 @@
     modal.innerHTML =
       '<div class="acc-sheet">' +
         '<button class="acc-close" type="button" aria-label="close">×</button>' +
-        '<div class="acc-crest"><img src="img/cassell-seal-round.png" alt="Cassell College"></div>' +
+        '<div class="acc-crest"><img src="img/seal-round-320.webp" alt="Cassell College"></div>' +
         '<div class="acc-title">' + esc(t("login_title")) + "</div>" +
         '<form class="acc-form" id="accLoginForm" autocomplete="off" novalidate>' +
           '<input id="accLgEmail" type="email" placeholder="' + esc(t("ph_email")) + '" maxlength="80">' +

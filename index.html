@@ -6,9 +6,13 @@
 <title>龙族 · 混血种档案 ｜ DRAGON RAJA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- 首屏关键资源：提前取，避免开屏闪烁 -->
+<link rel="preload" as="image" href="img/kv-banner.webp" fetchpriority="high">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/notoserifsc/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mK4Q.woff2">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261003-1930">
-<link rel="stylesheet" href="eva-extra.css?v=20261003-1930">
+<link rel="stylesheet" href="style.css?v=20261003-2000">
+<link rel="stylesheet" href="eva-extra.css?v=20261003-2000">
 <style>
 /* index 专属：电影感开场 + hero + 世界观 + 卷目预览 */
 #boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
@@ -69,7 +73,12 @@
 .boot-letter-toggle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:none;border:none;cursor:pointer;color:var(--gold);font-family:var(--serif);font-size:12px;letter-spacing:.3em;padding:0 0 10px;text-shadow:0 0 8px rgba(0,0,0,.7);transition:.3s;}
 .boot-letter-toggle:hover{color:var(--gold-bright);}
 .boot-letter-toggle .lt-arrow{display:inline-block;transition:transform .3s ease;font-size:11px;}
+/* 折叠：包一层 .boot-letter-body 用 grid-rows 0fr→1fr 做无跳动的高度动画 */
+.boot-letter-body{display:grid;grid-template-rows:1fr;transition:grid-template-rows .45s cubic-bezier(.4,0,.2,1),opacity .35s ease;}
+.boot-letter-body>.boot-letter{overflow:hidden;min-height:0;}
+.boot-letter-wrap.collapsed .boot-letter-body{grid-template-rows:0fr;opacity:0;}
 .boot-letter-wrap.collapsed .boot-letter-toggle .lt-arrow{transform:rotate(-90deg);}
+.boot-letter-wrap.collapsed .boot-letter-toggle .lt-label::after{content:"（展开）";opacity:.5;font-size:10px;}
 
 .login-foot{margin-top:14px;font-family:var(--serif);font-size:12px;letter-spacing:.1em;}
 .login-foot a{color:var(--gold-soft);text-decoration:none;border-bottom:1px dashed rgba(216,181,117,.4);}
@@ -144,7 +153,7 @@
 .elegy .signoff{margin-top:32px;color:var(--gold-soft);font-family:var(--serif);font-size:13.5px;letter-spacing:.15em;font-style:italic;}
 @media(max-width:600px){.hero h1{letter-spacing:.12em;}.elegy .quote-block{padding:28px 20px;}.elegy .quote-text{font-size:15px;}}
 </style>
-<link rel="icon" type="image/png" href="img/cassell-seal-round.png">
+<link rel="icon" type="image/png" href="img/seal-round-320.webp">
 </head>
 <body>
 <div id="boot">
@@ -165,7 +174,9 @@
         <span class="lt-label" data-i18n="boot_letter_toggle">录取通知书</span>
         <span class="lt-arrow">▾</span>
       </button>
-      <div class="boot-letter" data-i18n-html="boot_letter"><span class="bl-salut">致 未来的屠龙者：</span><br>经卡塞尔学院血统鉴定委员会裁定，你体内流淌着古老的龙血。现正式通知——<br><span class="bl-emph">你已被录取为本届混血种学员。</span><br>钟声即将为你敲响。踏入此门，便再无回头。</div>
+      <div class="boot-letter-body">
+        <div class="boot-letter" data-i18n-html="boot_letter"><span class="bl-salut">致 未来的屠龙者：</span><br>经卡塞尔学院血统鉴定委员会裁定，你体内流淌着古老的龙血。现正式通知——<br><span class="bl-emph">你已被录取为本届混血种学员。</span><br>钟声即将为你敲响。踏入此门，便再无回头。</div>
+      </div>
     </div>
     <div class="boot-rule" data-i18n="boot_rule">每个人心里都有一条龙</div>
     <div class="boot-sub">DRAGON RAJA</div>
@@ -182,7 +193,7 @@
 <div id="admissionModal" class="adm-modal" aria-hidden="true">
   <div class="adm-sheet">
     <button class="adm-close" id="admClose" type="button" aria-label="close">×</button>
-    <div class="adm-crest"><img src="img/cassell-seal-round.png" alt="Cassell College"></div>
+    <div class="adm-crest"><img src="img/seal-round-320.webp" alt="Cassell College"></div>
     <div class="adm-college">CASSELL COLLEGE</div>
     <div class="adm-title" data-i18n="boot_notice_title">录 取 通 知</div>
     <div class="adm-tabs" id="admTabs">
@@ -236,6 +247,192 @@
   </div>
 </div>
 
+<style id="artdir-polish">
+/* ============================================================
+   美术/排版增强层 —— 纯 CSS，零 JS 依赖，不阻塞渲染
+   ============================================================ */
+
+/* --- 1. 排版基线：全站流体字号 + 更好的中文断行 --- */
+:root{
+  --fs-hero:clamp(38px,9vw,86px);
+  --fs-h2:clamp(26px,4.2vw,40px);
+  --fs-sec-num:clamp(11px,1.1vw,13px);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --gold-glow:0 0 24px rgba(216,181,117,.28);
+  --shadow-deep:0 24px 60px rgba(0,0,0,.55);
+  --line-soft:rgba(150,180,220,.13);
+}
+.sec-title h2{font-size:var(--fs-h2);line-height:1.24;letter-spacing:.18em;margin-top:10px;}
+.sec-title .num{font-size:var(--fs-sec-num);}
+.sec-title .kick{font-size:clamp(10px,1vw,12px);}
+
+/* --- 2. 首屏：巨型排版 + 呼吸光晕（纯 transform，不触发 layout） --- */
+.hero{position:relative;isolation:isolate;}
+/* 官方 KV 横幅作背景层：opacity 低 + 渐隐遮罩，保证前景文字对比度达标 */
+.hero-bg{
+  position:absolute;inset:0;z-index:-2;
+  background:url(img/kv-banner.webp) center/cover no-repeat;
+  opacity:.3;filter:saturate(.85) contrast(1.02);
+  transform:scale(1.04);
+  animation:heroDrift 26s ease-in-out infinite alternate;
+}
+@keyframes heroDrift{from{transform:scale(1.04) translate3d(0,0,0);}to{transform:scale(1.1) translate3d(0,-1.6%,0);}}
+/* 底部与四周渐隐，让图片融进底色 */
+.hero-bg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(120% 80% at 50% 42%,transparent 30%,rgba(3,10,20,.72) 78%,var(--bg) 100%),
+    linear-gradient(180deg,rgba(3,10,20,.86) 0%,transparent 26%,transparent 62%,var(--bg) 100%);
+}
+/* 图片未加载时的兜底渐变，保证首屏永远不是纯黑 */
+.hero{background:radial-gradient(circle at 50% 30%,#13233c 0%,#0a1524 45%,var(--bg) 100%);}
+.hero h1{
+  font-size:var(--fs-hero);line-height:.98;letter-spacing:.16em;padding-left:.16em;
+  background:linear-gradient(180deg,#fff8e8 0%,#f4cf68 42%,#a97c33 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  text-shadow:0 0 60px rgba(216,181,117,.22);
+  animation:heroRise 1.1s var(--ease) both;
+}
+@keyframes heroRise{from{opacity:0;transform:translateY(26px) scale(.985);filter:blur(6px);}to{opacity:1;transform:none;filter:none;}}
+.hero .sub,.hero .tag,.hero .cta{animation:heroRise 1.1s var(--ease) both;}
+.hero .sub{animation-delay:.1s;}
+.hero .tag{animation-delay:.18s;}
+.hero .cta{animation-delay:.26s;}
+
+/* 首屏底部渐隐，和下一屏无缝衔接 */
+.hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:26vh;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(3,10,20,.72) 62%,var(--bg));
+}
+
+/* --- 3. 滚动进场（IntersectionObserver 加 .in，纯 CSS 过渡） --- */
+.rise{opacity:0;transform:translateY(30px);transition:opacity .85s var(--ease),transform .85s var(--ease);}
+.rise.in{opacity:1;transform:none;}
+.rise.d1{transition-delay:.08s}.rise.d2{transition-delay:.16s}.rise.d3{transition-delay:.24s}
+.rise.d4{transition-delay:.32s}.rise.d5{transition-delay:.4s}.rise.d6{transition-delay:.48s}
+
+/* --- 4. 卡片：层次 + 悬浮光泽 + 描边渐变 --- */
+.preview-card,.king-card,.codex-card{
+  position:relative;isolation:isolate;
+  background:linear-gradient(168deg,rgba(14,26,44,.82),rgba(7,15,27,.9));
+  border:1px solid var(--line-soft);
+  border-radius:4px;
+  box-shadow:0 10px 30px rgba(0,0,0,.34);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .5s var(--ease);
+  overflow:hidden;
+}
+.preview-card::after,.king-card::after,.codex-card::after{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(420px 220px at var(--mx,50%) var(--my,0%),rgba(216,181,117,.16),transparent 72%);
+  opacity:0;transition:opacity .45s ease;
+}
+.preview-card:hover,.king-card:hover,.codex-card:hover{
+  transform:translateY(-7px);border-color:rgba(216,181,117,.42);
+  box-shadow:0 22px 48px rgba(0,0,0,.5),0 0 0 1px rgba(216,181,117,.1) inset;
+}
+.preview-card:hover::after,.king-card:hover::after,.codex-card:hover::after{opacity:1;}
+/* 顶部金线：静态 transform，无重排 */
+.preview-card::before,.king-card::before{
+  content:"";position:absolute;top:0;left:14%;right:14%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(244,207,104,.85),transparent);
+  transform:scaleX(0);transform-origin:50% 50%;
+  transition:transform .55s var(--ease);
+}
+.preview-card:hover::before,.king-card:hover::before{transform:scaleX(1);}
+
+/* --- 5. preview 卡：编号徽标化 --- */
+.preview-card .pc-no{
+  display:inline-block;font-size:10.5px;letter-spacing:.22em;color:var(--gold-soft);
+  border:1px solid rgba(216,181,117,.24);border-radius:999px;padding:2px 10px;margin-bottom:12px;
+}
+.preview-card h3{font-size:clamp(16px,1.6vw,20px);line-height:1.4;}
+.preview-card .go{display:inline-flex;align-items:center;gap:6px;transition:gap .35s var(--ease),color .35s ease;}
+.preview-card:hover .go{gap:11px;}
+
+/* --- 6. 区块标题：加细分隔与呼吸点 --- */
+.sec-title{position:relative;margin-bottom:clamp(30px,4.4vw,54px);}
+.sec-title h2::after{
+  content:"";display:block;width:64px;height:2px;margin:20px auto 0;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.sec-title .sub{max-width:60ch;margin-inline:auto;}
+
+/* --- 7. 导航：更精炼的胶囊 + 滚动后收紧 --- */
+.nav-inner{transition:padding .4s var(--ease),gap .4s var(--ease);}
+.nav-links a{position:relative;padding:5px 2px;}
+.nav-links a::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform:scaleX(0);transform-origin:50% 50%;transition:transform .4s var(--ease);
+}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
+.nav-links a.active{color:var(--gold-bright);text-shadow:var(--gold-glow);}
+
+/* --- 8. boot 首屏：通知书纸张质感 + 蜡封 --- */
+.boot-letter{
+  border-radius:2px;
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.014) 0 2px,transparent 2px 4px),
+    linear-gradient(168deg,rgba(12,22,38,.9),rgba(5,11,21,.95));
+  box-shadow:0 0 0 1px rgba(216,181,117,.09),0 18px 44px rgba(0,0,0,.5);
+  backdrop-filter:blur(3px);
+}
+.boot-crest img{
+  filter:drop-shadow(0 0 22px rgba(216,181,117,.42));
+  animation:crestFloat 5.5s ease-in-out infinite;
+}
+@keyframes crestFloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-9px) rotate(-1.2deg);}}
+.boot-notice-title{animation:titleGlow 4.5s ease-in-out infinite;}
+@keyframes titleGlow{
+  0%,100%{text-shadow:0 0 22px rgba(216,181,117,.28),0 0 8px rgba(0,0,0,.98);}
+  50%{text-shadow:0 0 40px rgba(216,181,117,.55),0 0 10px rgba(0,0,0,.98);}
+}
+.boot-enroll-btn:hover{box-shadow:0 0 26px rgba(216,181,117,.28);transform:translateY(-2px);}
+.boot-enter:not(:disabled):hover{box-shadow:0 0 26px rgba(216,181,117,.3);transform:translateY(-2px);}
+.boot-enter,.boot-enroll-btn,.boot-music{transition:transform .35s var(--ease),box-shadow .35s ease,border-color .35s ease,color .35s ease;}
+
+/* --- 9. 世界观双图：错落 + 图片底部渐隐，与文字融为整体 --- */
+.world{position:relative;}
+.art-frame{position:relative;border-radius:3px;overflow:hidden;}
+/* 图片底部压暗，caption 文字才读得清 */
+.art-frame::after{
+  content:"";position:absolute;inset:auto 0 0 0;height:52%;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(3,10,20,.86));
+}
+.art-frame img{width:100%;height:auto;display:block;transition:transform 1.1s var(--ease);}
+.art-frame:hover img{transform:scale(1.035);}
+.art-frame .cap{position:relative;z-index:1;}
+/* 第二张图轻微错位，制造杂志感 */
+@media(min-width:860px){
+  .art-frame--wide{margin:26px 0 0 clamp(28px,7vw,90px);}
+  .art-frame--wide img{border-radius:3px;box-shadow:0 18px 46px rgba(0,0,0,.5);}
+}
+
+/* --- 10. 焦点可见性（无障碍） --- */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--gold);outline-offset:3px;border-radius:2px;
+}
+
+/* --- 10. 滚动条 --- */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#050d18}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#3d4a5c,#1d2733);border-radius:99px;border:2px solid #050d18}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#6b5a3a,#2a3644)}
+
+/* --- 11. 响应式收敛 --- */
+@media(max-width:640px){
+  .sec-title h2{letter-spacing:.1em;}
+  .boot-letter{padding:18px 16px;font-size:13px;}
+  .hero h1{letter-spacing:.1em;}
+}
+/* --- 12. 降低动效偏好 --- */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}
+  .rise{opacity:1!important;transform:none!important;}
+}
+</style>
+
 <nav>
   <div class="nav-inner">
     <a class="brand" href="index.html"><img src="img/crest.webp" alt="crest"><div><span class="zh">龙族</span><span class="en">DRAGON RAJA</span></div><span class="tag" data-i18n="nav_tag">混血种档案</span></a>
@@ -259,6 +456,7 @@
 </nav>
 
 <header class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
   <div class="kicker" data-i18n="hero_kicker">卡塞尔学院 · 混血种档案</div>
   <h1>龙族</h1>
   <div class="en">D R A G O N &nbsp; R A J A</div>
@@ -271,7 +469,8 @@
   <div class="sec-title"><span class="num">N ° 01</span><div class="kick">W O R L D V I E W</div><h2 data-i18n="s01_h2">世 界 观</h2><div class="sub" data-i18n="s01_sub">当龙血逆着时光流淌</div></div>
   <div class="diamond-row"><span class="ln"></span><span class="diamond"></span><span class="ln r"></span></div>
   <div class="world">
-    <div class="art-frame"><img src="img/dragon-01.webp" alt="龙族史浮雕"><div class="cap">⟪ 龙族史浮雕 · 巨龙凌于残城之上 ⟫</div></div>
+    <div class="art-frame"><img src="img/dragon-01.webp" alt="龙族史浮雕" loading="lazy" decoding="async"><div class="cap">⟪ 龙族史浮雕 · 巨龙凌于残城之上 ⟫</div></div>
+    <div class="art-frame art-frame--wide"><img src="img/kv-city.webp" alt="路明非与城市夜景" loading="lazy" decoding="async"><div class="cap">⟪ 有人在灯红酒绿里，等一句回不来 ⟫</div></div>
     <p data-i18n="world_p1">《龙族》是作家江南创作的奇幻小说系列。故事里，一群被称为“混血种”的少年在卡塞尔学院（Cassell College）的庇护下，与沉眠于世界各处的龙族后裔战斗。他们既背负人类的身份，又流淌着龙的血——是异类，也是屠龙者中最后的希望。</p>
     <p class="quote" data-i18n="world_quote">“每个人心里都有一条龙，有的人终其一生都在驯服它，而有的人，成了它的奴隶。”</p>
     <p data-i18n="world_p3">在这个世界里，“言灵”是混血种觉醒后能够释放的先天能力，每种言灵都有专属序列号：从最普通的“蛇”（序列号22），到灭世级的“烛龙”（序列号114）。而你，究竟是第几代混血种，又能否听见血脉深处的那一句言灵？</p>
@@ -347,14 +546,122 @@
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
 
-<script src="i18n.js?v=20261003-1930"></script>
-<script src="app.js?v=20261003-1930"></script>
-<script src="eva.js?v=20261003-1930"></script>
+<script src="i18n.js?v=20261003-2000"></script>
+<script src="app.js?v=20261003-2000"></script>
+<script src="eva.js?v=20261003-2000"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="auth.js?v=20261003-1930"></script>
-<script src="account.js?v=20261003-1930"></script>
-<script src="achievements.js?v=20261003-1930"></script>
+<script>
+/* ============================================================
+   美术/交互增强 —— IntersectionObserver + CSS 变量，无依赖
+   ============================================================ */
+(function(){
+  'use strict';
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- A. 滚动进场：只给首屏之下元素加 .rise，避免开屏闪烁 ---- */
+  function initReveal(){
+    if(reduce || !('IntersectionObserver' in window)){
+      document.querySelectorAll('.rise').forEach(function(el){el.classList.add('in');});
+      return;
+    }
+    var targets = document.querySelectorAll(
+      '.sec-title, .preview-card, .king-card, .codex-card, .more-link, .result-card, .ritual-panel'
+    );
+    if(!targets.length) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          io.unobserve(e.target);           /* 一次性，不重复观察，省资源 */
+        }
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+    targets.forEach(function(el,i){
+      el.classList.add('rise');
+      /* 同排卡片错峰：按在父级中的序号加 d1..d6 */
+      el.classList.add('d' + ((i % 6) + 1));
+      io.observe(el);
+    });
+  }
+
+  /* ---- B. 卡片光泽跟随指针（写 CSS 变量，不触发布局重排） ---- */
+  function initSpotlight(){
+    if(reduce || !window.matchMedia || !window.matchMedia('(hover:hover)').matches) return;
+    var sel = '.preview-card, .king-card, .codex-card';
+    var cards = document.querySelectorAll(sel);
+    if(!cards.length) return;
+    var pending = false, lastX = 0, lastY = 0, lastEl = null;
+    function apply(){
+      if(lastEl){
+        lastEl.style.setProperty('--mx', lastX + '%');
+        lastEl.style.setProperty('--my', lastY + '%');
+      }
+      pending = false;
+    }
+    document.addEventListener('pointermove', function(ev){
+      var el = ev.target.closest ? ev.target.closest(sel) : null;
+      if(!el) return;
+      var r = el.getBoundingClientRect();
+      lastX = ((ev.clientX - r.left) / r.width) * 100;
+      lastY = ((ev.clientY - r.top) / r.height) * 100;
+      lastEl = el;
+      if(!pending){ pending = true; requestAnimationFrame(apply); }
+    },{passive:true});
+  }
+
+  /* ---- C. 导航滚动收紧 + 阴影 ---- */
+  function initNav(){
+    var nav = document.querySelector('nav');
+    if(!nav) return;
+    var inner = nav.querySelector('.nav-inner');
+    var last = -1;
+    function onScroll(){
+      var y = window.scrollY || window.pageYOffset || 0;
+      if(y === last) return;
+      last = y;
+      if(y > 24){
+        nav.style.boxShadow = '0 10px 34px rgba(0,0,0,.5)';
+        if(inner){ inner.style.paddingTop = '10px'; inner.style.paddingBottom = '10px'; }
+      }else{
+        nav.style.boxShadow = 'none';
+        if(inner){ inner.style.paddingTop = ''; inner.style.paddingBottom = ''; }
+      }
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }
+
+  /* ---- D. 底部渐隐进度条（轻量，不影响布局） ---- */
+  function initProgress(){
+    var bar = document.createElement('div');
+    bar.style.cssText = 'position:fixed;top:0;left:0;height:2px;width:0;z-index:9999;'+
+      'background:linear-gradient(90deg,#8b673c,#f4cf68,#b23a48);'+
+      'box-shadow:0 0 10px rgba(244,207,104,.6);pointer-events:none;'+
+      'transition:width .12s linear;';
+    document.body.appendChild(bar);
+    var pending = false;
+    function upd(){
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      var p = h > 0 ? Math.min(1, (window.scrollY || 0) / h) : 0;
+      bar.style.width = (p * 100).toFixed(2) + '%';
+      pending = false;
+    }
+    window.addEventListener('scroll', function(){
+      if(!pending){ pending = true; requestAnimationFrame(upd); }
+    },{passive:true});
+    window.addEventListener('resize', upd, {passive:true});
+    upd();
+  }
+
+  function boot(){ initReveal(); initSpotlight(); initNav(); initProgress(); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+<script src="auth.js?v=20261003-2000"></script>
+<script src="account.js?v=20261003-2000"></script>
+<script src="achievements.js?v=20261003-2000"></script>
 <script>
 (function(){
   const boot=document.getElementById('boot');
@@ -504,7 +811,7 @@
     const year=new Date().getFullYear();
     const c=letterContent(isEn,name,year);
     const bg='#fbf6e8', panelFrom='#fbf6e8', panelTo='#f3e9d0', ink='#2b2118', gold='#8c6f3f', label='#7a6046';
-    const crest=(typeof location!=='undefined'&&location.origin&&location.origin.indexOf('http')===0?location.origin:'https://luisdingww-bit.github.io/dragonraja-site')+'/img/cassell-seal-round.png';
+    const crest=(typeof location!=='undefined'&&location.origin&&location.origin.indexOf('http')===0?location.origin:'https://luisdingww-bit.github.io/dragonraja-site')+'/img/seal-round-320.webp';
     const title=isEn?'LETTER OF ADMISSION':'录 取 通 知';
     const presLabel=isEn?'President':'校长签名';
     const secLabel=isEn?'Chief Secretary':'首席秘书签名';
