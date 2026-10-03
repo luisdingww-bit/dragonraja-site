@@ -273,3 +273,97 @@
 .eva-ask-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
 .eva-ask{background:rgba(216,181,117,.08);border:1px solid var(--line-strong);color:var(--gold);font:600 11.5px/1 var(--serif);letter-spacing:.06em;padding:6px 10px;border-radius:999px;cursor:pointer;transition:.25s;}
 .eva-ask:hover{background:rgba(216,181,117,.18);color:var(--gold-bright);border-color:var(--gold);}
+/* ============================================================
+   子页 Hero 背景层（配合各页 .page-hero-bg）
+   ============================================================ */
+.page-hero{position:relative;isolation:isolate;}
+.page-hero-bg{
+  position:absolute;inset:0;z-index:-2;
+  background-position:center 22%;background-size:cover;background-repeat:no-repeat;
+  opacity:.22;filter:saturate(.8) contrast(1.04);
+  transform:scale(1.05);
+  animation:phDrift 30s ease-in-out infinite alternate;
+}
+@keyframes phDrift{from{transform:scale(1.05) translate3d(0,0,0);}to{transform:scale(1.12) translate3d(0,-1.4%,0);}}
+/* 三重渐隐：保证 h1 文字对比度达标，同时让图片融进底色 */
+.page-hero-bg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(130% 90% at 50% 30%,transparent 22%,rgba(3,10,20,.78) 72%,var(--bg) 100%),
+    linear-gradient(180deg,rgba(3,10,20,.9) 0%,rgba(3,10,20,.34) 34%,rgba(3,10,20,.6) 66%,var(--bg) 100%);
+}
+/* 兜底：图未加载时首屏仍是深蓝渐变而非纯黑
+   ⚠️ 用 background-image 而非 background 简写，否则会连带清掉上面的渐变 */
+.page-hero{
+  background-image:radial-gradient(circle at 50% 26%,#12223a 0%,#0a1422 48%,var(--bg) 100%);
+}
+/* 竖版海报（story 页）稍偏右，避免压住居中标题 */
+.page-hero:has(.page-hero-bg[style*="poster-main"]) .page-hero-bg{background-position:center 18%;}
+@media(max-width:640px){
+  .page-hero-bg{opacity:.16;}
+}
+@media(prefers-reduced-motion:reduce){
+  .page-hero-bg{animation:none;}
+}
+
+/* ============================================================
+   EVA 终端升级：开机自检 / 搜索 / 快捷键
+   ============================================================ */
+.eva-boot{
+  font:400 12.5px/2 var(--serif);letter-spacing:.06em;
+  color:var(--gold-soft);background:rgba(3,10,20,.6);
+  border:1px solid var(--line);border-left:2px solid var(--gold);
+  border-radius:3px;padding:16px 20px;margin:0 0 20px;
+  position:relative;overflow:hidden;
+}
+.eva-boot::after{ /* 扫描线质感 */
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 2px,transparent 2px 4px);
+}
+.eb-line{opacity:0;transform:translateX(-8px);animation:ebIn .34s var(--ease) forwards;}
+.eb-line:nth-child(1){animation-delay:.05s}
+.eb-line:nth-child(2){animation-delay:.28s}
+.eb-line:nth-child(3){animation-delay:.51s}
+.eb-line:nth-child(4){animation-delay:.74s}
+@keyframes ebIn{to{opacity:1;transform:none;}}
+.eb-ok{color:#7fd6a2;margin-right:6px;}
+.eb-dim{color:var(--ink-dim);}
+.eb-cursor .eb-caret{
+  display:inline-block;width:8px;height:14px;background:var(--gold);
+  margin-left:6px;vertical-align:-2px;animation:ebBlink 1.05s steps(2) infinite;
+}
+@keyframes ebBlink{0%,50%{opacity:1}51%,100%{opacity:0}}
+/* 扫描结束后收起（不改变布局高度用 max-height 过渡） */
+.eva-boot.done{max-height:0;opacity:0;padding-top:0;padding-bottom:0;margin-bottom:0;border-width:0;
+  transition:max-height .6s var(--ease),opacity .4s ease,padding .5s ease,margin .5s ease;}
+
+.eva-tools{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:0 0 18px;}
+.eva-search{
+  flex:1;min-width:220px;background:rgba(3,10,20,.72);
+  border:1px solid var(--line);border-radius:2px;color:var(--ink);
+  padding:11px 15px;font:400 13.5px var(--sans);letter-spacing:.04em;transition:.28s;
+}
+.eva-search::placeholder{color:#4d5763;}
+.eva-search:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(216,181,117,.1);}
+.eva-kbd-hints{display:flex;align-items:center;gap:6px;font:400 11px var(--serif);color:var(--ink-dim);letter-spacing:.1em;flex-wrap:wrap;}
+.eva-kbd-hints kbd{
+  display:inline-block;min-width:19px;text-align:center;
+  background:rgba(216,181,117,.08);border:1px solid var(--line-strong);
+  border-bottom-width:2px;border-radius:3px;color:var(--gold);
+  font:600 10.5px/1.7 var(--sans);padding:0 4px;
+}
+/* 搜索命中高亮 */
+.eva-hit{background:rgba(216,181,117,.2);color:var(--gold-bright);border-radius:2px;padding:0 2px;}
+.eva-row.dimmed{opacity:.3;}
+.eva-empty-hint{padding:40px 20px;text-align:center;color:var(--ink-dim);font:400 13px var(--serif);letter-spacing:.14em;}
+/* 任务进度条 */
+.eva-progress{height:2px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:8px;}
+.eva-progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--gold-bright));
+  width:0;transition:width .8s var(--ease);}
+@media(max-width:640px){
+  .eva-kbd-hints{display:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  .eb-line{opacity:1;transform:none;animation:none;}
+  .eb-cursor .eb-caret{animation:none;}
+}

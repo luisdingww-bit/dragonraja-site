@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261003-2000">
-<link rel="stylesheet" href="eva-extra.css?v=20261003-2000">
+<link rel="stylesheet" href="style.css?v=20261003-2340">
+<link rel="stylesheet" href="eva-extra.css?v=20261003-2340">
 <link rel="icon" type="image/png" href="img/seal-round-320.webp">
 </head>
 <body>
@@ -35,6 +35,7 @@
 </nav>
 
 <header class="page-hero">
+  <div class="page-hero-bg" style="background-image:url(img/dragon-06.webp)" aria-hidden="true"></div>
   <div class="crumb"><a href="index.html" data-i18n="nav_tag">混血种档案</a> · <span data-i18n="nav_eva">EVA 终端</span></div>
   <h1 data-i18n="eva_h1">EVA · 学 院 终 端</h1>
   <div class="en">C A S S E L L &nbsp; C O L L E G E &nbsp; · &nbsp; A . I . &nbsp; T E R M I N A L</div>
@@ -45,11 +46,31 @@
 
   <div id="accProfileBox"></div>
 
+  <!-- 终端开机自检动画 -->
+  <div class="eva-boot" id="evaBoot" aria-hidden="true">
+    <div class="eb-line"><span class="eb-ok">✔</span> 连接学院主控网络 … <span class="eb-dim">OK</span></div>
+    <div class="eb-line"><span class="eb-ok">✔</span> 加载龙纹识别库 … <span class="eb-dim">36 条言灵已就绪</span></div>
+    <div class="eb-line"><span class="eb-ok">✔</span> 同步混血种档案 … <span class="eb-dim" id="ebUser">访客</span></div>
+    <div class="eb-line eb-cursor"><span class="eb-ok">✔</span> EVA 终端意志已上线<span class="eb-caret"></span></div>
+  </div>
+
+  <!-- 全局搜索 + 快捷键提示 -->
+  <div class="eva-tools">
+    <input class="eva-search" id="evaSearch" type="search"
+           placeholder="搜索通知 / 任务 / 邮件 / 知识库…" data-i18n-ph="eva_search_ph" autocomplete="off">
+    <div class="eva-kbd-hints">
+      <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> <span data-i18n="eva_kbd_tab">切换面板</span>
+      <kbd>/</kbd> <span data-i18n="eva_kbd_search">聚焦搜索</span>
+    </div>
+  </div>
+
   <div class="eva-tabs">
     <button class="eva-tab active" data-tab="notice" data-i18n="eva_tab_notice">通知板</button>
     <button class="eva-tab" data-tab="task" data-i18n="eva_tab_task">任务中心</button>
     <button class="eva-tab" data-tab="mail" data-i18n="eva_tab_mail">学院邮箱</button>
   </div>
+
+  <div class="eva-empty-hint hidden" id="evaNoHit" data-i18n="eva_no_hit">未找到匹配内容 · 请换个关键词</div>
 
   <!-- 通知板 -->
   <div class="eva-panel-box" id="tab-notice">
@@ -78,12 +99,13 @@
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
 
-<script src="i18n.js?v=20261003-2000"></script>
-<script src="app.js?v=20261003-2000" defer></script>
-<script src="auth.js?v=20261003-2000" defer></script>
-<script src="account.js?v=20261003-2000" defer></script>
-<script src="eva.js?v=20261003-2000" defer></script>
-<script src="achievements.js?v=20261003-2000" defer></script>
+<script src="i18n.js?v=20261003-2340"></script>
+<script src="app.js?v=20261003-2340" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<script src="auth.js?v=20261003-2340" defer></script>
+<script src="account.js?v=20261003-2340" defer></script>
+<script src="eva.js?v=20261003-2340" defer></script>
+<script src="achievements.js?v=20261003-2340" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', function(){
     if(window.DR_ACC){
@@ -96,6 +118,90 @@
 function bootDashboard(){
   var E=window.EVA; if(!E){ setTimeout(bootDashboard, 60); return; }
   var L=E.L;
+
+  /* ---------- 开机自检：显示 1.6s 后自动收起 ---------- */
+  (function(){
+    var box=document.getElementById('evaBoot');
+    if(!box) return;
+    var u=document.getElementById('ebUser');
+    if(u){
+      try{
+        var cur = (window.DR_ACC && window.DR_ACC.current && window.DR_ACC.current()) || null;
+        u.textContent = cur && (cur.name||cur.email) ? String(cur.name||cur.email) : '访客 Guest';
+      }catch(e){ u.textContent='访客 Guest'; }
+    }
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){ box.style.display='none'; return; }
+    setTimeout(function(){ box.classList.add('done'); setTimeout(function(){ box.style.display='none'; }, 700); }, 1600);
+  })();
+
+  /* ---------- 全局搜索：过滤三个面板 + 知识库 ---------- */
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function mark(text, q){
+    var t = esc(text||'');
+    if(!q) return t;
+    try{
+      var re = new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+      return t.replace(re,'<mark class="eva-hit">$1</mark>');
+    }catch(e){ return t; }
+  }
+  var searchInput=document.getElementById('evaSearch');
+  var searchTimer=null;
+  function runSearch(raw){
+    var q=(raw||'').trim();
+    var panelBoxes=document.querySelectorAll('.eva-panel-box');
+    var anyHit=0;
+    panelBoxes.forEach(function(box){
+      var rows=box.querySelectorAll('.eva-row');
+      var hit=0;
+      rows.forEach(function(r){
+        var txt=(r.textContent||'').toLowerCase();
+        var match = !q || txt.indexOf(q.toLowerCase())>=0;
+        r.classList.toggle('dimmed', !!q && !match);
+        if(match && q) hit++;
+      });
+      if(q && hit) anyHit+=hit;
+      // 该面板无命中时隐藏
+      if(q) box.classList.toggle('hidden', hit===0);
+      else box.classList.remove('hidden');
+    });
+    // 知识库条目（EVA 面板外）
+    if(q){
+      var cards=document.querySelectorAll('[data-eva-kw]');
+      cards.forEach(function(c){
+        var txt=(c.textContent||'').toLowerCase();
+        var match=txt.indexOf(q.toLowerCase())>=0;
+        c.classList.toggle('dimmed', !match);
+        if(match) anyHit++;
+      });
+    }
+    // 空结果提示
+    var hint=document.getElementById('evaNoHit');
+    if(hint) hint.classList.toggle('hidden', !(q && anyHit===0));
+  }
+  if(searchInput){
+    searchInput.addEventListener('input', function(){
+      clearTimeout(searchTimer);
+      var v=searchInput.value;
+      searchTimer=setTimeout(function(){ runSearch(v); }, 140);
+    });
+    searchInput.addEventListener('keydown', function(e){
+      if(e.key==='Escape'){ searchInput.value=''; runSearch(''); searchInput.blur(); }
+    });
+  }
+
+  /* ---------- 键盘快捷键：1/2/3 切面板，/ 聚焦搜索 ---------- */
+  document.addEventListener('keydown', function(e){
+    var tag=(e.target&&e.target.tagName||'').toLowerCase();
+    var typing = tag==='input'||tag==='textarea'||e.target.isContentEditable;
+    if(e.key==='/' && !typing){ e.preventDefault(); if(searchInput) searchInput.focus(); return; }
+    if(typing) return;
+    if(e.key==='1'||e.key==='2'||e.key==='3'){
+      var map={'1':'notice','2':'task','3':'mail'};
+      var btn=document.querySelector('.eva-tab[data-tab="'+map[e.key]+'"]');
+      if(btn) btn.click();
+    }
+  });
 
   /* 标签切换 */
   document.querySelectorAll('.eva-tab').forEach(function(b){

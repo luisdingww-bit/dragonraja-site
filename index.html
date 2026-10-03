@@ -11,8 +11,8 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/notoserifsc/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mK4Q.woff2">
 <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261003-2000">
-<link rel="stylesheet" href="eva-extra.css?v=20261003-2000">
+<link rel="stylesheet" href="style.css?v=20261003-2340">
+<link rel="stylesheet" href="eva-extra.css?v=20261003-2340">
 <style>
 /* index 专属：电影感开场 + hero + 世界观 + 卷目预览 */
 #boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
@@ -206,8 +206,12 @@
         <input id="enName" type="text" data-i18n-ph="ph_name" placeholder="姓名 / Name" maxlength="40">
         <input id="enAge" type="number" min="1" max="120" data-i18n-ph="ph_age" placeholder="年龄 / Age">
         <input id="enEmail" type="email" data-i18n-ph="ph_email" placeholder="邮箱 / Email" maxlength="80">
-        <input id="enPass" type="password" data-i18n-ph="ph_password" placeholder="密码 / Password" minlength="6" maxlength="64">
-        <div class="bf-hint" id="enrollHint" data-i18n="boot_form_hint">填写注册信息并设置密码后方可启程</div>
+        <div style="display:flex;gap:9px;align-items:stretch;">
+          <input id="enCode" type="text" inputmode="numeric" data-i18n-ph="ph_code" placeholder="邮箱验证码" maxlength="8" style="flex:1;">
+          <button type="button" class="adm-submit" id="enGetCode" style="width:auto;padding:0 16px;white-space:nowrap;" data-i18n="get_code_btn">获取验证码</button>
+        </div>
+        <input id="enPass" type="password" data-i18n-ph="ph_password" placeholder="密码（用于以后登录）" minlength="6" maxlength="64">
+        <div class="bf-hint" id="enrollHint" data-i18n="boot_form_hint">获取邮箱验证码并填写后方可生成录取通知书</div>
         <button class="adm-submit" type="submit" data-i18n="boot_form_submit">生成录取通知书</button>
       </form>
     </div>
@@ -216,7 +220,7 @@
         <input id="lgEmail" type="email" data-i18n-ph="ph_email" placeholder="邮箱 / Email" maxlength="80">
         <input id="lgPass" type="password" data-i18n-ph="ph_password" placeholder="密码 / Password" maxlength="64">
         <div class="bf-hint" id="loginHint" data-i18n="login_hint">请输入邮箱与密码</div>
-        <div class="bf-hint" style="min-height:auto;color:var(--ink-dim);" data-i18n="login_hint_local">提示：演示模式下账号仅保存在当前浏览器；密码区分大小写，注意别带多余空格。</div>
+        <div class="bf-hint" style="min-height:auto;color:var(--ink-dim);" data-i18n="login_hint_cloud">账号保存在云端，任意设备均可登录；密码区分大小写。</div>
         <button class="adm-submit" type="submit" data-i18n="boot_login_btn">登 录</button>
       </form>
       <div class="login-foot"><a href="#" id="toEnroll" data-i18n="login_to_enroll">还没有账号？去登记</a><span style="margin:0 8px;color:var(--ink-dim);">·</span><a href="#" id="toReset" data-i18n="login_forgot">忘记密码？</a></div>
@@ -546,9 +550,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
 
-<script src="i18n.js?v=20261003-2000"></script>
-<script src="app.js?v=20261003-2000"></script>
-<script src="eva.js?v=20261003-2000"></script>
+<script src="i18n.js?v=20261003-2340"></script>
+<script src="app.js?v=20261003-2340"></script>
+<script src="eva.js?v=20261003-2340"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
@@ -659,9 +663,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   else boot();
 })();
 </script>
-<script src="auth.js?v=20261003-2000"></script>
-<script src="account.js?v=20261003-2000"></script>
-<script src="achievements.js?v=20261003-2000"></script>
+<!-- 云服务 SDK：auth.js 依赖它，必须先于 auth.js 加载 -->
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<script src="auth.js?v=20261003-2340"></script>
+<script src="account.js?v=20261003-2340"></script>
+<script src="achievements.js?v=20261003-2340"></script>
 <script>
 (function(){
   const boot=document.getElementById('boot');
@@ -879,14 +885,45 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   if(closeModalBtn)closeModalBtn.addEventListener('click',closeModal);
   if(modal)modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
 
+  /* 获取邮箱验证码：只发一次；倒计时内禁用重发 */
+  const enGetCode=document.getElementById('enGetCode');
+  if(enGetCode)enGetCode.addEventListener('click',async function(){
+    const em=(document.getElementById('enEmail').value||'').trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){
+      if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Enter a valid email first':'请先填写有效的邮箱地址';enrollHint.classList.add('err');}
+      return;
+    }
+    enGetCode.disabled=true; enGetCode.textContent='发送中…';
+    try{
+      await DR.auth.sendCode({email:em});
+      if(enrollHint){enrollHint.classList.remove('err');enrollHint.textContent=window.LANG==='en'?'Code sent — check your inbox':'验证码已发送，请查收邮件（有效期 5 分钟）';}
+      let left=60;
+      const tick=setInterval(function(){
+        left--;
+        enGetCode.textContent = left>0 ? (left+'s') : (window.LANG==='en'?'Resend':'重新获取');
+        if(left<=0){ clearInterval(tick); enGetCode.disabled=false; }
+      },1000);
+      enGetCode.textContent=left+'s';
+    }catch(err){
+      enGetCode.disabled=false;
+      enGetCode.textContent=window.t?window.t('get_code_btn'):'获取验证码';
+      if(enrollHint){enrollHint.textContent=window.LANG==='en'?('Failed: '+(err.message||err)):('发送失败：'+(err.message||err));enrollHint.classList.add('err');}
+    }
+  });
+
   if(enrollForm)enrollForm.addEventListener('submit',async function(e){
     e.preventDefault();
     const name=(document.getElementById('enName').value||'').trim();
     const age=(document.getElementById('enAge').value||'').trim();
     const email=(document.getElementById('enEmail').value||'').trim();
     const pass=(document.getElementById('enPass').value||'');
+    const code =(document.getElementById('enCode').value||'').trim();
     if(!name||!age||!email||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
       if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Please fill name, age and a valid email':'请完整填写姓名、年龄与有效邮箱';enrollHint.classList.add('err');}
+      return;
+    }
+    if(!code){
+      if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Please enter the email verification code':'请填写邮箱验证码（先点「获取验证码」）';enrollHint.classList.add('err');}
       return;
     }
     if(pass.length<6){
@@ -896,9 +933,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     if(enrollHint){enrollHint.classList.remove('err');enrollHint.textContent=window.t('boot_form_hint');}
     let user=null;
     try{
-      if(window.DR&&DR.auth){ const r=await DR.auth.signUp({name:name,age:age,email:email,password:pass}); user=r&&r.user; }
+      if(window.DR&&DR.auth){ const r=await DR.auth.signUp({name:name,age:age,email:email,password:pass,code:code}); user=r&&r.user; }
     }catch(err){
-      if(enrollHint){enrollHint.textContent=window.LANG==='en'?'Email already registered, please login':'该邮箱已注册，请直接登录';enrollHint.classList.add('err');}
+      const m=String((err&&err.message)||err);
+      if(enrollHint){
+        enrollHint.textContent = window.LANG==='en' ? ('Sign-up failed: '+m) : ('注册失败：'+m);
+        enrollHint.classList.add('err');
+      }
       return;
     }
     saveAdmission(name,age,email);
