@@ -57,6 +57,20 @@
     return ready;
   }
 
+  /* 🔑 关键防护：init() 在 SDK 缺失时会「同步抛错」。
+     若直接抛，上层 account.js 的 .catch() 接不住（那时 Promise 还没创建），
+     会导致 DR_ACC.init() 抛错 → 主 IIFE 整段中断 → 所有按钮事件都不绑定 → 点了没反应。
+     因此所有对外方法统一经 safe() 包装，把同步异常转成 rejected Promise。 */
+  function safe(fn) {
+    return function () {
+      try {
+        return Promise.resolve(fn.apply(null, arguments));
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    };
+  }
+
   /* ---------- 工具 ---------- */
   function normEmail(e) { return String(e || "").trim().toLowerCase(); }
   function validEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
@@ -251,17 +265,17 @@
       .catch(function () { return null; });
   }
 
-  /* ---------- 对外 API（与旧版接口兼容） ---------- */
+  /* ---------- 对外 API（与旧版接口兼容；全部经 safe() 防止同步异常中断上层） ---------- */
   var api = {
-    signUp: signUp,
-    signIn: signIn,
-    signOut: signOut,
-    getSession: getSession,
-    sendCode: sendCode,
-    resetPassword: resetPassword,
-    confirmReset: confirmReset,
-    saveMember: saveMember,
-    loadMember: loadMember,
+    signUp: safe(signUp),
+    signIn: safe(signIn),
+    signOut: safe(signOut),
+    getSession: safe(getSession),
+    sendCode: safe(sendCode),
+    resetPassword: safe(resetPassword),
+    confirmReset: safe(confirmReset),
+    saveMember: safe(saveMember),
+    loadMember: safe(loadMember),
     validEmail: validEmail,
     cloudAvailable: cloudAvailable,
     get mode() { return mode; }
