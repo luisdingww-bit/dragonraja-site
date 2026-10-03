@@ -5,9 +5,9 @@
  *  - 每次部署 CACHE_VERSION 变化 → activate 时自动清理旧缓存
  * deploy.mjs 会在发布时重写版本号与预缓存清单（相对路径，兼容 GitHub Pages 子路径与 Surge 根域名）。
  */
-const CACHE_VERSION = '20261003-2355';
+const CACHE_VERSION = '20261004-0005';
 const CACHE_NAME = 'dr-site-' + CACHE_VERSION;
-const PRECACHE = ["account.js?v=20261003-2355","achievements.js?v=20261003-2355","app.js?v=20261003-2355","auth.js?v=20261003-2355","characters-data.js?v=20261003-2355","data/orgs-data.js?v=20261003-2355","data/quotes-data.js?v=20261003-2355","data/timeline-data.js?v=20261003-2355","eva-extra.css?v=20261003-2355","eva.js?v=20261003-2355","i18n.js?v=20261003-2355","img/seal-320.webp","img/seal-round-320.webp","img/chapters-poster.jpg","img/crest.webp","img/kv-banner.webp","img/kv-city.webp","img/poster-main.webp","img/cast-keyart.webp","img/cast-keyart2.webp","img/dragon-01.webp","img/dragon-02.webp","img/dragon-03.webp","img/dragon-04.webp","img/dragon-05.webp","img/dragon-06.webp","img/opening.jpg","img/zihang-odin.jpg","modules.css?v=20261003-2355","style.css?v=20261003-2355"];
+const PRECACHE = ["account.js?v=20261004-0005","achievements.js?v=20261004-0005","app.js?v=20261004-0005","auth.js?v=20261004-0005","characters-data.js?v=20261004-0005","data/orgs-data.js?v=20261004-0005","data/quotes-data.js?v=20261004-0005","data/timeline-data.js?v=20261004-0005","eva-extra.css?v=20261004-0005","eva.js?v=20261004-0005","i18n.js?v=20261004-0005","img/seal-320.webp","img/seal-round-320.webp","img/chapters-poster.jpg","img/crest.webp","img/kv-banner.webp","img/kv-city.webp","img/poster-main.webp","img/cast-keyart.webp","img/cast-keyart2.webp","img/dragon-01.webp","img/dragon-02.webp","img/dragon-03.webp","img/dragon-04.webp","img/dragon-05.webp","img/dragon-06.webp","img/opening.jpg","img/zihang-odin.jpg","modules.css?v=20261004-0005","style.css?v=20261004-0005"];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

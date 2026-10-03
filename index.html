@@ -11,8 +11,8 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/notoserifsc/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mK4Q.woff2">
 <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261003-2355">
-<link rel="stylesheet" href="eva-extra.css?v=20261003-2355">
+<link rel="stylesheet" href="style.css?v=20261004-0005">
+<link rel="stylesheet" href="eva-extra.css?v=20261004-0005">
 <style>
 /* index 专属：电影感开场 + hero + 世界观 + 卷目预览 */
 #boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
@@ -34,6 +34,25 @@
 .boot-crest img{width:100%;height:100%;object-fit:contain;border-radius:50%;animation:crestSpin 18s linear infinite;}
 @keyframes crestSpin{to{transform:rotate(360deg);}}
 .boot-kicker{color:var(--gold);letter-spacing:.42em;font-family:var(--serif);font-size:clamp(10px,1.3vw,13px);padding-left:.42em;margin-bottom:12px;text-shadow:0 0 14px rgba(0,0,0,.9);}
+/* 镜像站提示：非同源部署时显示，引导前往可登录主站 */
+.boot-origin-note{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
+  max-width:640px;margin:0 auto 18px;padding:11px 16px;
+  background:linear-gradient(90deg,rgba(224,160,74,.1),rgba(224,160,74,.04));
+  border:1px solid rgba(224,160,74,.34);border-radius:2px;
+  font-family:var(--serif);font-size:12.5px;letter-spacing:.1em;color:#e0a04a;
+  text-shadow:0 0 10px rgba(0,0,0,.7);
+}
+.boot-origin-note b{color:#f0b862;font-weight:600;letter-spacing:.14em;}
+.boot-origin-note span{color:#c8a878;}
+.boot-origin-note a{
+  color:var(--gold-bright);text-decoration:none;border-bottom:1px solid rgba(244,207,104,.5);
+  padding-bottom:1px;transition:.25s;white-space:nowrap;
+}
+.boot-origin-note a:hover{color:#fff2d0;border-color:#fff2d0;}
+@media(max-width:560px){
+  .boot-origin-note{font-size:11.5px;gap:7px;padding:9px 12px;}
+}
 .boot-notice-title{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold-bright);font-family:var(--serif);font-size:clamp(22px,4.6vw,34px);letter-spacing:.28em;padding-left:.28em;margin-bottom:4px;text-shadow:0 0 22px rgba(216,181,117,.35),0 0 8px rgba(0,0,0,.98);font-weight:700;}
 .boot-notice-title .nt-ln{width:42px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
 .boot-notice-title .nt-ln.r{background:linear-gradient(90deg,var(--gold),transparent);}
@@ -168,6 +187,11 @@
   <div class="boot-content">
     <div class="boot-crest"><img src="img/crest.webp" alt="Crest"></div>
     <div class="boot-kicker" data-i18n="boot_kicker">卡塞尔学院 · 招生委员会</div>
+    <div class="boot-origin-note" id="bootOriginNote" style="display:none;">
+      <b data-i18n="boot_origin_title">当前为镜像站</b>
+      <span data-i18n="boot_origin_desc">登录与档案墙需在同源主站使用</span>
+      <a href="https://dragonraja-archive.app.workbuddy.host/" id="bootOriginLink" data-i18n="boot_origin_go">前往主站 →</a>
+    </div>
     <div class="boot-notice-title"><span class="nt-ln"></span><span data-i18n="boot_notice_title">录 取 通 知</span><span class="nt-ln r"></span></div>
     <div class="boot-letter-wrap" id="letterWrap">
       <button class="boot-letter-toggle" id="letterToggle" type="button" aria-expanded="true">
@@ -551,9 +575,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
 
-<script src="i18n.js?v=20261003-2355"></script>
-<script src="app.js?v=20261003-2355"></script>
-<script src="eva.js?v=20261003-2355"></script>
+<script src="i18n.js?v=20261004-0005"></script>
+<script src="app.js?v=20261004-0005"></script>
+<script src="eva.js?v=20261004-0005"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
@@ -666,9 +690,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 </script>
 <!-- 云服务 SDK：auth.js 依赖它，必须先于 auth.js 加载 -->
 <script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
-<script src="auth.js?v=20261003-2355"></script>
-<script src="account.js?v=20261003-2355"></script>
-<script src="achievements.js?v=20261003-2355"></script>
+<script src="auth.js?v=20261004-0005"></script>
+<script src="account.js?v=20261004-0005"></script>
+<script src="achievements.js?v=20261004-0005"></script>
 <script>
 (function(){
   const boot=document.getElementById('boot');
@@ -888,16 +912,25 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
   /* 跨域提示：云服务按 Origin 校验，非同源部署无法登录/写档案 */
   (function(){
-    var w=document.getElementById('originWarn');
-    if(!w) return;
-    try{
-      if(window.DR&&DR.auth&&typeof DR.auth.cloudAvailable==='function'&&!DR.auth.cloudAvailable()){
-        w.style.display='block';
-        w.innerHTML = (window.LANG==='en')
-          ? 'Account cloud service is not reachable from this domain. <a href="https://dragonraja-archive.app.workbuddy.host/" style="color:var(--gold)">Open the same-origin site →</a>'
-          : '当前域名无法连接账号云服务，登录与档案墙需在同源站点使用。<a href="https://dragonraja-archive.app.workbuddy.host/" style="color:var(--gold)">前往同源站点 →</a>';
-      }
-    }catch(e){}
+    var show=function(){
+      var w=document.getElementById('bootOriginNote');
+      if(!w) return;
+      // 云服务同源域白名单
+      var OK='https://dragonraja-archive.app.workbuddy.host';
+      if(location.origin===OK) return;      // 同源 → 不显示
+      w.style.display='flex';
+    };
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',show);
+    else show();
+    // 兜底：脚本若加载后判定一致，隐藏之
+    setTimeout(function(){
+      try{
+        if(window.DR&&DR.auth&&typeof DR.auth.cloudAvailable==='function'&&DR.auth.cloudAvailable()){
+          var w2=document.getElementById('bootOriginNote');
+          if(w2) w2.style.display='none';
+        }
+      }catch(e){}
+    },600);
   })();
 
   /* 获取邮箱验证码：只发一次；倒计时内禁用重发 */
