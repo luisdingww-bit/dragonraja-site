@@ -261,12 +261,12 @@
         { zh:"代价不可逆。路明非用一次次「交换」换回同伴的命，也把自己一点点交到魔鬼手里——可他始终没后悔。",
           en:"The price is irreversible. Mingfei traded again and again to bring his friends back, slowly giving himself to the devil — yet he never regretted it." }
       ],
-      page:{ href:'items.html', zh:'装备部仓库 · 契约书', en:'Arsenal · The Pact' } },
+      page:{ href:'sins.html', zh:'七宗罪 · 独立档案', en:'Seven Sins · Dossier' } },
 
     { id:'wristband', kw:['红白护腕','护腕','wristband'], aliases:['红白','东京塔的约定'],
       zh:"红白护腕——路明非送给绘梨衣的护腕。东京塔下，她把护腕留下，把名字留给他——Sakura，我们还能再来吗？",
       en:"The red-white wristband — the band Mingfei gave Eri. Beneath Tokyo Tower she left it behind and left him her name — Sakura, can we come back again?",
-      page:{ href:'items.html', zh:'装备部仓库 · 红白护腕', en:'Arsenal · Wristband' } },
+      page:{ href:'story.html', zh:'情节长卷 · 互动版', en:'Story · Interactive' } },
 
     { id:'spirit', kw:['言灵','spirit'], aliases:['序列号','咒语','codex','图鉴'],
       zh:"言灵——混血种觉醒后释放的先天能力，各有序列号：从「蛇」（22）、「镰鼬」（59）、「君焰」（71）到「审判」（111）、「归墟」（113）、「烛龙」（114），甚至「龙语」（120）。你的血统越高，能驾驭的言灵越危险。",
@@ -366,17 +366,17 @@
     { id:'blackcard', kw:['黑卡','录取通知','black card'], aliases:['激活码','录取通知书'],
       zh:"黑卡——卡塞尔学院的录取凭证，通往混血种世界的车票。激活码一旦启用，便再无回头。",
       en:"The Black Card — Cassell's admission token, a ticket to the hybrid world. Once the activation code is used, there is no turning back.",
-      page:{ href:'items.html', zh:'装备部仓库 · 黑卡', en:'Arsenal · Black Card' } },
+      page:{ href:'story.html', zh:'情节长卷 · 互动版', en:'Story · Interactive' } },
 
     { id:'maybach', kw:['迈巴赫','maybach'], aliases:['豪车','高架桥的车'],
       zh:"迈巴赫——雨夜高架桥上的老旧豪车，车前站着八足神马。楚天骄在这里走向奥丁，也从此被抹去。",
       en:"The Maybach — the old sedan on the rain-swept viaduct, facing an eight-legged horse. Here Chu Tianjiao walked toward Odin and was erased.",
-      page:{ href:'items.html', zh:'装备部仓库 · 迈巴赫', en:'Arsenal · Maybach' } },
+      page:{ href:'kings.html', zh:'四大龙王 · 详情', en:'Four Kings · Detail' } },
 
     { id:'items', kw:['装备','道具','物品','仓库','arsenal','item'], aliases:['装备部仓库','道具图鉴'],
       zh:"装备部仓库——黑卡、红白护腕、迈巴赫、七宗罪、四分之一条命契约书、尼伯龙根钥匙……每一件藏品都对应一段名场面。",
       en:"The Arsenal — the Black Card, the red-white wristband, the Maybach, the Seven Sins, the quarter-life pact, the Nibelungen key… every relic carries a famous scene.",
-      page:{ href:'items.html', zh:'装备部仓库 · 道具图鉴', en:'Arsenal · Item Codex' } },
+      page:{ href:'codex.html', zh:'言灵图鉴 · 完整版', en:'Spirit Codex · Full' } },
 
     { id:'orgs', kw:['机构','组织','学院机构','institution','organization'], aliases:['机构簿','org'],
       zh:"卡塞尔机构簿——秘党、执行部、装备部、狮心会、学生会、蛇岐八家，一家机构一张档案卡：职能、代表人物、经典事件与经典梗。",
