@@ -20,9 +20,11 @@
 (function () {
   "use strict";
 
-  /* ---- 云服务公开配置（仅公开端点与 publishableKey，无任何私密凭据） ---- */
+  /* ---- 云服务公开配置（仅公开端点与 publishableKey，无任何私密凭据） ----
+     endpoint 用 location.origin：云服务按 Origin 校验，必须与部署域同源，
+     这样无论部署到 WorkBuddy / GitHub Pages / surge 都能对上。 */
   var CLOUD = {
-    endpoint: "https://dragonraja-archive.app.workbuddy.host",
+    endpoint: (typeof location !== "undefined" && location.origin) || "",
     oauthRelayBaseUrl: "https://www.workbuddy.cn/v2/as/genie-baas/oauth",
     publishableKey: "wbpk_3HnQvT4BzfmUMKF1Pvs6Ml_LLOxPaP4s5zw6mYP8wXVCrR0Azx58kmV"
   };
@@ -32,6 +34,16 @@
   var ready = null;       // 初始化 Promise
   var mode = "cloud";
   var LSK = "dr_member_v2";   // 本地仅作离线兜底（云端不可用时）
+
+  /* 云服务是否可用（跨域部署时会被 Origin 校验拒绝）。
+     供 UI 提前判断，避免用户点了登录却毫无反应。 */
+  var cloudHint = null;
+  function cloudAvailable() {
+    // 已知可用的同源部署
+    if (location.origin === "https://dragonraja-archive.app.workbuddy.host") return true;
+    // 其他域名下无法保证 Origin 匹配，登录可能被服务端拒绝
+    return false;
+  }
 
   function init() {
     if (ready) return ready;
@@ -251,6 +263,7 @@
     saveMember: saveMember,
     loadMember: loadMember,
     validEmail: validEmail,
+    cloudAvailable: cloudAvailable,
     get mode() { return mode; }
   };
 

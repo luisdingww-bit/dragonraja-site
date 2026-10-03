@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>混血种档案墙 · DRAGON RAJA</title>
+<meta name="description" content="卡塞尔学院公开档案墙 — 登录后登记你的言灵与血统，永久保存于云端，并向所有访客公开展示。">
+<link rel="icon" type="image/png" href="img/seal-round-320.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030a14;--panel:rgba(10,22,38,.66);--line:rgba(150,180,220,.16);
+  --line-strong:rgba(170,200,235,.32);--ink:#dbe8f6;--ink-bright:#f0f3f7;--ink-dim:#66707a;
+  --gold:#d8b575;--gold-bright:#f4cf68;--gold-soft:#8b673c;--blood:#b23a48;
+  --serif:"Noto Serif SC","Songti SC",STSong,serif;
+  --sans:"Noto Sans SC",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  background-image:radial-gradient(circle at 50% -5%,#11233c 0%,transparent 55%),
+                   radial-gradient(circle at 85% 110%,#1a0e16 0%,transparent 50%),
+                   linear-gradient(180deg,#030a14,#050d18 60%,#030a14);
+  color:var(--ink);min-height:100vh;overflow-x:hidden;font-family:var(--sans);
+  line-height:1.8;-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;}
+
+#embers{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.ember{position:absolute;bottom:-12px;border-radius:50%;opacity:0;animation:rise linear infinite;}
+@keyframes rise{
+  0%{transform:translateY(0);opacity:0;}
+  12%{opacity:.85;}88%{opacity:.4;}
+  100%{transform:translateY(-106vh) translateX(46px);opacity:0;}
+}
+.bg-ring{position:fixed;top:50%;left:50%;width:120vmin;height:120vmin;transform:translate(-50%,-50%);
+  border:1px solid rgba(150,180,220,.06);border-radius:50%;z-index:0;pointer-events:none;animation:spin 90s linear infinite;}
+.bg-ring.two{width:80vmin;height:80vmin;border-color:rgba(216,181,117,.05);animation-duration:60s;animation-direction:reverse;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(10px);
+  background:linear-gradient(180deg,rgba(4,11,20,.94),rgba(4,11,20,.55));border-bottom:1px solid var(--line);}
+.nav-inner{max-width:1240px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+.brand{font-family:var(--serif);text-decoration:none;}
+.brand .zh{font-size:19px;letter-spacing:.3em;color:var(--ink-bright);}
+.brand .en{color:var(--gold);letter-spacing:.32em;font-size:10px;display:block;margin-top:1px;}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.nav-back{color:var(--gold)!important;text-decoration:none;border:1px solid var(--line-strong);border-radius:999px;
+  padding:6px 14px;font-family:var(--serif);font-size:12px;letter-spacing:.18em;transition:.25s;}
+.nav-back:hover{border-color:var(--gold);background:rgba(216,181,117,.1);color:var(--gold-bright)!important;}
+.who{display:none;align-items:center;gap:10px;font-family:var(--serif);font-size:12.5px;letter-spacing:.1em;color:var(--gold);}
+.who.on{display:flex;}
+.who .dot{width:7px;height:7px;border-radius:50%;background:var(--gold-bright);box-shadow:0 0 9px var(--gold);}
+.link-btn{background:transparent;border:1px solid var(--line-strong);color:var(--ink-dim);border-radius:999px;
+  padding:6px 14px;font-family:var(--serif);font-size:12px;letter-spacing:.16em;cursor:pointer;transition:.25s;}
+.link-btn:hover{color:var(--gold-bright);border-color:var(--gold);}
+
+.wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:0 24px 100px;}
+
+.page-hero{text-align:center;padding:84px 0 56px;}
+.crumb{color:var(--gold-soft);font-family:var(--serif);font-size:12px;letter-spacing:.3em;margin-bottom:18px;}
+h1{font-family:var(--serif);font-size:clamp(34px,7vw,58px);letter-spacing:.2em;color:var(--ink-bright);
+  text-shadow:0 0 26px rgba(120,150,200,.25);}
+.page-hero .en{color:var(--gold);letter-spacing:.4em;font-size:13px;margin-top:12px;font-family:var(--serif);}
+.page-hero .lede{color:var(--ink-dim);max-width:640px;margin:24px auto 0;font-size:14.5px;line-height:2;}
+.page-hero .lede b{color:var(--gold);font-weight:400;}
+
+.lv-D{color:#7f8c99;border-color:rgba(127,140,153,.4);}
+.lv-C{color:#5f9ea0;border-color:rgba(95,158,160,.4);}
+.lv-B{color:#5b8fd6;border-color:rgba(91,143,214,.4);}
+.lv-A{color:#9b6fd6;border-color:rgba(155,111,214,.4);}
+.lv-S{color:var(--gold-bright);border-color:rgba(244,207,104,.45);}
+.lv-SS{color:#ff8fb0;border-color:rgba(255,143,176,.45);}
+.lv-SSS{color:#ff5c7a;border-color:rgba(255,92,122,.5);}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:0 0 50px;}
+@media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr);}}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:22px 18px;
+  text-align:center;backdrop-filter:blur(6px);transition:.3s;}
+.stat:hover{border-color:var(--line-strong);transform:translateY(-2px);}
+.stat b{display:block;font-family:var(--serif);font-size:30px;color:var(--gold-bright);line-height:1.2;letter-spacing:.05em;}
+.stat span{font-size:11px;color:var(--ink-dim);letter-spacing:.22em;}
+
+.split{display:grid;grid-template-columns:400px 1fr;gap:34px;align-items:start;}
+@media(max-width:1000px){.split{grid-template-columns:1fr;}}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:30px 26px;
+  backdrop-filter:blur(6px);position:sticky;top:92px;}
+@media(max-width:1000px){.panel{position:static;}}
+.panel h2{font-family:var(--serif);font-size:20px;letter-spacing:.2em;color:var(--ink-bright);margin-bottom:6px;}
+.panel .p-sub{color:var(--gold-soft);font-size:11px;letter-spacing:.2em;margin-bottom:22px;font-family:var(--serif);}
+
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:11.5px;letter-spacing:.2em;color:var(--gold-soft);margin-bottom:7px;font-family:var(--serif);}
+.field label .req{color:var(--blood);}
+.field input,.field select,.field textarea{
+  width:100%;background:rgba(3,10,20,.7);border:1px solid var(--line);border-radius:2px;
+  color:var(--ink);padding:11px 13px;font-family:var(--sans);font-size:14px;transition:.25s;}
+.field textarea{resize:vertical;min-height:88px;line-height:1.75;}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(216,181,117,.1);}
+.field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--gold) 50%),
+  linear-gradient(135deg,var(--gold) 50%,transparent 50%);
+  background-position:calc(100% - 19px) 50%,calc(100% - 14px) 50%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px;}
+.field select option{background:#06101d;color:var(--ink);}
+.field .err-msg{color:#f08a95;font-size:11.5px;margin-top:6px;letter-spacing:.05em;display:none;}
+.field .err-msg.on{display:block;}
+.hint{font-size:11px;color:#4d5763;margin-top:6px;letter-spacing:.05em;}
+
+.emoji-row{display:flex;gap:7px;flex-wrap:wrap;}
+.emoji-row button{background:rgba(3,10,20,.7);border:1px solid var(--line);border-radius:3px;
+  font-size:19px;padding:5px 9px;cursor:pointer;transition:.2s;line-height:1;}
+.emoji-row button:hover{border-color:var(--gold);transform:scale(1.12);}
+.emoji-row button.on{border-color:var(--gold);background:rgba(216,181,117,.14);}
+
+.btn{width:100%;background:linear-gradient(145deg,rgba(40,18,24,.9),rgba(14,7,10,.9));color:var(--ink);
+  border:1px solid var(--line-strong);padding:13px 18px;font-size:14px;letter-spacing:.22em;
+  font-family:var(--serif);cursor:pointer;border-radius:2px;transition:.3s;}
+.btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold-bright);
+  background:linear-gradient(145deg,rgba(58,28,20,.92),rgba(20,10,8,.92));}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+.btn.ghost{background:transparent;color:var(--ink-dim);}
+.btn.ghost:hover{color:var(--gold-bright);}
+.btn-row{display:flex;gap:10px;margin-top:20px;}
+.btn-row .btn{margin:0;}
+
+.msg{margin-top:14px;padding:11px 14px;border-radius:2px;font-size:13px;display:none;letter-spacing:.05em;line-height:1.7;}
+.msg.ok{display:block;background:rgba(216,181,117,.12);border:1px solid rgba(216,181,117,.35);color:var(--gold-bright);}
+.msg.err{display:block;background:rgba(178,58,72,.12);border:1px solid rgba(178,58,72,.4);color:#f08a95;}
+
+/* 登录门 */
+.gate{text-align:center;padding:12px 0 4px;}
+.gate .lock{font-size:30px;margin-bottom:12px;opacity:.6;}
+.gate p{color:var(--ink-dim);font-size:13.5px;line-height:1.95;margin-bottom:6px;}
+.gate .why{color:var(--gold-soft);font-size:11.5px;letter-spacing:.1em;margin-bottom:20px;line-height:1.8;}
+.divider{display:flex;align-items:center;gap:14px;margin:22px 0;color:#3f4a56;
+  font-size:10.5px;letter-spacing:.2em;font-family:var(--serif);}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line);}
+
+.wall-head{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap;}
+.wall-head h2{font-family:var(--serif);font-size:22px;letter-spacing:.18em;color:var(--ink-bright);}
+.wall-head .cnt{color:var(--gold);font-size:12px;letter-spacing:.2em;font-family:var(--serif);}
+.search{flex:1;min-width:180px;background:rgba(3,10,20,.7);border:1px solid var(--line);border-radius:2px;
+  color:var(--ink);padding:10px 14px;font-size:13.5px;font-family:var(--sans);}
+.search:focus{outline:none;border-color:var(--gold);}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:16px;}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:24px 20px;
+  position:relative;overflow:hidden;transition:.3s;backdrop-filter:blur(6px);
+  display:flex;flex-direction:column;}
+.card::before{content:"";position:absolute;inset:0 0 auto;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);opacity:.5;}
+.card:hover{border-color:var(--line-strong);transform:translateY(-3px);box-shadow:0 14px 34px rgba(0,0,0,.4);}
+.card.mine{border-color:rgba(216,181,117,.45);}
+.card-top{display:flex;align-items:flex-start;gap:13px;margin-bottom:14px;}
+.avatar{font-size:34px;line-height:1;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(216,181,117,.22));}
+.card h3{font-family:var(--serif);font-size:18px;letter-spacing:.1em;color:var(--ink-bright);line-height:1.4;word-break:break-word;}
+.card .by{font-size:11px;color:#4d5763;letter-spacing:.1em;margin-top:3px;}
+.lv-badge{display:inline-block;font-family:var(--serif);font-size:10.5px;letter-spacing:.16em;
+  border:1px solid;border-radius:999px;padding:2px 10px;margin-bottom:12px;}
+.rowline{display:flex;gap:9px;align-items:baseline;margin-bottom:8px;font-size:13.5px;line-height:1.6;}
+.rowline .k{color:var(--gold-soft);font-size:11px;letter-spacing:.16em;flex-shrink:0;
+  font-family:var(--serif);min-width:44px;}
+.rowline .v{color:var(--ink);word-break:break-word;}
+.rowline .v.spirit{color:var(--gold);font-family:var(--serif);letter-spacing:.06em;}
+.card .bio{color:var(--ink-dim);font-size:13px;line-height:1.85;margin-top:12px;padding-top:12px;
+  border-top:1px dashed var(--line);white-space:pre-wrap;word-break:break-word;}
+.card-foot{margin-top:auto;padding-top:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.stamp{font-size:10px;color:#3f4a56;letter-spacing:.12em;font-family:var(--serif);}
+.mini-btn{background:transparent;border:1px solid var(--line-strong);color:var(--gold);border-radius:2px;
+  font-size:11px;letter-spacing:.14em;padding:4px 11px;cursor:pointer;font-family:var(--serif);transition:.25s;}
+.mini-btn:hover{border-color:var(--gold);background:rgba(216,181,117,.12);}
+.mini-btn.danger{color:#c9707c;border-color:rgba(178,58,72,.45);}
+.mini-btn.danger:hover{background:rgba(178,58,72,.16);border-color:var(--blood);}
+
+.empty{text-align:center;padding:70px 20px;color:var(--ink-dim);grid-column:1/-1;}
+.empty .big{font-size:44px;margin-bottom:16px;opacity:.55;}
+.empty p{font-family:var(--serif);letter-spacing:.16em;font-size:14px;line-height:2;}
+.skel{height:270px;border-radius:3px;background:linear-gradient(100deg,var(--panel) 30%,rgba(26,42,64,.85) 50%,var(--panel) 70%);
+  background-size:220% 100%;animation:sh 1.3s infinite;}
+@keyframes sh{to{background-position:-120% 0;}}
+
+footer{text-align:center;padding:40px 24px 50px;border-top:1px solid var(--line);margin-top:70px;}
+footer .copy{color:#3c4654;font-size:11px;letter-spacing:.12em;font-family:var(--serif);line-height:2;}
+</style>
+</head>
+<body>
+<div id="embers"></div>
+<div class="bg-ring"></div><div class="bg-ring two"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="zh">龙族</span><span class="en">DRAGON RAJA</span>
+    </a>
+    <div class="nav-right">
+      <span class="who" id="who"><span class="dot"></span><span id="who-text"></span></span>
+      <button class="link-btn" id="nav-out" style="display:none">退出</button>
+      <a class="nav-back" href="index.html">← 返回主站</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="page-hero">
+    <div class="crumb">CASSELL&nbsp;COLLEGE&nbsp;·&nbsp;PUBLIC&nbsp;REGISTRY</div>
+    <h1>混血种档案墙</h1>
+    <div class="en">D R A G O N &nbsp; P R O F I L E &nbsp; W A L L</div>
+    <p class="lede">
+      每一位混血种的血脉都会被学院永久记录。<br>
+      档案<b>永久保存于云端</b>，向所有访客公开；登录后你只能编辑<b>自己的</b>那一份。
+    </p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="s-total">—</b><span>登记者</span></div>
+    <div class="stat"><b id="s-sss">—</b><span>SSS 血统</span></div>
+    <div class="stat"><b id="s-spirits">—</b><span>不同言灵</span></div>
+    <div class="stat"><b id="s-mine">—</b><span>我的档案</span></div>
+  </div>
+
+  <div class="split">
+    <!-- ============ 左：登录门 / 编辑面板 ============ -->
+    <section class="panel" id="panel">
+      <!-- 未登录：登录门 -->
+      <div id="gate">
+        <div class="gate">
+          <div class="lock">🗝️</div>
+          <h2>登记 / 编辑需登录</h2>
+          <div class="why">浏览无需登录 · 写入需身份认证</div>
+        </div>
+        <div class="field">
+          <label>手机号</label>
+          <input id="f-phone" inputmode="numeric" maxlength="11" placeholder="11 位中国大陆手机号">
+          <div class="err-msg" id="phone-err">请输入正确的 11 位手机号</div>
+        </div>
+        <div class="field">
+          <label>验证码</label>
+          <div style="display:flex;gap:9px;">
+            <input id="f-code" inputmode="numeric" maxlength="6" placeholder="6 位验证码" style="flex:1">
+            <button type="button" class="btn ghost" id="btn-code" style="width:auto;padding:11px 16px;font-size:12.5px;">获取验证码</button>
+          </div>
+        </div>
+        <button type="button" class="btn" id="btn-login" style="width:100%;margin-top:4px;">登录并登记</button>
+        <div class="divider">或</div>
+        <button type="button" class="btn ghost" id="btn-wechat">使用微信登录</button>
+        <div class="msg" id="gate-msg"></div>
+      </div>
+
+      <!-- 已登录：编辑面板 -->
+      <form id="form" autocomplete="off" style="display:none">
+        <h2 id="form-title">登记新档案</h2>
+        <div class="p-sub" id="form-kick">R E G I S T E R</div>
+
+        <div class="field">
+          <label>混血种姓名 <span class="req">*</span></label>
+          <input id="f-hero" maxlength="24" placeholder="例：路明非" required>
+        </div>
+        <div class="field">
+          <label>言灵 <span class="req">*</span></label>
+          <input id="f-spirit" maxlength="30" placeholder="例：言灵·青铜与火之王" required>
+          <div class="hint">你所觉醒的龙语文言</div>
+        </div>
+        <div class="field">
+          <label>血统等级 <span class="req">*</span></label>
+          <select id="f-level" required>
+            <option value="SSS">SSS · 屠龙级</option>
+            <option value="SS">SS · 超级混血种</option>
+            <option value="S">S · 纯血种</option>
+            <option value="A">A · 混血种</option>
+            <option value="B">B · 低阶混血种</option>
+            <option value="C">C · 觉醒者</option>
+            <option value="D">D · 未觉醒</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>学院 / 势力</label>
+          <input id="f-academy" maxlength="30" placeholder="例：卡塞尔学院 · 学生会">
+        </div>
+        <div class="field">
+          <label>头衔</label>
+          <input id="f-title" maxlength="30" placeholder="例：S 级生 / 死侍">
+        </div>
+        <div class="field">
+          <label>徽记</label>
+          <div class="emoji-row" id="emoji-row"></div>
+        </div>
+        <div class="field">
+          <label>档案简介</label>
+          <textarea id="f-bio" maxlength="400" placeholder="你的故事、战绩、内心独白……"></textarea>
+          <div class="hint"><span id="bio-count">0</span> / 400</div>
+        </div>
+        <div class="btn-row">
+          <button type="submit" class="btn" id="btn-submit">提交档案</button>
+          <button type="button" class="btn ghost" id="btn-cancel" style="display:none">取消</button>
+        </div>
+        <div class="msg" id="msg"></div>
+      </form>
+    </section>
+
+    <!-- ============ 右：档案墙 ============ -->
+    <section>
+      <div class="wall-head">
+        <h2>公开档案</h2>
+        <span class="cnt" id="wall-cnt">载入中…</span>
+        <input class="search" id="search" placeholder="搜索姓名 / 言灵 / 学院…">
+      </div>
+      <div class="cards" id="cards">
+        <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+        <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="copy">
+      C A S S E L L &nbsp; C O L L E G E<br>
+      档案永久保存于云端数据库 · 登录者仅可编辑自己的档案
+    </div>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<script>
+/* ==================== 云服务客户端 ====================
+   取自激活时返回的 publicConfig；勿从 location 推导 endpoint */
+const cloud = WorkBuddyCloud.createWorkBuddyCloud({
+  endpoint: location.origin,
+  oauthRelayBaseUrl: "https://www.workbuddy.cn/v2/as/genie-baas/oauth",
+  publishableKey: "wbpk_3HnQvT4BzfmUMKF1Pvs6Ml_LLOxPaP4s5zw6mYP8wXVCrR0Azx58kmV"
+});
+
+const EMOJIS = ["🐉","🔥","⚔️","🩸","👑","🗝️","🛡️","🌊","⛰️","✨","🦴","📖","🎭","☗️"];
+const LEVELS = ["SSS","SS","S","A","B","C","D"];
+const LV_CN = {SSS:"屠龙",SS:"超混",S:"纯血",A:"混血",B:"低阶",C:"觉醒",D:"未觉醒"};
+
+let EMOJI = "🐉";
+let editingId = null;
+let allRows = [];
+let session = null;                 // 当前登录会话（null = 未登录）
+let pendingPhone = null;            // 已发送的验证码上下文
+let codeTimer = null;
+
+/* ==================== DOM ==================== */
+const $ = s => document.querySelector(s);
+const cards = $("#cards"), msg = $("#msg"), form = $("#form"), gateMsg = $("#gate-msg");
+const fHero = $("#f-hero"), fSpirit = $("#f-spirit"), fLevel = $("#f-level"),
+      fAcademy = $("#f-academy"), fTitle = $("#f-title"), fBio = $("#f-bio");
+
+/* ==================== 余烬背景 ==================== */
+(function embers(){
+  const box = $("#embers");
+  for(let i=0;i<26;i++){
+    const e = document.createElement("div");
+    e.className = "ember";
+    const s = Math.random()*2.2+1;
+    e.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}vw;`+
+      `background:${["#d8b575","#b23a48","#5b8fd6"][i%3]};`+
+      `animation-duration:${Math.random()*11+9}s;animation-delay:${Math.random()*9}s;`;
+    box.appendChild(e);
+  }
+})();
+
+/* ==================== 徽记选择 ==================== */
+(function emojiPicker(){
+  const row = $("#emoji-row");
+  EMOJIS.forEach((em,i)=>{
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = em; b.dataset.em = em;
+    if(i===0) b.classList.add("on");
+    b.addEventListener("click",()=>{
+      row.querySelectorAll("button").forEach(x=>x.classList.remove("on"));
+      b.classList.add("on"); EMOJI = em;
+    });
+    row.appendChild(b);
+  });
+})();
+
+fBio.addEventListener("input",()=>{ $("#bio-count").textContent = fBio.value.length; });
+
+/* ==================== 提示 ==================== */
+function say(el, text, type){
+  el.textContent = text;
+  el.className = "msg " + type;
+  if(type === "ok"){
+    setTimeout(()=>{ if(el.textContent === text) el.className = "msg"; }, 5200);
+  }
+}
+const sayMsg   = (t,k)=>say(msg, t, k);
+const sayGate  = (t,k)=>say(gateMsg, t, k);
+const clearMsg = ()=>{ msg.className = "msg"; msg.textContent = ""; };
+
+/* ==================== 登录态 ==================== */
+function maskPhone(p){
+  const s = String(p || "");
+  if(s.length < 7) return s;
+  return s.slice(0,3) + "****" + s.slice(-4);
+}
+function showSignedIn(){
+  $("#gate").style.display = "none";
+  form.style.display = "";
+  $("#who").classList.add("on");
+  $("#nav-out").style.display = "";
+  const phone = session?.user?.phone || "";
+  $("#who-text").textContent = phone ? maskPhone(phone) : (session?.user?.id || "已登录").slice(0,18);
+}
+function showSignedOut(){
+  $("#gate").style.display = "";
+  form.style.display = "none";
+  $("#who").classList.remove("on");
+  $("#nav-out").style.display = "none";
+  editingId = null;
+  render();
+}
+
+/* ==================== 读取（公开，无需登录） ==================== */
+async function loadAll(){
+  const { data, error } = await cloud.database
+    .from("dragon_profiles").select("*")
+    .order("created_at", { ascending: false })
+    .limit(300);
+  if(error) throw error;
+  allRows = data || [];
+  render();
+}
+
+/* ==================== 渲染 ==================== */
+function esc(s){
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+/* 仅用于界面显示「编辑/删除」按钮 —— 不是安全边界，
+   真正的权限在数据库 RLS（owner_id = auth.uid()） */
+function isMine(r){ return !!session && r.owner_id === session.user.id; }
+
+function fmtDate(s){
+  const d = new Date(s);
+  if(!s || isNaN(d)) return "";
+  return d.getFullYear()+"."+String(d.getMonth()+1).padStart(2,"0")+"."+String(d.getDate()).padStart(2,"0");
+}
+
+function render(){
+  const q = $("#search").value.trim().toLowerCase();
+  const list = q ? allRows.filter(r =>
+    [r.hero_name, r.spirit, r.academy, r.title, r.bio]
+      .some(v => String(v || "").toLowerCase().includes(q))
+  ) : allRows;
+
+  $("#s-total").textContent    = allRows.length;
+  $("#s-sss").textContent      = allRows.filter(r => r.blood_level === "SSS").length;
+  $("#s-spirits").textContent  = new Set(allRows.map(r => r.spirit).filter(Boolean)).size;
+  $("#s-mine").textContent     = allRows.filter(isMine).length;
+  $("#wall-cnt").textContent   = q ? `匹配 ${list.length} / ${allRows.length}` : `共 ${allRows.length} 份档案`;
+
+  if(!list.length){
+    cards.innerHTML = `<div class="empty"><div class="big">🗝️</div>
+      <p>${q ? "没有匹配的档案" : "还没有人登记 —— 成为第一个被记录的血脉"}</p></div>`;
+    return;
+  }
+
+  cards.innerHTML = list.map(r => {
+    const lv  = LEVELS.includes(r.blood_level) ? r.blood_level : "D";
+    const mine = isMine(r);
+    return `<article class="card ${mine ? 'mine' : ''}">
+      <div class="card-top">
+        <div class="avatar">${esc(r.avatar_emoji || "🐉")}</div>
+        <div>
+          <h3>${esc(r.hero_name)}</h3>
+          <div class="by">登记者 · ${esc(fmtDate(r.created_at))}</div>
+        </div>
+      </div>
+      <div class="lv-badge lv-${lv}">${lv} · ${esc(LV_CN[lv])}</div>
+      <div class="rowline"><span class="k">言灵</span><span class="v spirit">${esc(r.spirit)}</span></div>
+      ${r.academy ? `<div class="rowline"><span class="k">学院</span><span class="v">${esc(r.academy)}</span></div>` : ""}
+      ${r.title   ? `<div class="rowline"><span class="k">头衔</span><span class="v">${esc(r.title)}</span></div>` : ""}
+      ${r.bio     ? `<div class="bio">${esc(r.bio)}</div>` : ""}
+      <div class="card-foot">
+        <span class="stamp">NO.${String(r.id).padStart(4,"0")}</span>
+        ${mine ? `<span style="flex:1"></span>
+          <button class="mini-btn" data-edit="${r.id}">编辑</button>
+          <button class="mini-btn danger" data-del="${r.id}">删除</button>` : ""}
+      </div>
+    </article>`;
+  }).join("");
+
+  cards.querySelectorAll("[data-edit]").forEach(b =>
+    b.addEventListener("click", () => startEdit(allRows.find(x => String(x.id) === b.dataset.edit))));
+  cards.querySelectorAll("[data-del]").forEach(b =>
+    b.addEventListener("click", () => delProfile(b.dataset.del)));
+}
+
+function fillForm(r){
+  fHero.value    = r.hero_name || "";
+  fSpirit.value  = r.spirit || "";
+  fLevel.value   = LEVELS.includes(r.blood_level) ? r.blood_level : "D";
+  fAcademy.value = r.academy || "";
+  fTitle.value   = r.title || "";
+  fBio.value     = r.bio || "";
+  EMOJI = r.avatar_emoji || "🐉";
+  $("#emoji-row").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.em === EMOJI));
+  $("#bio-count").textContent = fBio.value.length;
+}
+function startEdit(r){
+  if(!r) return;
+  editingId = r.id;
+  fillForm(r);
+  $("#form-title").textContent = "编辑档案";
+  $("#form-kick").innerHTML   = "E D I T &nbsp; R E C O R D";
+  $("#btn-submit").textContent = "保存修改";
+  $("#btn-cancel").style.display = "";
+  clearMsg();
+  $("#panel").scrollIntoView({ behavior:"smooth", block:"center" });
+}
+function resetForm(){
+  editingId = null;
+  form.reset();
+  EMOJI = "🐉";
+  $("#emoji-row").querySelectorAll("button").forEach((b,i) => b.classList.toggle("on", i === 0));
+  $("#bio-count").textContent = "0";
+  $("#form-title").textContent = "登记新档案";
+  $("#form-kick").innerHTML   = "R E G I S T E R";
+  $("#btn-submit").textContent = "提交档案";
+  $("#btn-cancel").style.display = "none";
+  clearMsg();
+}
+
+async function delProfile(id){
+  if(!confirm("确定要永久删除这份档案吗？此操作不可恢复。")) return;
+  try{
+    const { data, error } = await cloud.database.from("dragon_profiles").delete().eq("id", id).select();
+    if(error) throw error;
+    if(!Array.isArray(data) || !data.length){
+      sayMsg("删除未生效：该档案不存在，或不属于你（数据库已拒绝）。","err"); return;
+    }
+    sayMsg("档案已删除。","ok");
+    await loadAll();
+  }catch(e){ sayMsg("删除失败：" + (e.message || e), "err"); }
+}
+
+/* ==================== 提交 ==================== */
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearMsg();
+
+  /* 强制登录门：未登录绝不写入 */
+  if(!session){
+    showSignedOut();
+    sayGate("请先登录后再登记档案。","err");
+    return;
+  }
+  const hero = fHero.value.trim(), spirit = fSpirit.value.trim();
+  if(!hero || !spirit){ sayMsg("混血种姓名与言灵为必填项。","err"); return; }
+
+  const btn = $("#btn-submit");
+  btn.disabled = true; btn.textContent = "提交中…";
+  try{
+    /* ⚠️ 绝不发送 owner_id —— 由数据库 DEFAULT auth.uid() 填充，RLS 校验 */
+    const row = {
+      hero_name: hero,
+      spirit,
+      blood_level: fLevel.value,
+      academy: fAcademy.value.trim() || null,
+      title: fTitle.value.trim() || null,
+      bio: fBio.value.trim() || null,
+      avatar_emoji: EMOJI,
+      status: "published",
+      updated_at: new Date().toISOString()
+    };
+    if(editingId){
+      const { data, error } = await cloud.database
+        .from("dragon_profiles").update(row).eq("id", editingId).select();
+      if(error) throw error;
+      if(!Array.isArray(data) || !data.length){
+        throw new Error("没有找到这条档案，或它不属于你（数据库已拒绝该操作）。");
+      }
+    }else{
+      const { error } = await cloud.database.from("dragon_profiles").insert(row);
+      if(error) throw error;
+    }
+    const wasEdit = !!editingId;
+    resetForm();
+    sayMsg(wasEdit ? "档案已更新。" : "登记成功，档案已永久保存。","ok");
+    await loadAll();
+  }catch(e){
+    const m = String(e.message || e);
+    if(m.includes("42501"))      sayMsg("数据库拒绝了这次写入（权限不足），请退出后重新登录再试。","err");
+    else if(m.includes("42P01")) sayMsg("数据表尚未就绪，请稍后重试。","err");
+    else if(m.includes("401"))   sayMsg("登录状态已失效，请重新登录。","err");
+    else                         sayMsg("提交失败：" + m,"err");
+  }finally{
+    btn.disabled = false;
+    btn.textContent = editingId ? "保存修改" : "提交档案";
+  }
+});
+
+/* ==================== 手机验证码登录 ==================== */
+const fPhone = $("#f-phone"), fCode = $("#f-code"), btnCode = $("#btn-code"), btnLogin = $("#btn-login");
+
+fPhone.addEventListener("input", () => $("#phone-err").classList.remove("on"));
+
+/* 获取验证码 —— 只发一次；提交时绝不重发 */
+btnCode.addEventListener("click", async () => {
+  sayGate("");
+  const phone = fPhone.value.trim().replace(/\s/g, "");
+  if(!/^1\d{10}$/.test(phone)){
+    $("#phone-err").classList.add("on");
+    return;                                   // 格式错误：不发任何请求
+  }
+  btnCode.disabled = true;
+  try{
+    const sent = await cloud.auth.sendOtp({ phone });
+    if(sent.error) throw sent.error;
+    pendingPhone = {
+      phone,
+      verificationId: sent.data.verificationId,
+      isExistingUser: sent.data.isExistingUser
+    };
+    sayGate("验证码已发送，请在 5 分钟内填写。","ok");
+    let left = 60;
+    codeTimer = setInterval(() => {
+      left--;
+      btnCode.textContent = left > 0 ? `${left}s 后重发` : "重新获取";
+      if(left <= 0){
+        clearInterval(codeTimer);
+        btnCode.disabled = false;
+        btnCode.textContent = "获取验证码";
+      }
+    }, 1000);
+  }catch(e){
+    btnCode.disabled = false;
+    sayGate("验证码发送失败：" + (e.message || e), "err");
+  }
+});
+
+/* 提交验证码 —— 复用已发送的上下文 */
+btnLogin.addEventListener("click", async () => {
+  sayGate("");
+  const code = fCode.value.trim();
+  if(!pendingPhone){
+    sayGate("请先点击「获取验证码」。","err");
+    return;
+  }
+  if(!code){
+    sayGate("请填写收到的验证码。","err");
+    return;
+  }
+  btnLogin.disabled = true; btnLogin.textContent = "验证中…";
+  try{
+    const done = await cloud.auth.verifyOtp({
+      phone: pendingPhone.phone,
+      verificationId: pendingPhone.verificationId,
+      isExistingUser: pendingPhone.isExistingUser,
+      token: code
+    });
+    if(done.error) throw done.error;     // 校验失败不建立会话，也不重发
+    pendingPhone = null;
+    session = done.data.session || { user: done.data.user };
+    showSignedIn();
+    sayGate("","");
+    await loadAll();
+  }catch(e){
+    sayGate("登录失败：" + (e.message || e) + "（验证码错误可重新填写）","err");
+  }finally{
+    btnLogin.disabled = false; btnLogin.textContent = "登录并登记";
+  }
+});
+
+/* ==================== 微信登录 ==================== */
+$("#btn-wechat").addEventListener("click", async () => {
+  sayGate("");
+  try{
+    const res = await cloud.auth.signInWithOAuth({
+      provider: "wechat",
+      redirectTo: location.origin + location.pathname
+    });
+    if(res.error){ sayGate("微信登录未开启或失败：" + (res.error.message || res.error),"err"); return; }
+    location.assign(res.data.url);
+  }catch(e){ sayGate("微信登录失败：" + (e.message || e),"err"); }
+});
+
+/* ==================== 退出 ==================== */
+$("#nav-out").addEventListener("click", async () => {
+  try{ await cloud.auth.signOut(); }catch(e){}
+  session = null;
+  resetForm();
+  showSignedOut();
+});
+
+/* ==================== 启动 ==================== */
+(async function boot(){
+  /* 1) 先无条件处理微信回调（必须在任何路由守卫之前） */
+  try{
+    const cb = await cloud.auth.handleWechatWebCallback();
+    if(cb.error){
+      sayGate("微信登录失败：" + (cb.error.message || cb.error),"err");
+    }else if(cb.data){
+      /* 成功：必须清掉 code/state，否则刷新会重放一次性凭证 */
+      history.replaceState(null, "", location.pathname);
+      session = cb.data.session || cb.data;
+      if(session && session.user) showSignedIn();
+    }
+    /* data 为 null 且无 error = 普通访问，继续正常启动 */
+  }catch(e){
+    /* 回调不是本次的目标，忽略 */
+  }
+
+  /* 2) 恢复已有会话 */
+  if(!session){
+    try{
+      const { data } = await cloud.auth.getSession();
+      if(data && data.session){ session = data.session; showSignedIn(); }
+      else showSignedOut();
+    }catch(e){ showSignedOut(); }
+  }
+
+  /* 3) 公开读取（无需登录） */
+  loadAll().catch(e => {
+    cards.innerHTML = `<div class="empty"><div class="big">⚠️</div>
+      <p>档案载入失败：${esc(e.message || e)}<br>请检查网络后刷新重试。</p></div>`;
+    $("#wall-cnt").textContent = "载入失败";
+  });
+})();
+
+$("#btn-cancel").addEventListener("click", resetForm);
+$("#search").addEventListener("input", render);
+</script>
+</body>
+</html>
