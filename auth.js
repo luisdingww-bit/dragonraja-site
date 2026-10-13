@@ -45,16 +45,29 @@
     return false;
   }
 
+  /* 🔑 init() 必须返回 Promise。
+     曾经写成「同步 return true」，导致 init().then 报
+     "init(...).then is not a function" —— 注册/登录全挂。
+     且失败时不缓存结果，让 SDK 稍后加载完成还能重试。 */
   function init() {
     if (ready) return ready;
-    ready = (function () {
-      if (!window.WorkBuddyCloud) throw new Error("云服务 SDK 未加载");
-      var cloud = window.WorkBuddyCloud.createWorkBuddyCloud(CLOUD);
-      db = cloud.database;
-      auth = cloud.auth;
-      return true;
-    })();
-    return ready;
+    var p = new Promise(function (resolve, reject) {
+      if (!window.WorkBuddyCloud) {
+        reject(new Error("云服务 SDK 未加载"));
+        return;
+      }
+      try {
+        var cloud = window.WorkBuddyCloud.createWorkBuddyCloud(CLOUD);
+        db = cloud.database;
+        auth = cloud.auth;
+        resolve(true);
+      } catch (e) {
+        reject(e);
+      }
+    });
+    p["catch"](function () { if (ready === p) ready = null; });
+    ready = p;
+    return p;
   }
 
   /* 🔑 关键防护：init() 在 SDK 缺失时会「同步抛错」。
@@ -92,6 +105,9 @@
   function sendCode(payload) {
     var email = normEmail(payload && payload.email);
     if (!validEmail(email)) return Promise.reject(new Error("请输入正确的邮箱地址"));
+    if (!cloudAvailable()) {
+      return Promise.reject(new Error("当前域名无法连接账号云服务，请前往同源主站 dragonraja-archive.app.workbuddy.host 注册"));
+    }
     return init()
       .then(function () { return auth.sendOtp({ email: email }); })
       .then(function (r) {
@@ -239,15 +255,10 @@
         var row = Object.assign({}, patch || {});
         row.updated_at = new Date().toISOString();
         /* 注意：绝不发送 owner_id —— 由数据库 DEFAULT auth.uid() 填充并由 RLS 校验 */
-        return db.from("site_members")
-          .select("*", { count: "exact", head: true })
-          .then(function (probe) { return probe; })
-          .then(function () {
-            return db.from("site_members").upsert(
-              Object.assign(row, { created_at: new Date().toISOString() }),
-              { onConflict: "owner_id" }
-            );
-          });
+        return db.from("site_members").upsert(
+          Object.assign(row, { created_at: new Date().toISOString() }),
+          { onConflict: "owner_id" }
+        );
       });
   }
 
