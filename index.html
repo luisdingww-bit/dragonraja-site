@@ -11,8 +11,8 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/notoserifsc/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mK4Q.woff2">
 <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261014-0100">
-<link rel="stylesheet" href="eva-extra.css?v=20261014-0100">
+<link rel="stylesheet" href="style.css?v=20261014-0150">
+<link rel="stylesheet" href="eva-extra.css?v=20261014-0150">
 <style>
 /* index 专属：电影感开场 + hero + 世界观 + 卷目预览 */
 #boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
@@ -575,9 +575,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
 
-<script src="i18n.js?v=20261014-0100"></script>
-<script src="app.js?v=20261014-0100"></script>
-<script src="eva.js?v=20261014-0100"></script>
+<script src="i18n.js?v=20261014-0150"></script>
+<script src="app.js?v=20261014-0150"></script>
+<script src="eva.js?v=20261014-0150"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
@@ -693,9 +693,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
      两者都失败时 auth.js 会安全降级，不再中断页面交互。 -->
 <script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"
         onerror="var s=document.createElement('script');s.src='https://unpkg.com/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js';s.async=false;document.head.appendChild(s);"></script>
-<script src="auth.js?v=20261014-0100"></script>
-<script src="account.js?v=20261014-0100"></script>
-<script src="achievements.js?v=20261014-0100"></script>
+<script src="auth.js?v=20261014-0150"></script>
+<script src="account.js?v=20261014-0150"></script>
+<script src="achievements.js?v=20261014-0150"></script>
 <script>
 (function(){
   const boot=document.getElementById('boot');
@@ -847,7 +847,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     const year=new Date().getFullYear();
     const c=letterContent(isEn,name,year);
     const bg='#fbf6e8', panelFrom='#fbf6e8', panelTo='#f3e9d0', ink='#2b2118', gold='#8c6f3f', label='#7a6046';
-    const crest=(typeof location!=='undefined'&&location.origin&&location.origin.indexOf('http')===0?location.origin:'https://luisdingww-bit.github.io/dragonraja-site')+'/img/seal-round-320.webp';
+    /* 邮件用校徽：必须用「不透明 PNG」。
+       ① 邮件客户端普遍不支持 WebP；
+       ② PNG 透明在邮件里会被渲染成灰底/马赛克。
+       此图已预先合成到邮件米色底 #fbf6e8，四角即背景色，可无缝融入。 */
+    const crest=(typeof location!=='undefined'&&location.origin&&location.origin.indexOf('http')===0?location.origin:'https://luisdingww-bit.github.io/dragonraja-site')+'/img/seal-mail.png';
     const title=isEn?'LETTER OF ADMISSION':'录 取 通 知';
     const presLabel=isEn?'President':'校长签名';
     const secLabel=isEn?'Chief Secretary':'首席秘书签名';
@@ -856,7 +860,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     +'<div style="margin:0;padding:0;background:'+bg+';">'
     +'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:'+bg+';padding:28px 0;"><tr><td align="center">'
     +'<div style="max-width:600px;width:100%;background:linear-gradient(180deg,'+panelFrom+' 0%,'+panelTo+' 100%);border:8px double #bfa36f;color:'+ink+';padding:34px 30px 28px;text-align:center;font-family:Georgia,\'Times New Roman\',\'Songti SC\',serif;box-shadow:0 18px 60px rgba(0,0,0,.45);">'
-    +'<img src="'+crest+'" width="76" height="76" style="border-radius:50%;border:2px solid #bfa36f;box-shadow:0 0 20px rgba(191,163,111,.35);margin-bottom:10px;" alt="Cassell College">'
+    +'<img src="'+crest+'" width="76" height="76" style="display:block;margin:0 auto 10px;border:0;" alt="Cassell College">'
     +'<div style="letter-spacing:.28em;color:'+ink+';font-size:clamp(18px,3.6vw,26px);font-weight:700;margin-bottom:4px;">CASSELL COLLEGE</div>'
     +'<div style="letter-spacing:.4em;color:'+gold+';font-size:clamp(16px,3vw,22px);margin-bottom:22px;padding-left:.4em;">'+title+'</div>'
     +'<div style="text-align:left;padding:0 8px;">'
