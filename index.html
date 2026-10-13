@@ -11,8 +11,8 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/notoserifsc/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mK4Q.woff2">
 <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261014-0015">
-<link rel="stylesheet" href="eva-extra.css?v=20261014-0015">
+<link rel="stylesheet" href="style.css?v=20261014-0100">
+<link rel="stylesheet" href="eva-extra.css?v=20261014-0100">
 <style>
 /* index 专属：电影感开场 + hero + 世界观 + 卷目预览 */
 #boot{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s ease,visibility 1s;display:flex;align-items:center;justify-content:center;}
@@ -575,9 +575,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   <p class="copy" data-i18n="footer_copy">© 龙族同人个人站 · Ding.LDCrew-MADE · 禁止商用</p>
 </footer>
 
-<script src="i18n.js?v=20261014-0015"></script>
-<script src="app.js?v=20261014-0015"></script>
-<script src="eva.js?v=20261014-0015"></script>
+<script src="i18n.js?v=20261014-0100"></script>
+<script src="app.js?v=20261014-0100"></script>
+<script src="eva.js?v=20261014-0100"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
@@ -693,9 +693,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
      两者都失败时 auth.js 会安全降级，不再中断页面交互。 -->
 <script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"
         onerror="var s=document.createElement('script');s.src='https://unpkg.com/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js';s.async=false;document.head.appendChild(s);"></script>
-<script src="auth.js?v=20261014-0015"></script>
-<script src="account.js?v=20261014-0015"></script>
-<script src="achievements.js?v=20261014-0015"></script>
+<script src="auth.js?v=20261014-0100"></script>
+<script src="account.js?v=20261014-0100"></script>
+<script src="achievements.js?v=20261014-0100"></script>
 <script>
 (function(){
   const boot=document.getElementById('boot');
@@ -998,6 +998,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     saveAdmission(name,age,email);
     sendAdmissionEmail(name,age,email);
     if(user&&window.DR_ACC)DR_ACC.setUser(user);
+    /* 注册即写入云端档案（owner_id 由数据库 DEFAULT auth.uid() 填充） */
+    try{
+      if(window.DR&&DR.profile&&DR.profile.set)DR.profile.set({email:email,name:name,age:age});
+    }catch(e){}
     admLetter.innerHTML=buildLetter(name,age,email);
     enrollView.classList.add('hidden');
     if(admTabs)admTabs.classList.add('hidden');
@@ -1074,6 +1078,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       const r=await DR.auth.signIn({email:email,password:pass});
       const user=r&&r.user;
       try{ const meta=(user&&user.user_metadata)||{}; localStorage.setItem('dr_enroll',JSON.stringify({name:meta.name||email,age:meta.age||'',email:email,ts:Date.now()})); }catch(e){}
+      /* 先取回云端档案（跨设备数据），再更新 UI；两步都包 try 保证 UI 一定刷新 */
+      try{ if(window.DR&&DR.profile&&DR.profile.syncFromCloud) await DR.profile.syncFromCloud(); }catch(e){}
       updateAccount(user);
       closeModal();
       enableEnter();

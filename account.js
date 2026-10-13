@@ -151,24 +151,34 @@
   /* ============ 登录 / 登出 ============ */
   function setUser(user) {
     if (!user) return;
-    var meta = user.user_metadata || {};
-    var email = (user.email || meta.email || "").trim().toLowerCase();
-    var name = (meta.name || user.name || email || "").trim();
-    var age = meta.age || user.age || "";
-    if (!email) return;
-    if (!name) name = email.split("@")[0];
-    var prof = DR.profile.get(email) || {};
-    prof.email = email; prof.name = name; if (age) prof.age = age;
-    DR.profile.set(prof);
-    CURRENT = { email: email, name: name, age: age, profile: prof };
-    renderAll();
-    fire("acc:login", CURRENT);
-    if (config.onLogin) { try { config.onLogin(CURRENT); } catch (e) {} }
-    addMemberEmail(name, email);
-    // 若此前已做过血统鉴定，补齐「新生登记」任务
-    if (prof.bloodLevel && window.EVA) window.EVA.completeTask("t0");
-    // 登录后执行待定回调（如：被拦截的血统检测）
-    if (pending) { var p = pending; pending = null; try { p(CURRENT); } catch (e) {} }
+    try {
+      var meta = user.user_metadata || {};
+      var email = (user.email || meta.email || "").trim().toLowerCase();
+      var name = (meta.name || user.name || email || "").trim();
+      var age = meta.age || user.age || "";
+      /* ⚠️ 无 email 也不能 return：否则登录后 UI 不更新，表现为"仍要求登录"。
+         用 uid 兜底作为标识，保证 UI 一定刷新。 */
+      if (!email) email = String(user.id || user.uid || ("u" + Date.now()));
+      if (!name) name = email.indexOf("@") > 0 ? email.split("@")[0] : email;
+      var prof = {};
+      try { prof = DR.profile.get(email) || {}; } catch (e) { prof = {}; }
+      prof.email = email; prof.name = name; if (age) prof.age = age;
+      try { DR.profile.set(prof); } catch (e) {}
+      CURRENT = { email: email, name: name, age: age, profile: prof };
+      renderAll();
+      fire("acc:login", CURRENT);
+      if (config.onLogin) { try { config.onLogin(CURRENT); } catch (e) {} }
+      try { addMemberEmail(name, email); } catch (e) {}
+      // 若此前已做过血统鉴定，补齐「新生登记」任务
+      if (prof.bloodLevel && window.EVA) window.EVA.completeTask("t0");
+      // 登录后执行待定回调（如：被拦截的血统检测）
+      if (pending) { var p = pending; pending = null; try { p(CURRENT); } catch (e) {} }
+    } catch (e) {
+      // setUser 任何异常都不能让 UI 卡在"未登录"态
+      console.warn('[DR_ACC] setUser failed:', e && e.message);
+      CURRENT = { email: email, name: name, age: age, profile: prof };
+      try { renderAll(); } catch (e2) {}
+    }
   }
 
   function logout() {
@@ -399,6 +409,14 @@
       }).catch(function () { renderAll(); });
     } else {
       renderAll();
+    }
+    /* 监听登录状态变化：登录成功 / 登出 / 令牌刷新都会触发，
+       比只靠 init 时读一次 getSession 可靠（修复"登录后仍显示未登录"）。 */
+    if (DR.auth && typeof DR.auth.onAuthChange === "function") {
+      DR.auth.onAuthChange(function (ev, user) {
+        if (user) setUser(user);
+        else if (ev === "SIGNED_OUT" || ev === "signed_out") { CURRENT = null; renderAll(); }
+      });
     }
     if (window.onLangChange) window.onLangChange(function () { renderAll(); });
   }

@@ -186,18 +186,42 @@
     return m || "登录失败";
   }
 
-  /* ---------- 当前会话 ---------- */
+  /* ---------- 当前会话 ----------
+     SDK 返回 { data: session|null, error }。
+     session 形态可能是 { user, access_token, ... } 或 { session:{user}, user }，
+     故逐层兜底解析，任一形态都能取到 user。 */
+  function pickUser(s) {
+    if (!s) return null;
+    if (s.user && (s.user.email || s.user.id)) return s.user;
+    if (s.session && s.session.user) return s.session.user;
+    if (s.email || s.id) return s;
+    return null;
+  }
+
   function getSession() {
     return init()
       .then(function () { return auth.getSession(); })
       .then(function (r) {
         if (r && r.error) return null;
         var s = r && r.data;
-        if (!s) return null;
-        var session = s.session || s;
-        var user = session && (session.user || s.user);
+        var user = pickUser(s) || pickUser(r);
         if (!user) return null;
+        var session = (s && s.session) || s || r;
         return { user: user, session: session };
+      })
+      .catch(function () { return null; });
+  }
+
+  /* 登录状态变化监听（官方推荐）。
+     比轮询 getSession 可靠：登录/登出/刷新令牌都会触发。 */
+  function onAuthChange(cb) {
+    return init()
+      .then(function () {
+        if (typeof auth.onAuthStateChange !== "function") return null;
+        return auth.onAuthStateChange(function (ev, session) {
+          var user = pickUser(session) || pickUser(session && session.session);
+          try { cb(ev, user, session); } catch (e) {}
+        });
       })
       .catch(function () { return null; });
   }
@@ -288,13 +312,71 @@
     saveMember: safe(saveMember),
     loadMember: safe(loadMember),
     validEmail: validEmail,
+    onAuthChange: safe(onAuthChange),
     cloudAvailable: cloudAvailable,
     get mode() { return mode; }
   };
 
+  /* ---------- 档案接口（account.js 依赖 DR.profile.get/set/saveBloodline） ----------
+     account.js 的 setUser() 会调 DR.profile.get()，此前只留了空壳导致
+     "DR.profile.get is not a function" → 登录后 UI 永不更新、反复要求登录。
+     这里补齐完整实现：读本地缓存即时返回（不阻塞 UI），同时异步同步到云端。 */
+  var PK = "dr_profile_v1";
+  function pGet(email) {
+    if (!email) return null;
+    try {
+      var all = JSON.parse(localStorage.getItem(PK) || "{}");
+      return all[String(email).toLowerCase()] || null;
+    } catch (e) { return null; }
+  }
+  function pSet(prof) {
+    if (!prof || !prof.email) return prof;
+    try {
+      var all = JSON.parse(localStorage.getItem(PK) || "{}");
+      all[String(prof.email).toLowerCase()] = prof;
+      localStorage.setItem(PK, JSON.stringify(all));
+    } catch (e) {}
+    // 异步同步到云端（失败静默，不阻塞本地体验）
+    try {
+      saveMember({
+        member_name: prof.name, member_age: prof.age ? parseInt(prof.age, 10) : null,
+        member_email: prof.email, blood_level: prof.bloodLevel || null,
+        spirit: prof.spirit || null, dr_no: prof.drNo || null
+      })["catch"](function () {});
+    } catch (e) {}
+    return prof;
+  }
+  function pSaveBloodline(email, patch) {
+    var p = pGet(email) || { email: String(email || "").toLowerCase() };
+    Object.keys(patch || {}).forEach(function (k) { p[k] = patch[k]; });
+    p.email = String(email || p.email || "").toLowerCase();
+    return pSet(p);
+  }
+  /* 云端档案合并进本地（供登录后调用，取回跨设备数据） */
+  function pSyncFromCloud() {
+    return loadMember().then(function (row) {
+      if (!row) return null;
+      var email = String(row.member_email || "").toLowerCase();
+      if (!email) return null;
+      var local = pGet(email) || {};
+      var merged = Object.assign({}, local, {
+        email: email, name: row.member_name || local.name,
+        age: row.member_age || local.age,
+        bloodLevel: row.blood_level || local.bloodLevel,
+        spirit: row.spirit || local.spirit,
+        drNo: row.dr_no || local.drNo
+      });
+      return pSet(merged);
+    })["catch"](function () { return null; });
+  }
+
   window.DR = window.DR || {};
   window.DR.auth = api;
   window.DR.authMode = mode;
-  // 旧代码读 DR.profile 的地方保留一个空壳，避免报错
-  window.DR.profile = window.DR.profile || {};
+  window.DR.profile = {
+    get: pGet,
+    set: pSet,
+    saveBloodline: pSaveBloodline,
+    syncFromCloud: pSyncFromCloud
+  };
 })();
